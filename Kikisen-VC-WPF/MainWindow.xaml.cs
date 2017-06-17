@@ -137,6 +137,10 @@ namespace Kikisen_VC_WPF
 					}
 					// バックグラウンド処理をキャンセルする
 					if (this.Worker != null) this.FuncWorkerReset();
+				} else if (gtapikey != null) {
+					// APIキーが格納されてれば正しいものとする
+					btnGTAPIkey.Content = "GoogleTranslatorAPI(認証済)";
+					txtbGTAPIkey.Password = gtapikey;
 				}
 			};
 			_funcGoogleTranslatorinit(_keyGTAPI);
@@ -569,7 +573,8 @@ namespace Kikisen_VC_WPF
 				;
 				if (FuncTranslateTextToSpeech("test", pw).Result) {
 					MessageBox.Show("Google Translator APIキーの認証に\"成功\"しました。");
-					_keyGTAPI = txtbGTAPIkey.Password.Trim();
+					_keyGTAPI = pw.Trim();
+					_funcGoogleTranslatorinit(_keyGTAPI);
 					Properties.Settings.Default.keyGTAPI = _keyGTAPI;
 					Properties.Settings.Default.Save();
 				} else {
@@ -1205,9 +1210,6 @@ namespace Kikisen_VC_WPF
 			try {
 				if (_keyGTAPI == "" && apikey == "") {
 					throw new Exception();
-				}
-				if (_keyGTAPI == "") {
-					return false;
 				}
 				var service = new TranslateService(new BaseClientService.Initializer() {
 					ApiKey = _keyGTAPI,

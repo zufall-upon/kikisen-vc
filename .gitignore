@@ -21,7 +21,8 @@ x64/
 x86/
 bld/
 [Bb]in/
-obj/
+[Oo]bj/[Dd]ebug/
+[Oo]bj/[Rr]elease/
 [Ll]og/
 
 # Visual Studio 2015 cache/options directory

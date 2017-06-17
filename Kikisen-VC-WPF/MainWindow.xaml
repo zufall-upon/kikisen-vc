@@ -73,7 +73,7 @@
                         <ColumnDefinition Width="87*"/>
                     </Grid.ColumnDefinitions>
                     <Button x:Name="btnGTAPIkey" Content="GoogleTranslatorAPI(未認証)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="157" Click="btnGTAPIkey_Click" Grid.ColumnSpan="2"/>
-                    <PasswordBox x:Name="txtbGTAPIkey" HorizontalAlignment="Left" Margin="25,0,0,0" VerticalAlignment="Top" Width="62" Grid.Column="1"/>
+                    <PasswordBox x:Name="txtbGTAPIkey" HorizontalAlignment="Right" VerticalAlignment="Top" Width="62" Grid.Column="1" Margin="0,1,0,0"/>
                 </Grid>
             </TabItem>
         </TabControl>
