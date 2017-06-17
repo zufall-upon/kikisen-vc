@@ -72,5 +72,10 @@ Google Translator API web key
 
 GNU General Public License v3.0
 
+# Probrems
+現状の問題点を書きます。
+- Googleの音声認識、翻訳を行うとAPI呼び出し回数がとんでもないことになります。公開に当たっては危険なので、試用機能は取り除きました。
+- 英語の聞き取りの処理が不十分で、同じ単語が何度も発声されます。
+
 # New Features!
 - MS音声認識のデフォルト化→実質使い物になりません。トレーニングしてのテストはしていません。
