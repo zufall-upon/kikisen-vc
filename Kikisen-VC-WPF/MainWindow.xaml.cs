@@ -120,6 +120,11 @@ namespace Kikisen_VC_WPF
 					}
 					// バックグラウンド処理をキャンセルする
 					if (this.Worker != null) this.FuncWorkerReset();
+					return;
+				} else if (jsonpath != "") {
+					// APIキーが格納されてれば正しいものとする
+					lblGCSAPI.Text = "認証済み";
+					_strGCSAPIJson = File.ReadAllText(jsonpath);
 				}
 			};
 			_funcGoogleCloudSpeechinit(_keyGCSAPIjsonPath);
@@ -658,7 +663,7 @@ namespace Kikisen_VC_WPF
 					_ms_ss = new SpeechStreamer(100000);
 				}
 
-				var culture = (_recog_lang_set == "en-US") ? "en-GB" : _recog_lang_set;
+				var culture = (_recog_lang_set == "en-US") ? "en-US" : _recog_lang_set;
 				_ms_recogEngine = new SpeechRecognitionEngine(new CultureInfo(culture));
 				DictationGrammar customDictationGrammar = new DictationGrammar("grammar:dictation");
 				customDictationGrammar.Name = "custom";
@@ -948,7 +953,7 @@ namespace Kikisen_VC_WPF
 															FuncTranslateTextToSpeech(speechtxt);
 														} else {
 															//this.FuncWriteTextLog(speechtxt + "[" + note.Results[0].Stability + "]");
-															//FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), speechtxt, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+															FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), speechtxt, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
 														}
 													}));
 													lastspeaktext = outtext + subtext;
