@@ -137,7 +137,7 @@ namespace Kikisen_VC_WPF
 					}
 					// バックグラウンド処理をキャンセルする
 					if (this.Worker != null) this.FuncWorkerReset();
-				} else if (gtapikey != null) {
+				} else if (gtapikey != "") {
 					// APIキーが格納されてれば正しいものとする
 					btnGTAPIkey.Content = "GoogleTranslatorAPI(認証済)";
 					txtbGTAPIkey.Password = gtapikey;
