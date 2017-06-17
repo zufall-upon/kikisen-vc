@@ -46,7 +46,7 @@ Google Translator API web key
 
 ## Licence
 使用は自由ですが、改変しての再配布はソースを開示してください。
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+GNU General Public License v3.0
 
 # New Features!
 - MS音声認識のデフォルト化→実質使い物になりません。トレーニングしてのテストはしていません。
