@@ -1,0 +1,1848 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.Cloud.Speech.V1</name>
+    </assembly>
+    <members>
+        <member name="T:Google.Cloud.Speech.V1.CloudSpeechReflection">
+            <summary>Holder for reflection information generated from google/cloud/speech/v1/cloud_speech.proto</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.CloudSpeechReflection.Descriptor">
+            <summary>File descriptor for google/cloud/speech/v1/cloud_speech.proto</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.RecognizeRequest">
+            <summary>
+            The top-level message sent by the client for the `Recognize` method.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognizeRequest.ConfigFieldNumber">
+            <summary>Field number for the "config" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognizeRequest.Config">
+            <summary>
+            *Required* Provides information to the recognizer that specifies how to
+            process the request.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognizeRequest.AudioFieldNumber">
+            <summary>Field number for the "audio" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognizeRequest.Audio">
+            <summary>
+            *Required* The audio data to be recognized.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LongRunningRecognizeRequest">
+            <summary>
+            The top-level message sent by the client for the `LongRunningRecognize`
+            method.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LongRunningRecognizeRequest.ConfigFieldNumber">
+            <summary>Field number for the "config" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.LongRunningRecognizeRequest.Config">
+            <summary>
+            *Required* Provides information to the recognizer that specifies how to
+            process the request.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LongRunningRecognizeRequest.AudioFieldNumber">
+            <summary>Field number for the "audio" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.LongRunningRecognizeRequest.Audio">
+            <summary>
+            *Required* The audio data to be recognized.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.StreamingRecognizeRequest">
+            <summary>
+            The top-level message sent by the client for the `StreamingRecognize` method.
+            Multiple `StreamingRecognizeRequest` messages are sent. The first message
+            must contain a `streaming_config` message and must not contain `audio` data.
+            All subsequent messages must contain `audio` data and must not contain a
+            `streaming_config` message.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognizeRequest.StreamingConfigFieldNumber">
+            <summary>Field number for the "streaming_config" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognizeRequest.StreamingConfig">
+            <summary>
+            Provides information to the recognizer that specifies how to process the
+            request. The first `StreamingRecognizeRequest` message must contain a
+            `streaming_config`  message.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognizeRequest.AudioContentFieldNumber">
+            <summary>Field number for the "audio_content" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognizeRequest.AudioContent">
+            <summary>
+            The audio data to be recognized. Sequential chunks of audio data are sent
+            in sequential `StreamingRecognizeRequest` messages. The first
+            `StreamingRecognizeRequest` message must not contain `audio_content` data
+            and all subsequent `StreamingRecognizeRequest` messages must contain
+            `audio_content` data. The audio bytes must be encoded as specified in
+            `RecognitionConfig`. Note: as with all bytes fields, protobuffers use a
+            pure binary representation (not base64). See
+            [audio limits](https://cloud.google.com/speech/limits#content).
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.StreamingRecognizeRequest.StreamingRequestOneofCase">
+            <summary>Enum of possible cases for the "streaming_request" oneof.</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.StreamingRecognitionConfig">
+            <summary>
+            Provides information to the recognizer that specifies how to process the
+            request.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognitionConfig.ConfigFieldNumber">
+            <summary>Field number for the "config" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognitionConfig.Config">
+            <summary>
+            *Required* Provides information to the recognizer that specifies how to
+            process the request.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognitionConfig.SingleUtteranceFieldNumber">
+            <summary>Field number for the "single_utterance" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognitionConfig.SingleUtterance">
+             <summary>
+             *Optional* If `false` or omitted, the recognizer will perform continuous
+             recognition (continuing to wait for and process audio even if the user
+             pauses speaking) until the client closes the input stream (gRPC API) or
+             until the maximum time limit has been reached. May return multiple
+             `StreamingRecognitionResult`s with the `is_final` flag set to `true`.
+            
+             If `true`, the recognizer will detect a single spoken utterance. When it
+             detects that the user has paused or stopped speaking, it will return an
+             `END_OF_SINGLE_UTTERANCE` event and cease recognition. It will return no
+             more than one `StreamingRecognitionResult` with the `is_final` flag set to
+             `true`.
+             </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognitionConfig.InterimResultsFieldNumber">
+            <summary>Field number for the "interim_results" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognitionConfig.InterimResults">
+            <summary>
+            *Optional* If `true`, interim results (tentative hypotheses) may be
+            returned as they become available (these interim results are indicated with
+            the `is_final=false` flag).
+            If `false` or omitted, only `is_final=true` result(s) are returned.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.RecognitionConfig">
+            <summary>
+            Provides information to the recognizer that specifies how to process the
+            request.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.EncodingFieldNumber">
+            <summary>Field number for the "encoding" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognitionConfig.Encoding">
+            <summary>
+            *Required* Encoding of audio data sent in all `RecognitionAudio` messages.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.SampleRateHertzFieldNumber">
+            <summary>Field number for the "sample_rate_hertz" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognitionConfig.SampleRateHertz">
+            <summary>
+            *Required* Sample rate in Hertz of the audio data sent in all
+            `RecognitionAudio` messages. Valid values are: 8000-48000.
+            16000 is optimal. For best results, set the sampling rate of the audio
+            source to 16000 Hz. If that's not possible, use the native sample rate of
+            the audio source (instead of re-sampling).
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.LanguageCodeFieldNumber">
+            <summary>Field number for the "language_code" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognitionConfig.LanguageCode">
+            <summary>
+            *Required* The language of the supplied audio as a
+            [BCP-47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) language tag.
+            Example: "en-US".
+            See [Language Support](https://cloud.google.com/speech/docs/languages)
+            for a list of the currently supported language codes.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.MaxAlternativesFieldNumber">
+            <summary>Field number for the "max_alternatives" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognitionConfig.MaxAlternatives">
+            <summary>
+            *Optional* Maximum number of recognition hypotheses to be returned.
+            Specifically, the maximum number of `SpeechRecognitionAlternative` messages
+            within each `SpeechRecognitionResult`.
+            The server may return fewer than `max_alternatives`.
+            Valid values are `0`-`30`. A value of `0` or `1` will return a maximum of
+            one. If omitted, will return a maximum of one.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.ProfanityFilterFieldNumber">
+            <summary>Field number for the "profanity_filter" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognitionConfig.ProfanityFilter">
+            <summary>
+            *Optional* If set to `true`, the server will attempt to filter out
+            profanities, replacing all but the initial character in each filtered word
+            with asterisks, e.g. "f***". If set to `false` or omitted, profanities
+            won't be filtered out.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.SpeechContextsFieldNumber">
+            <summary>Field number for the "speech_contexts" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognitionConfig.SpeechContexts">
+            <summary>
+            *Optional* A means to provide context to assist the speech recognition.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.RecognitionConfig.Types">
+            <summary>Container for nested types declared in the RecognitionConfig message type.</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.RecognitionConfig.Types.AudioEncoding">
+             <summary>
+             Audio encoding of the data sent in the audio message. All encodings support
+             only 1 channel (mono) audio. Only `FLAC` includes a header that describes
+             the bytes of audio that follow the header. The other encodings are raw
+             audio bytes with no header.
+            
+             For best results, the audio source should be captured and transmitted using
+             a lossless encoding (`FLAC` or `LINEAR16`). Recognition accuracy may be
+             reduced if lossy codecs, which include the other codecs listed in
+             this section, are used to capture or transmit the audio, particularly if
+             background noise is present.
+             </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.Types.AudioEncoding.EncodingUnspecified">
+            <summary>
+            Not specified. Will return result [google.rpc.Code.INVALID_ARGUMENT][].
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.Types.AudioEncoding.Linear16">
+            <summary>
+            Uncompressed 16-bit signed little-endian samples (Linear PCM).
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.Types.AudioEncoding.Flac">
+            <summary>
+            [`FLAC`](https://xiph.org/flac/documentation.html) (Free Lossless Audio
+            Codec) is the recommended encoding because it is
+            lossless--therefore recognition is not compromised--and
+            requires only about half the bandwidth of `LINEAR16`. `FLAC` stream
+            encoding supports 16-bit and 24-bit samples, however, not all fields in
+            `STREAMINFO` are supported.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.Types.AudioEncoding.Mulaw">
+            <summary>
+            8-bit samples that compand 14-bit audio samples using G.711 PCMU/mu-law.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.Types.AudioEncoding.Amr">
+            <summary>
+            Adaptive Multi-Rate Narrowband codec. `sample_rate_hertz` must be 8000.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.Types.AudioEncoding.AmrWb">
+            <summary>
+            Adaptive Multi-Rate Wideband codec. `sample_rate_hertz` must be 16000.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.Types.AudioEncoding.OggOpus">
+            <summary>
+            Opus encoded audio frames in Ogg container
+            ([OggOpus](https://wiki.xiph.org/OggOpus)).
+            `sample_rate_hertz` must be 16000.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionConfig.Types.AudioEncoding.SpeexWithHeaderByte">
+            <summary>
+            Although the use of lossy encodings is not recommended, if a very low
+            bitrate encoding is required, `OGG_OPUS` is highly preferred over
+            Speex encoding. The [Speex](https://speex.org/)  encoding supported by
+            Cloud Speech API has a header byte in each block, as in MIME type
+            `audio/x-speex-with-header-byte`.
+            It is a variant of the RTP Speex encoding defined in
+            [RFC 5574](https://tools.ietf.org/html/rfc5574).
+            The stream is a sequence of blocks, one block per RTP packet. Each block
+            starts with a byte containing the length of the block, in bytes, followed
+            by one or more frames of Speex data, padded to an integral number of
+            bytes (octets) as specified in RFC 5574. In other words, each RTP header
+            is replaced with a single byte containing the block length. Only Speex
+            wideband is supported. `sample_rate_hertz` must be 16000.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.SpeechContext">
+            <summary>
+            Provides "hints" to the speech recognizer to favor specific words and phrases
+            in the results.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.SpeechContext.PhrasesFieldNumber">
+            <summary>Field number for the "phrases" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechContext.Phrases">
+            <summary>
+            *Optional* A list of strings containing words and phrases "hints" so that
+            the speech recognition is more likely to recognize them. This can be used
+            to improve the accuracy for specific words and phrases, for example, if
+            specific commands are typically spoken by the user. This can also be used
+            to add additional words to the vocabulary of the recognizer. See
+            [usage limits](https://cloud.google.com/speech/limits#content).
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.RecognitionAudio">
+            <summary>
+            Contains audio data in the encoding specified in the `RecognitionConfig`.
+            Either `content` or `uri` must be supplied. Supplying both or neither
+            returns [google.rpc.Code.INVALID_ARGUMENT][]. See
+            [audio limits](https://cloud.google.com/speech/limits#content).
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionAudio.ContentFieldNumber">
+            <summary>Field number for the "content" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognitionAudio.Content">
+            <summary>
+            The audio data bytes encoded as specified in
+            `RecognitionConfig`. Note: as with all bytes fields, protobuffers use a
+            pure binary representation, whereas JSON representations use base64.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognitionAudio.UriFieldNumber">
+            <summary>Field number for the "uri" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognitionAudio.Uri">
+            <summary>
+            URI that points to a file that contains audio data bytes as specified in
+            `RecognitionConfig`. Currently, only Google Cloud Storage URIs are
+            supported, which must be specified in the following format:
+            `gs://bucket_name/object_name` (other URI formats return
+            [google.rpc.Code.INVALID_ARGUMENT][]). For more information, see
+            [Request URIs](https://cloud.google.com/storage/docs/reference-uris).
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.RecognitionAudio.AudioSourceOneofCase">
+            <summary>Enum of possible cases for the "audio_source" oneof.</summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FromStorageUri(System.String)">
+            <summary>
+            Constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> with a <see cref="P:Google.Cloud.Speech.V1.RecognitionAudio.Uri"/> property referring to a Google Cloud
+            Storage URI.
+            </summary>
+            <param name="storageUri">A Google Cloud Storage URI, of the form <c>gs://bucket-name/object-name</c>. Must not be null.</param>
+            <returns>The newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FetchFromUriAsync(System.Uri,System.Net.Http.HttpClient)">
+            <summary>
+            Asynchronously constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> by downloading data from the given URI.
+            </summary>
+            <param name="uri">The URI to fetch. Must not be null.</param>
+            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> to use to fetch the image, or
+            <c>null</c> to use a default client.</param>
+            <returns>A task representing the asynchronous operation. The result will be the newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FetchFromUriAsync(System.String,System.Net.Http.HttpClient)">
+            <summary>
+            Asynchronously constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> by downloading data from the given URI.
+            </summary>
+            <param name="uri">The URI to fetch. Must not be null.</param>
+            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> to use to fetch the image, or
+            <c>null</c> to use a default client.</param>
+            <returns>A task representing the asynchronous operation. The result will be the newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FetchFromUri(System.String,System.Net.Http.HttpClient)">
+            <summary>
+            Constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> by downloading data from the given URI.
+            </summary>
+            <param name="uri">The URI to fetch. Must not be null.</param>
+            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> to use to fetch the image, or
+            <c>null</c> to use a default client.</param>
+            <returns>The newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FetchFromUri(System.Uri,System.Net.Http.HttpClient)">
+            <summary>
+            Constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> by downloading data from the given URI.
+            </summary>
+            <param name="uri">The URI to fetch. Must not be null.</param>
+            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> to use to fetch the image, or
+            <c>null</c> to use a default client.</param>
+            <returns>The newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FromFile(System.String)">
+            <summary>
+            Constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> by loading data from the given file path.
+            </summary>
+            <param name="path">The file path to load RecognitionAudio data from. Must not be null.</param>
+            <returns>The newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FromFileAsync(System.String)">
+            <summary>
+            Asynchronously constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> by loading data from the given file path.
+            </summary>
+            <param name="path">The file path to load RecognitionAudio data from. Must not be null.</param>
+            <returns>The newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FromStream(System.IO.Stream)">
+            <summary>
+            Constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> by loading data from the given stream.
+            </summary>
+            <param name="stream">The stream to load RecognitionAudio data from. Must not be null.</param>
+            <returns>The newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FromStreamAsync(System.IO.Stream)">
+            <summary>
+            Asynchronously constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> by loading data from the given stream.
+            </summary>
+            <param name="stream">The stream to load RecognitionAudio data from. Must not be null.</param>
+            <returns>The newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FromBytes(System.Byte[])">
+            <summary>
+            Constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> from the given byte array.
+            </summary>
+            <remarks>This method copies the data from the byte array; modifications to <paramref name="bytes"/>
+            after this method returns will not be reflected in the RecognitionAudio.</remarks>
+            <param name="bytes">The bytes representing the raw RecognitionAudio data.</param>
+            <returns>The newly created RecognitionAudio.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.RecognitionAudio.FromBytes(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Constructs a <see cref="T:Google.Cloud.Speech.V1.RecognitionAudio"/> from a section of the given byte array.
+            </summary>
+            <remarks>This method copies the data from the byte array; modifications to <paramref name="bytes"/>
+            after this method returns will not be reflected in the RecognitionAudio.</remarks>
+            <param name="bytes">The bytes representing the raw RecognitionAudio data.</param>
+            <param name="offset">The offset into the byte array of the start of the data to include in the RecognitionAudio.</param>
+            <param name="count">The number of bytes to include in the RecognitionAudio.</param>
+            <returns>The newly created RecognitionAudio.</returns>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.RecognizeResponse">
+            <summary>
+            The only message returned to the client by the `Recognize` method. It
+            contains the result as zero or more sequential `SpeechRecognitionResult`
+            messages.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.RecognizeResponse.ResultsFieldNumber">
+            <summary>Field number for the "results" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.RecognizeResponse.Results">
+            <summary>
+            *Output-only* Sequential list of transcription results corresponding to
+            sequential portions of audio.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LongRunningRecognizeResponse">
+            <summary>
+            The only message returned to the client by the `LongRunningRecognize` method.
+            It contains the result as zero or more sequential `SpeechRecognitionResult`
+            messages. It is included in the `result.response` field of the `Operation`
+            returned by the `GetOperation` call of the `google::longrunning::Operations`
+            service.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LongRunningRecognizeResponse.ResultsFieldNumber">
+            <summary>Field number for the "results" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.LongRunningRecognizeResponse.Results">
+            <summary>
+            *Output-only* Sequential list of transcription results corresponding to
+            sequential portions of audio.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LongRunningRecognizeMetadata">
+            <summary>
+            Describes the progress of a long-running `LongRunningRecognize` call. It is
+            included in the `metadata` field of the `Operation` returned by the
+            `GetOperation` call of the `google::longrunning::Operations` service.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LongRunningRecognizeMetadata.ProgressPercentFieldNumber">
+            <summary>Field number for the "progress_percent" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.LongRunningRecognizeMetadata.ProgressPercent">
+            <summary>
+            Approximate percentage of audio processed thus far. Guaranteed to be 100
+            when the audio is fully processed and the results are available.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LongRunningRecognizeMetadata.StartTimeFieldNumber">
+            <summary>Field number for the "start_time" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.LongRunningRecognizeMetadata.StartTime">
+            <summary>
+            Time when the request was received.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LongRunningRecognizeMetadata.LastUpdateTimeFieldNumber">
+            <summary>Field number for the "last_update_time" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.LongRunningRecognizeMetadata.LastUpdateTime">
+            <summary>
+            Time of the most recent processing update.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.StreamingRecognizeResponse">
+             <summary>
+             `StreamingRecognizeResponse` is the only message returned to the client by
+             `StreamingRecognize`. A series of one or more `StreamingRecognizeResponse`
+             messages are streamed back to the client.
+            
+             Here's an example of a series of ten `StreamingRecognizeResponse`s that might
+             be returned while processing audio:
+            
+             1. results { alternatives { transcript: "tube" } stability: 0.01 }
+            
+             2. results { alternatives { transcript: "to be a" } stability: 0.01 }
+            
+             3. results { alternatives { transcript: "to be" } stability: 0.9 }
+                results { alternatives { transcript: " or not to be" } stability: 0.01 }
+            
+             4. results { alternatives { transcript: "to be or not to be"
+                                         confidence: 0.92 }
+                          alternatives { transcript: "to bee or not to bee" }
+                          is_final: true }
+            
+             5. results { alternatives { transcript: " that's" } stability: 0.01 }
+            
+             6. results { alternatives { transcript: " that is" } stability: 0.9 }
+                results { alternatives { transcript: " the question" } stability: 0.01 }
+            
+             7. speech_event_type: END_OF_SINGLE_UTTERANCE
+            
+             8. results { alternatives { transcript: " that is the question"
+                                         confidence: 0.98 }
+                          alternatives { transcript: " that was the question" }
+                          is_final: true }
+            
+             Notes:
+            
+             - Only two of the above responses #4 and #8 contain final results; they are
+               indicated by `is_final: true`. Concatenating these together generates the
+               full transcript: "to be or not to be that is the question".
+            
+             - The others contain interim `results`. #3 and #6 contain two interim
+               `results`: the first portion has a high stability and is less likely to
+               change; the second portion has a low stability and is very likely to
+               change. A UI designer might choose to show only high stability `results`.
+            
+             - The specific `stability` and `confidence` values shown above are only for
+               illustrative purposes. Actual values may vary.
+            
+             - In each response, only one of these fields will be set:
+                 `error`,
+                 `speech_event_type`, or
+                 one or more (repeated) `results`.
+             </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognizeResponse.ErrorFieldNumber">
+            <summary>Field number for the "error" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognizeResponse.Error">
+            <summary>
+            *Output-only* If set, returns a [google.rpc.Status][] message that
+            specifies the error for the operation.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognizeResponse.ResultsFieldNumber">
+            <summary>Field number for the "results" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognizeResponse.Results">
+            <summary>
+            *Output-only* This repeated list contains zero or more results that
+            correspond to consecutive portions of the audio currently being processed.
+            It contains zero or one `is_final=true` result (the newly settled portion),
+            followed by zero or more `is_final=false` results.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognizeResponse.SpeechEventTypeFieldNumber">
+            <summary>Field number for the "speech_event_type" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognizeResponse.SpeechEventType">
+            <summary>
+            *Output-only* Indicates the type of speech event.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.StreamingRecognizeResponse.Types">
+            <summary>Container for nested types declared in the StreamingRecognizeResponse message type.</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.StreamingRecognizeResponse.Types.SpeechEventType">
+            <summary>
+            Indicates the type of speech event.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognizeResponse.Types.SpeechEventType.SpeechEventUnspecified">
+            <summary>
+            No speech event specified.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognizeResponse.Types.SpeechEventType.EndOfSingleUtterance">
+            <summary>
+            This event indicates that the server has detected the end of the user's
+            speech utterance and expects no additional speech. Therefore, the server
+            will not process additional audio (although it may subsequently return
+            additional results). The client should stop sending additional audio
+            data, half-close the gRPC connection, and wait for any additional results
+            until the server closes the gRPC connection. This event is only sent if
+            `single_utterance` was set to `true`, and is not used otherwise.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.StreamingRecognitionResult">
+            <summary>
+            A streaming speech recognition result corresponding to a portion of the audio
+            that is currently being processed.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognitionResult.AlternativesFieldNumber">
+            <summary>Field number for the "alternatives" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognitionResult.Alternatives">
+            <summary>
+            *Output-only* May contain one or more recognition hypotheses (up to the
+            maximum specified in `max_alternatives`).
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognitionResult.IsFinalFieldNumber">
+            <summary>Field number for the "is_final" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognitionResult.IsFinal">
+            <summary>
+            *Output-only* If `false`, this `StreamingRecognitionResult` represents an
+            interim result that may change. If `true`, this is the final time the
+            speech service will return this particular `StreamingRecognitionResult`,
+            the recognizer will not return any further hypotheses for this portion of
+            the transcript and corresponding audio.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.StreamingRecognitionResult.StabilityFieldNumber">
+            <summary>Field number for the "stability" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.StreamingRecognitionResult.Stability">
+            <summary>
+            *Output-only* An estimate of the likelihood that the recognizer will not
+            change its guess about this interim result. Values range from 0.0
+            (completely unstable) to 1.0 (completely stable).
+            This field is only provided for interim results (`is_final=false`).
+            The default of 0.0 is a sentinel value indicating `stability` was not set.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.SpeechRecognitionResult">
+            <summary>
+            A speech recognition result corresponding to a portion of the audio.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.SpeechRecognitionResult.AlternativesFieldNumber">
+            <summary>Field number for the "alternatives" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechRecognitionResult.Alternatives">
+            <summary>
+            *Output-only* May contain one or more recognition hypotheses (up to the
+            maximum specified in `max_alternatives`).
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.SpeechRecognitionAlternative">
+            <summary>
+            Alternative hypotheses (a.k.a. n-best list).
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.SpeechRecognitionAlternative.TranscriptFieldNumber">
+            <summary>Field number for the "transcript" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechRecognitionAlternative.Transcript">
+            <summary>
+            *Output-only* Transcript text representing the words that the user spoke.
+            </summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.SpeechRecognitionAlternative.ConfidenceFieldNumber">
+            <summary>Field number for the "confidence" field.</summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechRecognitionAlternative.Confidence">
+            <summary>
+            *Output-only* The confidence estimate between 0.0 and 1.0. A higher number
+            indicates an estimated greater likelihood that the recognized words are
+            correct. This field is typically provided only for the top hypothesis, and
+            only for `is_final=true` results. Clients should not rely on the
+            `confidence` field as it is not guaranteed to be accurate, or even set, in
+            any of the results.
+            The default of 0.0 is a sentinel value indicating `confidence` was not set.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.Speech">
+            <summary>
+            Service that implements Google Cloud Speech API.
+            </summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.Speech.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.Speech.SpeechBase">
+            <summary>Base class for server-side implementations of Speech</summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechBase.Recognize(Google.Cloud.Speech.V1.RecognizeRequest,Grpc.Core.ServerCallContext)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="request">The request received from the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>The response to send back to the client (wrapped by a task).</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechBase.LongRunningRecognize(Google.Cloud.Speech.V1.LongRunningRecognizeRequest,Grpc.Core.ServerCallContext)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="request">The request received from the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>The response to send back to the client (wrapped by a task).</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechBase.StreamingRecognize(Grpc.Core.IAsyncStreamReader{Google.Cloud.Speech.V1.StreamingRecognizeRequest},Grpc.Core.IServerStreamWriter{Google.Cloud.Speech.V1.StreamingRecognizeResponse},Grpc.Core.ServerCallContext)">
+            <summary>
+            Performs bidirectional streaming speech recognition: receive results while
+            sending audio. This method is only available via the gRPC API (not REST).
+            </summary>
+            <param name="requestStream">Used for reading requests from the client.</param>
+            <param name="responseStream">Used for sending responses back to the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>A task indicating completion of the handler.</returns>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.Speech.SpeechClient">
+            <summary>Client for Speech</summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.#ctor(Grpc.Core.Channel)">
+            <summary>Creates a new client for Speech</summary>
+            <param name="channel">The channel to use to make remote calls.</param>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.#ctor(Grpc.Core.CallInvoker)">
+            <summary>Creates a new client for Speech that uses a custom <c>CallInvoker</c>.</summary>
+            <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.#ctor">
+            <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Protected constructor to allow creation of configured clients.</summary>
+            <param name="configuration">The client configuration.</param>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.Recognize(Google.Cloud.Speech.V1.RecognizeRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.Recognize(Google.Cloud.Speech.V1.RecognizeRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.RecognizeAsync(Google.Cloud.Speech.V1.RecognizeRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.RecognizeAsync(Google.Cloud.Speech.V1.RecognizeRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.LongRunningRecognize(Google.Cloud.Speech.V1.LongRunningRecognizeRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.LongRunningRecognize(Google.Cloud.Speech.V1.LongRunningRecognizeRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The response received from the server.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.LongRunningRecognizeAsync(Google.Cloud.Speech.V1.LongRunningRecognizeRequest,Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.LongRunningRecognizeAsync(Google.Cloud.Speech.V1.LongRunningRecognizeRequest,Grpc.Core.CallOptions)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="request">The request to send to the server.</param>
+            <param name="options">The options for the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.StreamingRecognize(Grpc.Core.Metadata,System.Nullable{System.DateTime},System.Threading.CancellationToken)">
+            <summary>
+            Performs bidirectional streaming speech recognition: receive results while
+            sending audio. This method is only available via the gRPC API (not REST).
+            </summary>
+            <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+            <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+            <param name="cancellationToken">An optional token for canceling the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.StreamingRecognize(Grpc.Core.CallOptions)">
+            <summary>
+            Performs bidirectional streaming speech recognition: receive results while
+            sending audio. This method is only available via the gRPC API (not REST).
+            </summary>
+            <param name="options">The options for the call.</param>
+            <returns>The call object.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.SpeechClient.CreateOperationsClient">
+            <summary>
+            Creates a new instance of <see cref="T:Google.LongRunning.Operations.OperationsClient"/> using the same call invoker as this client. 
+            </summary>
+            <returns>A new Operations client for the same target as this client.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.Speech.BindService(Google.Cloud.Speech.V1.Speech.SpeechBase)">
+            <summary>Creates service definition that can be registered with a server</summary>
+            <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes">
+            <summary>
+            A helper class forming a hierarchy of supported language codes, via nested classes.
+            All language codes are eventually represented as string constants. This is simply
+            a code-convenient form of the table at https://cloud.google.com/speech/docs/languages.
+            It is regenerated regularly, but not guaranteed to be complete at any moment in time;
+            if the language you wish to use is present in the table but not covered here, please use
+            the listed language code as a hard-coded string until this class catches up.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Afrikaans">
+            <summary>Language codes for Afrikaans.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Afrikaans.SouthAfrica">
+            <summary>Language code for Afrikaans (South Africa)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Arabic">
+            <summary>Language codes for Arabic.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Algeria">
+            <summary>Language code for Arabic (Algeria)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Bahrain">
+            <summary>Language code for Arabic (Bahrain)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Egypt">
+            <summary>Language code for Arabic (Egypt)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Iraq">
+            <summary>Language code for Arabic (Iraq)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Israel">
+            <summary>Language code for Arabic (Israel)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Jordan">
+            <summary>Language code for Arabic (Jordan)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Kuwait">
+            <summary>Language code for Arabic (Kuwait)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Lebanon">
+            <summary>Language code for Arabic (Lebanon)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Morocco">
+            <summary>Language code for Arabic (Morocco)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Oman">
+            <summary>Language code for Arabic (Oman)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Qatar">
+            <summary>Language code for Arabic (Qatar)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.SaudiArabia">
+            <summary>Language code for Arabic (Saudi Arabia)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.StateofPalestine">
+            <summary>Language code for Arabic (State of Palestine)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.Tunisia">
+            <summary>Language code for Arabic (Tunisia)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Arabic.UnitedArabEmirates">
+            <summary>Language code for Arabic (United Arab Emirates)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Basque">
+            <summary>Language codes for Basque.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Basque.Spain">
+            <summary>Language code for Basque (Spain)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Bulgarian">
+            <summary>Language codes for Bulgarian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Bulgarian.Bulgaria">
+            <summary>Language code for Bulgarian (Bulgaria)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Catalan">
+            <summary>Language codes for Catalan.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Catalan.Spain">
+            <summary>Language code for Catalan (Spain)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.ChineseCantonese">
+            <summary>Language codes for Chinese, Cantonese.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.ChineseCantonese.TraditionalHongKong">
+            <summary>Language code for Chinese, Cantonese (Traditional, Hong Kong)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.ChineseMandarin">
+            <summary>Language codes for Chinese, Mandarin.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.ChineseMandarin.SimplifiedChina">
+            <summary>Language code for Chinese, Mandarin (Simplified, China)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.ChineseMandarin.SimplifiedHongKong">
+            <summary>Language code for Chinese, Mandarin (Simplified, Hong Kong)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.ChineseMandarin.TraditionalTaiwan">
+            <summary>Language code for Chinese, Mandarin (Traditional, Taiwan)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Croatian">
+            <summary>Language codes for Croatian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Croatian.Croatia">
+            <summary>Language code for Croatian (Croatia)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Czech">
+            <summary>Language codes for Czech.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Czech.CzechRepublic">
+            <summary>Language code for Czech (Czech Republic)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Danish">
+            <summary>Language codes for Danish.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Danish.Denmark">
+            <summary>Language code for Danish (Denmark)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Dutch">
+            <summary>Language codes for Dutch.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Dutch.Netherlands">
+            <summary>Language code for Dutch (Netherlands)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.English">
+            <summary>Language codes for English.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.English.Australia">
+            <summary>Language code for English (Australia)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.English.Canada">
+            <summary>Language code for English (Canada)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.English.India">
+            <summary>Language code for English (India)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.English.Ireland">
+            <summary>Language code for English (Ireland)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.English.NewZealand">
+            <summary>Language code for English (New Zealand)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.English.Philippines">
+            <summary>Language code for English (Philippines)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.English.SouthAfrica">
+            <summary>Language code for English (South Africa)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.English.UnitedKingdom">
+            <summary>Language code for English (United Kingdom)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.English.UnitedStates">
+            <summary>Language code for English (United States)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Filipino">
+            <summary>Language codes for Filipino.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Filipino.Philippines">
+            <summary>Language code for Filipino (Philippines)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Finnish">
+            <summary>Language codes for Finnish.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Finnish.Finland">
+            <summary>Language code for Finnish (Finland)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.French">
+            <summary>Language codes for French.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.French.Canada">
+            <summary>Language code for French (Canada)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.French.France">
+            <summary>Language code for French (France)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Galician">
+            <summary>Language codes for Galician.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Galician.Spain">
+            <summary>Language code for Galician (Spain)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.German">
+            <summary>Language codes for German.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.German.Germany">
+            <summary>Language code for German (Germany)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Greek">
+            <summary>Language codes for Greek.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Greek.Greece">
+            <summary>Language code for Greek (Greece)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Hebrew">
+            <summary>Language codes for Hebrew.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Hebrew.Israel">
+            <summary>Language code for Hebrew (Israel)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Hindi">
+            <summary>Language codes for Hindi.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Hindi.India">
+            <summary>Language code for Hindi (India)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Hungarian">
+            <summary>Language codes for Hungarian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Hungarian.Hungary">
+            <summary>Language code for Hungarian (Hungary)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Icelandic">
+            <summary>Language codes for Icelandic.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Icelandic.Iceland">
+            <summary>Language code for Icelandic (Iceland)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Indonesian">
+            <summary>Language codes for Indonesian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Indonesian.Indonesia">
+            <summary>Language code for Indonesian (Indonesia)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Italian">
+            <summary>Language codes for Italian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Italian.Italy">
+            <summary>Language code for Italian (Italy)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Japanese">
+            <summary>Language codes for Japanese.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Japanese.Japan">
+            <summary>Language code for Japanese (Japan)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Korean">
+            <summary>Language codes for Korean.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Korean.SouthKorea">
+            <summary>Language code for Korean (South Korea)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Lithuanian">
+            <summary>Language codes for Lithuanian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Lithuanian.Lithuania">
+            <summary>Language code for Lithuanian (Lithuania)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Malay">
+            <summary>Language codes for Malay.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Malay.Malaysia">
+            <summary>Language code for Malay (Malaysia)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.NorwegianBokmal">
+            <summary>Language codes for Norwegian Bokmål.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.NorwegianBokmal.Norway">
+            <summary>Language code for Norwegian Bokmål (Norway)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Persian">
+            <summary>Language codes for Persian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Persian.Iran">
+            <summary>Language code for Persian (Iran)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Polish">
+            <summary>Language codes for Polish.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Polish.Poland">
+            <summary>Language code for Polish (Poland)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Portuguese">
+            <summary>Language codes for Portuguese.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Portuguese.Brazil">
+            <summary>Language code for Portuguese (Brazil)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Portuguese.Portugal">
+            <summary>Language code for Portuguese (Portugal)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Romanian">
+            <summary>Language codes for Romanian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Romanian.Romania">
+            <summary>Language code for Romanian (Romania)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Russian">
+            <summary>Language codes for Russian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Russian.Russia">
+            <summary>Language code for Russian (Russia)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Serbian">
+            <summary>Language codes for Serbian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Serbian.Serbia">
+            <summary>Language code for Serbian (Serbia)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Slovak">
+            <summary>Language codes for Slovak.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Slovak.Slovakia">
+            <summary>Language code for Slovak (Slovakia)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Slovenian">
+            <summary>Language codes for Slovenian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Slovenian.Slovenia">
+            <summary>Language code for Slovenian (Slovenia)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Spanish">
+            <summary>Language codes for Spanish.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Argentina">
+            <summary>Language code for Spanish (Argentina)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Bolivia">
+            <summary>Language code for Spanish (Bolivia)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Chile">
+            <summary>Language code for Spanish (Chile)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Colombia">
+            <summary>Language code for Spanish (Colombia)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.CostaRica">
+            <summary>Language code for Spanish (Costa Rica)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.DominicanRepublic">
+            <summary>Language code for Spanish (Dominican Republic)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Ecuador">
+            <summary>Language code for Spanish (Ecuador)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.ElSalvador">
+            <summary>Language code for Spanish (El Salvador)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Guatemala">
+            <summary>Language code for Spanish (Guatemala)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Honduras">
+            <summary>Language code for Spanish (Honduras)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Mexico">
+            <summary>Language code for Spanish (Mexico)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Nicaragua">
+            <summary>Language code for Spanish (Nicaragua)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Panama">
+            <summary>Language code for Spanish (Panama)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Paraguay">
+            <summary>Language code for Spanish (Paraguay)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Peru">
+            <summary>Language code for Spanish (Peru)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.PuertoRico">
+            <summary>Language code for Spanish (Puerto Rico)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Spain">
+            <summary>Language code for Spanish (Spain)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.UnitedStates">
+            <summary>Language code for Spanish (United States)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Uruguay">
+            <summary>Language code for Spanish (Uruguay)</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Spanish.Venezuela">
+            <summary>Language code for Spanish (Venezuela)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Swedish">
+            <summary>Language codes for Swedish.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Swedish.Sweden">
+            <summary>Language code for Swedish (Sweden)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Thai">
+            <summary>Language codes for Thai.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Thai.Thailand">
+            <summary>Language code for Thai (Thailand)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Turkish">
+            <summary>Language codes for Turkish.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Turkish.Turkey">
+            <summary>Language code for Turkish (Turkey)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Ukrainian">
+            <summary>Language codes for Ukrainian.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Ukrainian.Ukraine">
+            <summary>Language code for Ukrainian (Ukraine)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Vietnamese">
+            <summary>Language codes for Vietnamese.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Vietnamese.Vietnam">
+            <summary>Language code for Vietnamese (Vietnam)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.LanguageCodes.Zulu">
+            <summary>Language codes for Zulu.</summary>
+        </member>
+        <member name="F:Google.Cloud.Speech.V1.LanguageCodes.Zulu.SouthAfrica">
+            <summary>Language code for Zulu (South Africa)</summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.SpeechSettings">
+            <summary>
+            Settings for a <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/>.
+            </summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechSettings.GetDefault">
+            <summary>
+            Get a new instance of the default <see cref="T:Google.Cloud.Speech.V1.SpeechSettings"/>.
+            </summary>
+            <returns>
+            A new instance of the default <see cref="T:Google.Cloud.Speech.V1.SpeechSettings"/>.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechSettings.#ctor">
+            <summary>
+            Constructs a new <see cref="T:Google.Cloud.Speech.V1.SpeechSettings"/> object with default settings.
+            </summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechSettings.IdempotentRetryFilter">
+            <summary>
+            The filter specifying which RPC <see cref="T:Grpc.Core.StatusCode"/>s are eligible for retry
+            for "Idempotent" <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/> RPC methods.
+            </summary>
+            <remarks>
+            The eligible RPC <see cref="T:Grpc.Core.StatusCode"/>s for retry for "Idempotent" RPC methods are:
+            <list type="bullet">
+            <item><description><see cref="F:Grpc.Core.StatusCode.DeadlineExceeded"/></description></item>
+            <item><description><see cref="F:Grpc.Core.StatusCode.Unavailable"/></description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechSettings.NonIdempotentRetryFilter">
+            <summary>
+            The filter specifying which RPC <see cref="T:Grpc.Core.StatusCode"/>s are eligible for retry
+            for "NonIdempotent" <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/> RPC methods.
+            </summary>
+            <remarks>
+            The eligible RPC <see cref="T:Grpc.Core.StatusCode"/>s for retry for "NonIdempotent" RPC methods are:
+            <list type="bullet">
+            <item><description><see cref="F:Grpc.Core.StatusCode.Unavailable"/></description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechSettings.GetDefaultRetryBackoff">
+            <summary>
+            "Default" retry backoff for <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/> RPC methods.
+            </summary>
+            <returns>
+            The "Default" retry backoff for <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/> RPC methods.
+            </returns>
+            <remarks>
+            The "Default" retry backoff for <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/> RPC methods is defined as:
+            <list type="bullet">
+            <item><description>Initial delay: 100 milliseconds</description></item>
+            <item><description>Maximum delay: 60000 milliseconds</description></item>
+            <item><description>Delay multiplier: 1.3</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechSettings.GetDefaultTimeoutBackoff">
+            <summary>
+            "Default" timeout backoff for <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/> RPC methods.
+            </summary>
+            <returns>
+            The "Default" timeout backoff for <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/> RPC methods.
+            </returns>
+            <remarks>
+            The "Default" timeout backoff for <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/> RPC methods is defined as:
+            <list type="bullet">
+            <item><description>Initial timeout: 190000 milliseconds</description></item>
+            <item><description>Timeout multiplier: 1.0</description></item>
+            <item><description>Maximum timeout: 190000 milliseconds</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechSettings.RecognizeSettings">
+            <summary>
+            <see cref="T:Google.Api.Gax.Grpc.CallSettings"/> for synchronous and asynchronous calls to
+            <c>SpeechClient.Recognize</c> and <c>SpeechClient.RecognizeAsync</c>.
+            </summary>
+            <remarks>
+            The default <c>SpeechClient.Recognize</c> and
+            <c>SpeechClient.RecognizeAsync</c> <see cref="T:Google.Api.Gax.Grpc.RetrySettings"/> are:
+            <list type="bullet">
+            <item><description>Initial retry delay: 100 milliseconds</description></item>
+            <item><description>Retry delay multiplier: 1.3</description></item>
+            <item><description>Retry maximum delay: 60000 milliseconds</description></item>
+            <item><description>Initial timeout: 190000 milliseconds</description></item>
+            <item><description>Timeout multiplier: 1.0</description></item>
+            <item><description>Timeout maximum delay: 190000 milliseconds</description></item>
+            </list>
+            Retry will be attempted on the following response status codes:
+            <list>
+            <item><description><see cref="F:Grpc.Core.StatusCode.DeadlineExceeded"/></description></item>
+            <item><description><see cref="F:Grpc.Core.StatusCode.Unavailable"/></description></item>
+            </list>
+            Default RPC expiration is 600000 milliseconds.
+            </remarks>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechSettings.LongRunningRecognizeSettings">
+            <summary>
+            <see cref="T:Google.Api.Gax.Grpc.CallSettings"/> for synchronous and asynchronous calls to
+            <c>SpeechClient.LongRunningRecognize</c> and <c>SpeechClient.LongRunningRecognizeAsync</c>.
+            </summary>
+            <remarks>
+            The default <c>SpeechClient.LongRunningRecognize</c> and
+            <c>SpeechClient.LongRunningRecognizeAsync</c> <see cref="T:Google.Api.Gax.Grpc.RetrySettings"/> are:
+            <list type="bullet">
+            <item><description>Initial retry delay: 100 milliseconds</description></item>
+            <item><description>Retry delay multiplier: 1.3</description></item>
+            <item><description>Retry maximum delay: 60000 milliseconds</description></item>
+            <item><description>Initial timeout: 190000 milliseconds</description></item>
+            <item><description>Timeout multiplier: 1.0</description></item>
+            <item><description>Timeout maximum delay: 190000 milliseconds</description></item>
+            </list>
+            Retry will be attempted on the following response status codes:
+            <list>
+            <item><description><see cref="F:Grpc.Core.StatusCode.Unavailable"/></description></item>
+            </list>
+            Default RPC expiration is 600000 milliseconds.
+            </remarks>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechSettings.StreamingRecognizeSettings">
+            <summary>
+            <see cref="T:Google.Api.Gax.Grpc.CallSettings"/> for calls to <c>SpeechClient.StreamingRecognize</c>.
+            </summary>
+            <remarks>
+            Default RPC expiration is 600000 milliseconds.
+            </remarks>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechSettings.StreamingRecognizeStreamingSettings">
+            <summary>
+            <see cref="T:Google.Api.Gax.Grpc.BidirectionalStreamingSettings"/> for calls to
+            <c>SpeechClient.StreamingRecognize</c>.
+            </summary>
+            <remarks>
+            The default local send queue size is 100.
+            </remarks>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechSettings.LongRunningOperationsSettings">
+            <summary>
+            Settings used for long running operations.
+            </summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechSettings.Clone">
+            <summary>
+            Creates a deep clone of this object, with all the same property values.
+            </summary>
+            <returns>A deep clone of this <see cref="T:Google.Cloud.Speech.V1.SpeechSettings"/> object.</returns>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.SpeechClient">
+            <summary>
+            Speech client wrapper, for convenient use.
+            </summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechClient.DefaultEndpoint">
+            <summary>
+            The default endpoint for the Speech service, which is a host of "speech.googleapis.com" and a port of 443.
+            </summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechClient.DefaultScopes">
+            <summary>
+            The default Speech scopes.
+            </summary>
+            <remarks>
+            The default Speech scopes are:
+            <list type="bullet">
+            <item><description>"https://www.googleapis.com/auth/cloud-platform"</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.CreateAsync(Google.Api.Gax.Grpc.ServiceEndpoint,Google.Cloud.Speech.V1.SpeechSettings)">
+            <summary>
+            Asynchronously creates a <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/>, applying defaults for all unspecified settings,
+            and creating a channel connecting to the given endpoint with application default credentials where
+            necessary.
+            </summary>
+            <param name="endpoint">Optional <see cref="T:Google.Api.Gax.Grpc.ServiceEndpoint"/>.</param>
+            <param name="settings">Optional <see cref="T:Google.Cloud.Speech.V1.SpeechSettings"/>.</param>
+            <returns>The task representing the created <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/>.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.Create(Google.Api.Gax.Grpc.ServiceEndpoint,Google.Cloud.Speech.V1.SpeechSettings)">
+            <summary>
+            Synchronously creates a <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/>, applying defaults for all unspecified settings,
+            and creating a channel connecting to the given endpoint with application default credentials where
+            necessary.
+            </summary>
+            <param name="endpoint">Optional <see cref="T:Google.Api.Gax.Grpc.ServiceEndpoint"/>.</param>
+            <param name="settings">Optional <see cref="T:Google.Cloud.Speech.V1.SpeechSettings"/>.</param>
+            <returns>The created <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/>.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.Create(Grpc.Core.Channel,Google.Cloud.Speech.V1.SpeechSettings)">
+            <summary>
+            Creates a <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/> which uses the specified channel for remote operations.
+            </summary>
+            <param name="channel">The <see cref="T:Grpc.Core.Channel"/> for remote operations. Must not be null.</param>
+            <param name="settings">Optional <see cref="T:Google.Cloud.Speech.V1.SpeechSettings"/>.</param>
+            <returns>The created <see cref="T:Google.Cloud.Speech.V1.SpeechClient"/>.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.ShutdownDefaultChannelsAsync">
+            <summary>
+            Shuts down any channels automatically created by <see cref="M:Google.Cloud.Speech.V1.SpeechClient.Create(Google.Api.Gax.Grpc.ServiceEndpoint,Google.Cloud.Speech.V1.SpeechSettings)"/>
+            and <see cref="M:Google.Cloud.Speech.V1.SpeechClient.CreateAsync(Google.Api.Gax.Grpc.ServiceEndpoint,Google.Cloud.Speech.V1.SpeechSettings)"/>. Channels which weren't automatically
+            created are not affected.
+            </summary>
+            <remarks>After calling this method, further calls to <see cref="M:Google.Cloud.Speech.V1.SpeechClient.Create(Google.Api.Gax.Grpc.ServiceEndpoint,Google.Cloud.Speech.V1.SpeechSettings)"/>
+            and <see cref="M:Google.Cloud.Speech.V1.SpeechClient.CreateAsync(Google.Api.Gax.Grpc.ServiceEndpoint,Google.Cloud.Speech.V1.SpeechSettings)"/> will create new channels, which could
+            in turn be shut down by another call to this method.</remarks>
+            <returns>A task representing the asynchronous shutdown operation.</returns>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechClient.GrpcClient">
+            <summary>
+            The underlying gRPC Speech client.
+            </summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechClient.LongRunningOperationsClient">
+            <summary>
+            The client for long-running operations.
+            </summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.RecognizeAsync(Google.Cloud.Speech.V1.RecognitionConfig,Google.Cloud.Speech.V1.RecognitionAudio,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="config">
+            *Required* Provides information to the recognizer that specifies how to
+            process the request.
+            </param>
+            <param name="audio">
+            *Required* The audio data to be recognized.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            A Task containing the RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.RecognizeAsync(Google.Cloud.Speech.V1.RecognitionConfig,Google.Cloud.Speech.V1.RecognitionAudio,System.Threading.CancellationToken)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="config">
+            *Required* Provides information to the recognizer that specifies how to
+            process the request.
+            </param>
+            <param name="audio">
+            *Required* The audio data to be recognized.
+            </param>
+            <param name="cancellationToken">
+            A <see cref="T:System.Threading.CancellationToken"/> to use for this RPC.
+            </param>
+            <returns>
+            A Task containing the RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.Recognize(Google.Cloud.Speech.V1.RecognitionConfig,Google.Cloud.Speech.V1.RecognitionAudio,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="config">
+            *Required* Provides information to the recognizer that specifies how to
+            process the request.
+            </param>
+            <param name="audio">
+            *Required* The audio data to be recognized.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            The RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.RecognizeAsync(Google.Cloud.Speech.V1.RecognizeRequest,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="request">
+            The request object containing all of the parameters for the API call.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            A Task containing the RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.Recognize(Google.Cloud.Speech.V1.RecognizeRequest,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="request">
+            The request object containing all of the parameters for the API call.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            The RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.LongRunningRecognizeAsync(Google.Cloud.Speech.V1.RecognitionConfig,Google.Cloud.Speech.V1.RecognitionAudio,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="config">
+            *Required* Provides information to the recognizer that specifies how to
+            process the request.
+            </param>
+            <param name="audio">
+            *Required* The audio data to be recognized.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            A Task containing the RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.LongRunningRecognizeAsync(Google.Cloud.Speech.V1.RecognitionConfig,Google.Cloud.Speech.V1.RecognitionAudio,System.Threading.CancellationToken)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="config">
+            *Required* Provides information to the recognizer that specifies how to
+            process the request.
+            </param>
+            <param name="audio">
+            *Required* The audio data to be recognized.
+            </param>
+            <param name="cancellationToken">
+            A <see cref="T:System.Threading.CancellationToken"/> to use for this RPC.
+            </param>
+            <returns>
+            A Task containing the RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.LongRunningRecognize(Google.Cloud.Speech.V1.RecognitionConfig,Google.Cloud.Speech.V1.RecognitionAudio,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="config">
+            *Required* Provides information to the recognizer that specifies how to
+            process the request.
+            </param>
+            <param name="audio">
+            *Required* The audio data to be recognized.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            The RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.LongRunningRecognizeAsync(Google.Cloud.Speech.V1.LongRunningRecognizeRequest,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="request">
+            The request object containing all of the parameters for the API call.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            A Task containing the RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.PollOnceLongRunningRecognizeAsync(System.String,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Asynchronously poll an operation once, using an <c>operationName</c> from a previous invocation of <c>LongRunningRecognizeAsync</c>.
+            </summary>
+            <param name="operationName">The name of a previously invoked operation. Must not be <c>null</c> or empty.</param>
+            <param name="callSettings">If not null, applies overrides to this RPC call.</param>
+            <returns>A task representing the result of polling the operation.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.LongRunningRecognize(Google.Cloud.Speech.V1.LongRunningRecognizeRequest,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="request">
+            The request object containing all of the parameters for the API call.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            The RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.PollOnceLongRunningRecognize(System.String,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Poll an operation once, using an <c>operationName</c> from a previous invocation of <c>LongRunningRecognize</c>.
+            </summary>
+            <param name="operationName">The name of a previously invoked operation. Must not be <c>null</c> or empty.</param>
+            <param name="callSettings">If not null, applies overrides to this RPC call.</param>
+            <returns>The result of polling the operation.</returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClient.StreamingRecognize(Google.Api.Gax.Grpc.CallSettings,Google.Api.Gax.Grpc.BidirectionalStreamingSettings)">
+            <summary>
+            Performs bidirectional streaming speech recognition: receive results while
+            sending audio. This method is only available via the gRPC API (not REST).
+            </summary>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <param name="streamingSettings">
+            If not null, applies streaming overrides to this RPC call.
+            </param>
+            <returns>
+            The client-server stream.
+            </returns>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.SpeechClient.StreamingRecognizeStream">
+            <summary>
+            Bidirectional streaming methods for <c>StreamingRecognize</c>.
+            </summary>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.SpeechClientImpl">
+            <summary>
+            Speech client wrapper implementation, for convenient use.
+            </summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.#ctor(Google.Cloud.Speech.V1.Speech.SpeechClient,Google.Cloud.Speech.V1.SpeechSettings)">
+            <summary>
+            Constructs a client wrapper for the Speech service, with the specified gRPC client and settings.
+            </summary>
+            <param name="grpcClient">The underlying gRPC client.</param>
+            <param name="settings">The base <see cref="T:Google.Cloud.Speech.V1.SpeechSettings"/> used within this client </param>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechClientImpl.GrpcClient">
+            <summary>
+            The underlying gRPC Speech client.
+            </summary>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechClientImpl.LongRunningOperationsClient">
+            <summary>
+            The client for long-running operations.
+            </summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.RecognizeAsync(Google.Cloud.Speech.V1.RecognizeRequest,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="request">
+            The request object containing all of the parameters for the API call.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            A Task containing the RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.Recognize(Google.Cloud.Speech.V1.RecognizeRequest,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs synchronous speech recognition: receive results after all audio
+            has been sent and processed.
+            </summary>
+            <param name="request">
+            The request object containing all of the parameters for the API call.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            The RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.LongRunningRecognizeAsync(Google.Cloud.Speech.V1.LongRunningRecognizeRequest,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="request">
+            The request object containing all of the parameters for the API call.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            A Task containing the RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.LongRunningRecognize(Google.Cloud.Speech.V1.LongRunningRecognizeRequest,Google.Api.Gax.Grpc.CallSettings)">
+            <summary>
+            Performs asynchronous speech recognition: receive results via the
+            google.longrunning.Operations interface. Returns either an
+            `Operation.error` or an `Operation.response` which contains
+            a `LongRunningRecognizeResponse` message.
+            </summary>
+            <param name="request">
+            The request object containing all of the parameters for the API call.
+            </param>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <returns>
+            The RPC response.
+            </returns>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognize(Google.Api.Gax.Grpc.CallSettings,Google.Api.Gax.Grpc.BidirectionalStreamingSettings)">
+            <summary>
+            Performs bidirectional streaming speech recognition: receive results while
+            sending audio. This method is only available via the gRPC API (not REST).
+            </summary>
+            <param name="callSettings">
+            If not null, applies overrides to this RPC call.
+            </param>
+            <param name="streamingSettings">
+            If not null, applies streaming overrides to this RPC call.
+            </param>
+            <returns>
+            The client-server stream.
+            </returns>
+        </member>
+        <member name="T:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl">
+            <summary>
+            Bidirectional streaming methods for <c>StreamingRecognize</c>.
+            </summary>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl.#ctor(Google.Cloud.Speech.V1.SpeechClientImpl,Grpc.Core.AsyncDuplexStreamingCall{Google.Cloud.Speech.V1.StreamingRecognizeRequest,Google.Cloud.Speech.V1.StreamingRecognizeResponse},Google.Api.Gax.Grpc.BufferedClientStreamWriter{Google.Cloud.Speech.V1.StreamingRecognizeRequest})">
+            <summary>
+            Construct the bidirectional streaming method for <c>StreamingRecognize</c>.
+            </summary>
+            <param name="service">The service containing this streaming method.</param>
+            <param name="call">The underlying gRPC duplex streaming call.</param>
+            <param name="writeBuffer">The <see cref="T:Google.Api.Gax.Grpc.BufferedClientStreamWriter`1"/>
+            instance associated with this streaming call.</param>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl.GrpcCall">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl.TryWriteAsync(Google.Cloud.Speech.V1.StreamingRecognizeRequest)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl.WriteAsync(Google.Cloud.Speech.V1.StreamingRecognizeRequest)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl.TryWriteAsync(Google.Cloud.Speech.V1.StreamingRecognizeRequest,Grpc.Core.WriteOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl.WriteAsync(Google.Cloud.Speech.V1.StreamingRecognizeRequest,Grpc.Core.WriteOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl.TryWriteCompleteAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl.WriteCompleteAsync">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Cloud.Speech.V1.SpeechClientImpl.StreamingRecognizeStreamImpl.ResponseStream">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

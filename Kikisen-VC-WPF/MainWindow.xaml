@@ -1,0 +1,102 @@
+﻿<Window x:Class="Kikisen_VC_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kikisen_VC_WPF"
+        mc:Ignorable="d"
+        Title="Kikisen-VC" Height="312" Width="525" Closing="Window_Closing" ResizeMode="NoResize" Icon="resource/Hako3.ico">
+    <Grid>
+        <Label Content="認識Text" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtbRecogStatus" HorizontalAlignment="Left" Height="22" Margin="70,14,0,0" TextWrapping="Wrap" Text="Waiting..." VerticalAlignment="Top" Width="409" IsReadOnly="True"/>
+        <TabControl HorizontalAlignment="Left" Height="53" Margin="10,42,0,0" VerticalAlignment="Top" Width="230">
+            <TabItem Header="Inputデバイス">
+                <Grid Background="#FFE5E5E5">
+                    <ComboBox x:Name="cmbInputDevice" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="204" SelectionChanged="cmbInputDevice_SelectionChanged"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Outputデバイス">
+                <Grid Background="#FFE5E5E5">
+                    <ComboBox x:Name="cmbOutputDevice" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="204" SelectionChanged="cmbOutputDevice_SelectionChanged"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <TabControl HorizontalAlignment="Left" Height="53" Margin="10,100,0,0" VerticalAlignment="Top" Width="230">
+            <TabItem Header="音声認識API">
+                <Grid Background="#FFE5E5E5">
+                    <ComboBox x:Name="cmbRecogAPI" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="204" SelectionChanged="cmbRecogAPI_SelectionChanged"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabReconAPI_GCS_set" Header="GoogleCS設定">
+                <Grid Background="#FFE5E5E5">
+                    <Button x:Name="btnGCSAPI" Content="認証Json指定" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="82" Click="btnGCSAPI_Click"/>
+                    <TextBlock x:Name="lblGCSAPI" HorizontalAlignment="Left" Margin="97,2,0,0" TextWrapping="Wrap" Text="未認証(試用中)" VerticalAlignment="Top" Width="117"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <TabControl HorizontalAlignment="Left" Height="53" Margin="10,158,0,0" VerticalAlignment="Top" Width="230">
+            <TabItem Header="SpeechAPI">
+                <Grid Background="#FFE5E5E5">
+                    <ComboBox x:Name="cmbSpeechAPI" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="204" SelectionChanged="cmbSpeechAPI_SelectionChanged"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="MS option">
+                <Grid Background="#FFE5E5E5">
+                    <ComboBox x:Name="cmbMsVolume" HorizontalAlignment="Left" VerticalAlignment="Top" Width="47" SelectionChanged="cmbMsVolume_SelectionChanged"/>
+                    <ComboBox x:Name="cmbMsPitch" HorizontalAlignment="Left" Margin="52,0,0,0" VerticalAlignment="Top" Width="47" SelectionChanged="cmbMsPitch_SelectionChanged"/>
+                    <ComboBox x:Name="cmbMsEmphasis" HorizontalAlignment="Left" Margin="104,0,0,0" VerticalAlignment="Top" Width="57" SelectionChanged="cmbMsEmphasis_SelectionChanged"/>
+                    <ComboBox x:Name="cmbMsRate" HorizontalAlignment="Left" Margin="166,0,0,0" VerticalAlignment="Top" Width="58" SelectionChanged="cmbMsRate_SelectionChanged"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabVTWAPI" Header="HOYA Option" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="85" Margin="0" IsEnabled="False">
+                <Grid Background="#FFE5E5E5">
+                    <ComboBox x:Name="cmbVTEmotion" HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Margin="156,0,0,0" SelectionChanged="cmbVTEmotion_SelectionChanged"/>
+                    <ComboBox x:Name="cmbVTVolume" HorizontalAlignment="Left" VerticalAlignment="Top" Width="47" SelectionChanged="cmbVTVolume_SelectionChanged"/>
+                    <ComboBox x:Name="cmbVTPitch" HorizontalAlignment="Left" Margin="52,0,0,0" VerticalAlignment="Top" Width="47" RenderTransformOrigin="0.745,0.545" SelectionChanged="cmbVTPitch_SelectionChanged"/>
+                    <ComboBox x:Name="cmbVTSpeed" HorizontalAlignment="Left" Margin="104,0,0,0" VerticalAlignment="Top" Width="47" SelectionChanged="cmbVTSpeed_SelectionChanged"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <TabControl HorizontalAlignment="Left" Height="53" Margin="10,216,0,0" VerticalAlignment="Top" Width="230">
+            <TabItem Header="翻訳API">
+                <Grid Background="#FFE5E5E5">
+                    <ComboBox x:Name="cmbTranslate" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="204" SelectionChanged="cmbTranslate_SelectionChanged"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="翻訳設定">
+                <ComboBox x:Name="cmbTranslateSetting" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="204" SelectionChanged="cmbTranslateSetting_SelectionChanged"/>
+            </TabItem>
+            <TabItem x:Name="tabTranslator_GTAPI" Header="API Key" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="137*"/>
+                        <ColumnDefinition Width="87*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btnGTAPIkey" Content="GoogleTranslatorAPI(未認証)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="157" Click="btnGTAPIkey_Click" Grid.ColumnSpan="2"/>
+                    <PasswordBox x:Name="txtbGTAPIkey" HorizontalAlignment="Left" Margin="25,0,0,0" VerticalAlignment="Top" Width="62" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <TabControl HorizontalAlignment="Left" Height="228" Margin="245,42,0,0" VerticalAlignment="Top" Width="262">
+            <TabItem Header="単語辞書">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="txtbPhrases" HorizontalAlignment="Left" Height="200" TextWrapping="Wrap" VerticalAlignment="Top" Width="256" VerticalScrollBarVisibility="Auto" TextChanged="txtbPhrases_TextChanged"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="その他の設定" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="77" Margin="-2,-2,-21,0">
+                <Grid Background="#FFE5E5E5">
+                    <Button x:Name="btnVTWAPIkey" Content="HOYA VoiceText (未認証)" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="142" Click="btnVTWAPIkey_Click"/>
+                    <PasswordBox x:Name="txtbVTWAPIkey" HorizontalAlignment="Left" Margin="157,11,0,0" VerticalAlignment="Top" Width="89"/>
+                    <GroupBox Header="ログ設定" HorizontalAlignment="Left" Height="68" Margin="10,35,0,0" VerticalAlignment="Top" Width="236">
+                        <StackPanel HorizontalAlignment="Left" Height="38" Margin="0,10,-2,0" VerticalAlignment="Top" Width="226">
+                            <CheckBox x:Name="chkOutputText" Content="発言ログを出力する(./kikisen-vc-txt.log)" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="chkOutputText_Checked" Unchecked="chkOutputText_Unchecked"/>
+                            <CheckBox x:Name="chkOutputText_opt1" Content="発言ログに日時を付加する" HorizontalAlignment="Left" VerticalAlignment="Top" Unchecked="chkOutputText_opt1_Unchecked" Checked="chkOutputText_opt1_Checked"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Image x:Name="imgStatus" HorizontalAlignment="Left" Height="22" Margin="484,14,0,0" VerticalAlignment="Top" Width="22"/>
+
+    </Grid>
+</Window>
