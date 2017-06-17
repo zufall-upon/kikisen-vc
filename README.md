@@ -76,6 +76,34 @@ Overview
     - 仮想サウンドデバイス作成ソフト
       - [Virtual Audio Cables](http://vb-audio.pagesperso-orange.fr/Cable/index.htm)
 
+## Usage
+  - **発声代替機能**の使い方の設定例等
+    1. 仮想サウンドデバイス作成ソフトをインストールして、「既定のデバイス」に設定します。
+      - ![イメージ](http://i.imgur.com/yjhCim5.png)
+      - 仮想サウンドデバイスを「既定のデバイス」に設定しておけば、無設定で機械音声だけをマイク出力させることができます。自分の声は相手に伝わりません。
+    1. 「Inputデバイス」に使用中のマイクを指定します。
+    1. 「Outputデバイス」に仮想サウンドデバイスを指定します。
+      - ![イメージ](http://i.imgur.com/UMPgiPAm.png) ![イメージ](http://i.imgur.com/QJW1clEm.png)
+    1. 「音声認識API」「SpeechAPI」を適当に選んで設定します。Microsoft Harukaを使うとPingへの影響が軽減されるかもしれません。
+    1. 「翻訳API」を「翻訳なし」に設定します。「翻訳設定」を「Jpn→Eng」に設定します。
+      - ![イメージ](http://i.imgur.com/XIrbQyl.png) ![イメージ](http://i.imgur.com/V3qCcMS.png)
+    1. 必要に応じて「単語辞書」に発声単語を登録しておきます。
+    1. マイクに喋ります。選択した「SpeechAPI」を使って発声が行われます。（イメージ）
+      - ![イメージ](http://i.imgur.com/A5GM4oKm.png) ![イメージ](http://i.imgur.com/VQnTQkQm.png)
+
+
+  - **翻訳聴き専機能**の使い方の設定例等
+    1. 「Inputデバイス」に「Wasapi Loopback」を指定します。
+      - ![イメージ](http://i.imgur.com/pgGZR8d.png)
+    1. **※要課題**「Outputデバイス」にお使いのスピーカー・ヘッドセットを選択します。現在プログラムの問題で、お使いのデバイス以外のものを選べる場合はそれを指定してください。（イヤホンなど併用できる場合はそれを使うなど）
+      - ![イメージ](http://i.imgur.com/Za5w2ZL.png)
+    1. 「音声認識API」「SpeechAPI」を適当に選んで設定します。Microsoft Harukaを使うとPingへの影響が軽減されるかもしれません。
+    1. 「翻訳API」「API key」にGoogleTranslatorAPIのWebkeyを入力して認証します。
+      - ![イメージ](http://i.imgur.com/n8S8fwp.png)
+    1. 「翻訳API」を「GoogleTranslatorAPI」に設定します。「翻訳設定」を「Eng→Jpn」に設定します。
+      - ![イメージ](http://i.imgur.com/SzR7oU8.png) ![イメージ](http://i.imgur.com/T1AtTY3.png)
+    1. 「翻訳設定」を「Eng→Jpn」に設定して、「翻訳API」を「翻訳なし」にすると英語のまま認識を出力されるかもしれません。
+
 ## New Features!
   - 2017/06/17 初回公開。
 
@@ -135,31 +163,3 @@ Overview
 
     - 日本語への翻訳イメージ(「家出のドリッピー」朗読動画を認識)
       - ![イメージ](http://i.imgur.com/tHxZeKV.png)
-
-## Usage
-  - **発声代替機能**の使い方の設定例等
-    1. 仮想サウンドデバイス作成ソフトをインストールして、「既定のデバイス」に設定します。
-      - ![イメージ](http://i.imgur.com/yjhCim5.png)
-      - 仮想サウンドデバイスを「既定のデバイス」に設定しておけば、無設定で機械音声だけをマイク出力させることができます。自分の声は相手に伝わりません。
-    1. 「Inputデバイス」に使用中のマイクを指定します。
-    1. 「Outputデバイス」に仮想サウンドデバイスを指定します。
-      - ![イメージ](http://i.imgur.com/UMPgiPAm.png) ![イメージ](http://i.imgur.com/QJW1clEm.png)
-    1. 「音声認識API」「SpeechAPI」を適当に選んで設定します。Microsoft Harukaを使うとPingへの影響が軽減されるかもしれません。
-    1. 「翻訳API」を「翻訳なし」に設定します。「翻訳設定」を「Jpn→Eng」に設定します。
-      - ![イメージ](http://i.imgur.com/XIrbQyl.png) ![イメージ](http://i.imgur.com/V3qCcMS.png)
-    1. 必要に応じて「単語辞書」に発声単語を登録しておきます。
-    1. マイクに喋ります。選択した「SpeechAPI」を使って発声が行われます。（イメージ）
-      - ![イメージ](http://i.imgur.com/A5GM4oKm.png) ![イメージ](http://i.imgur.com/VQnTQkQm.png)
-
-
-  - **翻訳聴き専機能**の使い方の設定例等
-    1. 「Inputデバイス」に「Wasapi Loopback」を指定します。
-      - ![イメージ](http://i.imgur.com/pgGZR8d.png)
-    1. **※要課題**「Outputデバイス」にお使いのスピーカー・ヘッドセットを選択します。現在プログラムの問題で、お使いのデバイス以外のものを選べる場合はそれを指定してください。（イヤホンなど併用できる場合はそれを使うなど）
-      - ![イメージ](http://i.imgur.com/Za5w2ZL.png)
-    1. 「音声認識API」「SpeechAPI」を適当に選んで設定します。Microsoft Harukaを使うとPingへの影響が軽減されるかもしれません。
-    1. 「翻訳API」「API key」にGoogleTranslatorAPIのWebkeyを入力して認証します。
-      - ![イメージ](http://i.imgur.com/n8S8fwp.png)
-    1. 「翻訳API」を「GoogleTranslatorAPI」に設定します。「翻訳設定」を「Eng→Jpn」に設定します。
-      - ![イメージ](http://i.imgur.com/SzR7oU8.png) ![イメージ](http://i.imgur.com/T1AtTY3.png)
-    1. 「翻訳設定」を「Eng→Jpn」に設定して、「翻訳API」を「翻訳なし」にすると英語のまま認識を出力されるかもしれません。
