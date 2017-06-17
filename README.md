@@ -1,4 +1,4 @@
-Kikisen-VC (音声認識型音声合成VCツール)
+Kikisen-VC (音声認識型音声合成・翻訳VCツール)
 ====
 
 Overview
