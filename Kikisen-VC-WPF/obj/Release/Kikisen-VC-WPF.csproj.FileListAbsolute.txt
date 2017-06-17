@@ -91,7 +91,6 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\NAudio.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Newtonsoft.Json.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\System.Interactive.Async.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Zlib.Portable.xml
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC-WPF.csprojResolveAssemblyReference.cache
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\MainWindow.g.cs
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\App.g.cs
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC_Content.g.cs

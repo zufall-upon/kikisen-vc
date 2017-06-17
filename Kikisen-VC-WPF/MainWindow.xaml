@@ -30,7 +30,7 @@
             <TabItem x:Name="tabReconAPI_GCS_set" Header="GoogleCS設定">
                 <Grid Background="#FFE5E5E5">
                     <Button x:Name="btnGCSAPI" Content="認証Json指定" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="82" Click="btnGCSAPI_Click"/>
-                    <TextBlock x:Name="lblGCSAPI" HorizontalAlignment="Left" Margin="97,2,0,0" TextWrapping="Wrap" Text="未認証(試用中)" VerticalAlignment="Top" Width="117"/>
+                    <TextBlock x:Name="lblGCSAPI" HorizontalAlignment="Left" Margin="97,2,0,0" TextWrapping="Wrap" Text="未認証" VerticalAlignment="Top" Width="117"/>
                 </Grid>
             </TabItem>
         </TabControl>

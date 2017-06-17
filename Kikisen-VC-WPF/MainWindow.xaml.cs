@@ -106,14 +106,17 @@ namespace Kikisen_VC_WPF
 						isNowTestingGCS = false;
 					} else {
 						// APIキーがないか間違っている場合、お試しモードで動作する、お試し終了後はメッセージで終了する
-						System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-						using (StreamReader sr = new StreamReader(myAssembly.GetManifestResourceStream("Kikisen_VC_WPF.Google.testkey.json"), Encoding.GetEncoding("ascii"))) {
-							_strGCSAPIJson = sr.ReadToEnd();
-							sr.Close();
-							_keyGCSAPIjsonPath = "";
-							lblGCSAPI.Text = "未認証(試用中)";
-							isNowTestingGCS = true;
-						}
+						//System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+						//using (StreamReader sr = new StreamReader(myAssembly.GetManifestResourceStream("Kikisen_VC_WPF.Google.testkey.json"), Encoding.GetEncoding("ascii"))) {
+						//	_strGCSAPIJson = sr.ReadToEnd();
+						//	sr.Close();
+						//	_keyGCSAPIjsonPath = "";
+						//	lblGCSAPI.Text = "未認証";
+						//	isNowTestingGCS = true;
+						//}
+						_keyGCSAPIjsonPath = "";
+						lblGCSAPI.Text = "未認証";
+						isNowTestingGCS = false;
 					}
 					// バックグラウンド処理をキャンセルする
 					if (this.Worker != null) this.FuncWorkerReset();
@@ -776,10 +779,6 @@ namespace Kikisen_VC_WPF
 		}
 		// GoogleCloudSpeechAPI
 		void Worker_DoWork_GCS_Recog(object sender, DoWorkEventArgs e) {
-			Dispatcher.BeginInvoke((Action)(() => {
-				txtbRecogStatus.Text = "Waiting...";
-				this.FuncChangeImgStatus(0);
-			}));
 			try {
 				// キャンセルトークンの取得
 				_tokenGCSAPIcancelTokenS = new CancellationTokenSource();
@@ -969,6 +968,10 @@ namespace Kikisen_VC_WPF
 						var initialRequest = new StreamingRecognizeRequest();
 						initialRequest.StreamingConfig = streamingConfig;
 						call.RequestStream.WriteAsync(initialRequest).Wait();
+						Dispatcher.BeginInvoke((Action)(() => {
+							txtbRecogStatus.Text = "Waiting...";
+							this.FuncChangeImgStatus(0);
+						}));
 						try {
 							recorder = new RecordModel();
 							recorder.RecordDataAvailabled += (sender2, e2) => {
@@ -1048,7 +1051,10 @@ namespace Kikisen_VC_WPF
 					Thread.Sleep(Convert.ToInt32(Math.Round(_threadwaitsec)));
 				}
 			} catch (Exception w_e) {
-				FuncWriteLogFile(w_e.ToString());
+				Dispatcher.BeginInvoke((Action)(() => {
+					e.Cancel = true;
+					FuncWriteLogFile(w_e.ToString());
+				}));
 				this.FuncChangeImgStatus(2);
 				if (w_e.InnerException != null && w_e.InnerException.Message.Contains("StatusCode=Unauthenticated,")) {
 					if (isNowTestingGCS) {
@@ -1256,7 +1262,7 @@ namespace Kikisen_VC_WPF
 				if (isNowTestingGCS) {
 					if (w_e.InnerException.Message.Contains("StatusCode=Unauthenticated,")) {
 						txtbRecogStatus.Text = "お試し期間は終了しました。GoogleCloudSpeechApiの認証用Jsonファイルをご用意ください";
-						lblGCSAPI.Text = "未認証(試用終)";
+						lblGCSAPI.Text = "未認証";
 					}
 				}
 				FuncWriteLogFile(w_e.ToString());
