@@ -25,6 +25,7 @@ using Kikisen_VC_WPF.MS;
 using System.Net;
 using Google.Apis.Translate.v2;
 using Google.Apis.Services;
+using Microsoft.CognitiveServices.SpeechRecognition;
 
 namespace Kikisen_VC_WPF
 {
@@ -50,6 +51,7 @@ namespace Kikisen_VC_WPF
 		private bool _OutputText = Properties.Settings.Default.OutputText;
 		private bool _OutputText_opt1 = Properties.Settings.Default.OutputText_opt1;
 		private string _keyGTAPI = Properties.Settings.Default.keyGTAPI;
+		private string _keyBingSAPI1 = Properties.Settings.Default.keyBingSpAPI1;
 
 		private static System.Windows.Controls.ComboBox _cmbInputDevice;
 		private static System.Windows.Controls.ComboBox _cmbOutputDevice;
@@ -67,6 +69,7 @@ namespace Kikisen_VC_WPF
 		Action<string> _funcGoogleCloudSpeechinit;
 		Action<string> _funcVoicetextinit;
 		Action<string> _funcGoogleTranslatorinit;
+		Action<string> _funcBingSpeechinit;
 		SpeechRecognitionEngine _ms_recogEngine;
 		WaveIn _ms_wi;
 		SpeechStreamer _ms_ss;
@@ -78,6 +81,7 @@ namespace Kikisen_VC_WPF
 		Byte[] AudioBuffer = new Byte[20000000];
 		System.Speech.AudioFormat.SpeechAudioFormatInfo _in_safi;
 		System.Speech.AudioFormat.SpeechAudioFormatInfo _out_safi;
+		DataRecognitionClient _micClient;
 
 
 		public static int InputDevice { get => _cmbInputDevice.Items.IndexOf(_InputDevice); }
@@ -128,6 +132,27 @@ namespace Kikisen_VC_WPF
 				}
 			};
 			_funcGoogleCloudSpeechinit(_keyGCSAPIjsonPath);
+
+			//BingSpeechAPI
+			_funcBingSpeechinit = delegate (string apikey) {
+				if (_RecogAPI == "BingSpeechAPI" || tabReconAPI_BS_set.IsSelected) {
+					if (FuncBingSpeechAPIisEnable(apikey).Result) {
+						// APIキーが正しい場合
+						btnBingSpAPIkey.Content = "BingSpeechAPI(認証済)";
+						txtbBingSpAPIkey.Password = apikey;
+					} else {
+						btnBingSpAPIkey.Content = "BingSpeechAPI(未認証)";
+						txtbBingSpAPIkey.Password = "";
+					}
+					// バックグラウンド処理をキャンセルする
+					if (this.Worker != null) this.FuncWorkerReset();
+				} else if (apikey != "") {
+					// APIキーが格納されてれば正しいものとする
+					btnBingSpAPIkey.Content = "BingSpeechAPI(認証済)";
+					txtbBingSpAPIkey.Password = apikey;
+				}
+			};
+			_funcBingSpeechinit(_keyBingSAPI1);
 
 			_funcGoogleTranslatorinit = delegate (string gtapikey) {
 				if (_TranslateAPI == "GoogleTranslatorAPI" || tabTranslator_GTAPI.IsSelected) {
@@ -300,6 +325,7 @@ namespace Kikisen_VC_WPF
 			cmbRecogAPI.Items.Clear();
 			cmbRecogAPI.Items.Add("Windows音声認識API");
 			cmbRecogAPI.Items.Add("GoogleCloudSpeechAPI");
+			cmbRecogAPI.Items.Add("BingSpeechAPI");
 			cmbRecogAPI.Items.Refresh();
 			cmbRecogAPI.SelectedIndex = (0 <= cmbRecogAPI.Items.IndexOf(_RecogAPI)) ? cmbRecogAPI.Items.IndexOf(_RecogAPI) : 0;
 
@@ -363,6 +389,7 @@ namespace Kikisen_VC_WPF
 			Properties.Settings.Default.OutputText = _OutputText;
 			Properties.Settings.Default.OutputText_opt1 = _OutputText_opt1;
 			Properties.Settings.Default.keyGTAPI = _keyGTAPI;
+			Properties.Settings.Default.keyBingSpAPI1 = _keyBingSAPI1;
 			Properties.Settings.Default.Save();
 		}
 
@@ -375,8 +402,8 @@ namespace Kikisen_VC_WPF
 		}
 		public void FuncWriteLogFile(string strlog) {
 			try {
-				string appendText = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + strlog + Environment.NewLine;
-				File.AppendAllText(Environment.CurrentDirectory + "\\kikisen-vc-log.txt", appendText);
+				string appendText = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss :") + strlog + Environment.NewLine;
+				File.AppendAllText(Environment.CurrentDirectory + "\\kikisen-vc-log.log", appendText);
 			} catch (Exception e) {
 				MessageBox.Show("ログ書き込みエラー" + Environment.NewLine + e.ToString());
 			}
@@ -410,6 +437,8 @@ namespace Kikisen_VC_WPF
 			this.Worker = new BackgroundWorker();
 			if (_RecogAPI == "GoogleCloudSpeechAPI") {
 				this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_GCS_Recog);
+			} else if (_RecogAPI == "BingSpeechAPI") {
+				this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_BingSpeech_Recog);
 			} else {
 				this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_MS_Recog);
 			}
@@ -587,6 +616,23 @@ namespace Kikisen_VC_WPF
 				}
 			} catch (Exception e5) {
 				MessageBox.Show("Google Translator APIキーの認証に失敗しました。");
+			}
+		}
+		private void btnBingSpAPIkey_Click(object sender, RoutedEventArgs e) {
+			try {
+				string pw = txtbBingSpAPIkey.Password;
+				;
+				if (FuncBingSpeechAPIisEnable(pw).Result) {
+					MessageBox.Show("Bing Speech APIキーの認証に\"成功\"しました。");
+					_keyBingSAPI1 = pw.Trim();
+					_funcBingSpeechinit(_keyBingSAPI1);
+					Properties.Settings.Default.keyBingSpAPI1 = _keyBingSAPI1;
+					Properties.Settings.Default.Save();
+				} else {
+					MessageBox.Show("Bing Speech APIキーの認証に失敗しました。");
+				}
+			} catch (Exception e5) {
+				MessageBox.Show("Bing Speech APIキーの認証に失敗しました。");
 			}
 		}
 		private void chkOutputText_Checked(object sender, RoutedEventArgs e) {
@@ -784,7 +830,6 @@ namespace Kikisen_VC_WPF
 						FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
 					}
 				}));
-
 			}
 		}
 		// GoogleCloudSpeechAPI
@@ -796,9 +841,6 @@ namespace Kikisen_VC_WPF
 
 				System.Timers.Timer timer = null;
 				IAudioRecorder recorder = null;
-
-				int iTmpThreadNo = 88;
-				this.Worker.ReportProgress(iTmpThreadNo);
 
 				var credential = GoogleCredential.FromJson(_strGCSAPIJson);
 				credential = credential.CreateScoped("https://www.googleapis.com/auth/cloud-platform");
@@ -1110,6 +1152,125 @@ namespace Kikisen_VC_WPF
 				}
 			}
 		}
+		// Bing Speech API
+		void Worker_DoWork_BingSpeech_Recog(object sender, DoWorkEventArgs e) {
+			try {
+				// キャンセルトークンの取得
+				_tokenGCSAPIcancelTokenS = new CancellationTokenSource();
+				CancellationToken cToken = _tokenGCSAPIcancelTokenS.Token;
+
+				System.Timers.Timer timer;
+				while (!this.Worker.CancellationPending && !cToken.IsCancellationRequested) {
+					if (this.Worker.CancellationPending || cToken.IsCancellationRequested) {
+						e.Cancel = true;
+						_tokenGCSAPIcancelTokenS.Cancel();
+						break;
+					}
+					_micClient = SpeechRecognitionServiceFactory.CreateDataClient(SpeechRecognitionMode.LongDictation, _recog_lang_set, _keyBingSAPI1);
+					
+					_micClient.OnPartialResponseReceived += this.OnPartialResponseReceivedHandler;
+					_micClient.OnResponseReceived += this.OnMicDictationResponseReceivedHandler;
+					_micClient.OnConversationError += this.OnConversationErrorHandler;
+					_micClient.SendAudioFormat(SpeechAudioFormat.create16BitPCMFormat(16000));
+
+					var recorder = new RecordModel();
+					recorder.RecordDataAvailabled += (sender2, e2) => {
+						if (0 < e2.Length) {
+							try {
+								lock (recorder) {
+									_micClient.SendAudio(e2.Buffer, e2.Length);
+								}
+							} catch (InvalidOperationException w_e4) {
+								FuncWriteLogFile(w_e4.ToString());
+							} catch (AggregateException w_e4) {
+								FuncWriteLogFile(w_e4.ToString());
+							}
+						}
+						if (this.Worker.CancellationPending) {
+							recorder.Stop();
+							_tokenGCSAPIcancelTokenS.Cancel();
+						}
+					};
+					recorder.Start();
+					Dispatcher.BeginInvoke((Action)(() => {
+						txtbRecogStatus.Text = "Waiting...";
+						this.FuncChangeImgStatus(0);
+					}));
+
+					// Bing Speech API1回14秒までなので、14秒まできたら打ち切る
+					timer = new System.Timers.Timer(13800);
+					timer.Start();
+					timer.Elapsed += (sender2, e2) => {
+						try {
+							recorder.Stop();
+						} catch (TaskCanceledException w_e4) {
+							FuncWriteLogFile(w_e4.ToString());
+						}
+					};
+					do {
+						if (this.Worker.CancellationPending || cToken.IsCancellationRequested) {
+							e.Cancel = true;
+							break;
+						}
+						Thread.Sleep(Convert.ToInt32(Math.Round(_threadwaitsec/4)));
+					} while (!recorder.isStoped);
+
+					timer.Stop();
+					timer.Dispose();
+
+					Thread.Sleep(Convert.ToInt32(Math.Round(_threadwaitsec/4)));
+				}
+			} catch (NullReferenceException w_e) {
+				FuncWriteLogFile(w_e.ToString());
+				this.FuncChangeImgStatus(2);
+			} catch (Exception w_e) {
+				FuncWriteLogFile(w_e.ToString());
+				this.FuncChangeImgStatus(2);
+			}
+		}
+		private void WriteResponseResult(SpeechResponseEventArgs e) {
+			if (e.PhraseResponse.Results.Length == 0) {
+				return;
+			} else {
+				var outtext = "";
+				for (int i = 0; i < e.PhraseResponse.Results.Length; i++) {
+					outtext = e.PhraseResponse.Results[i].DisplayText;
+					Dispatcher.BeginInvoke((Action)(() => {
+						txtbRecogStatus.Text = outtext;
+						FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), outtext, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+					}));
+				}
+			}
+		}
+		private void OnPartialResponseReceivedHandler(object sender, PartialSpeechResponseEventArgs e) {
+			//if (e.PartialResult.Length == 0) {
+			//	return;
+			//} else {
+			//	var outtext = "";
+			//	for (int i = 0; i < e.PartialResult.Length; i++) {
+			//		outtext = e.PartialResult;
+			//		Dispatcher.BeginInvoke((Action)(() => {
+			//			txtbRecogStatus.Text = outtext + "[推測]";
+			//			FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), outtext, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+			//		}));
+			//	}
+			//}
+		}
+		private void OnMicDictationResponseReceivedHandler(object sender, SpeechResponseEventArgs e) {
+			//if (e.PhraseResponse.RecognitionStatus == RecognitionStatus.EndOfDictation ||
+			//	e.PhraseResponse.RecognitionStatus == RecognitionStatus.DictationEndSilenceTimeout) {
+			//	Dispatcher.Invoke(
+			//		(Action)(() => {
+			//			_micClient.EndAudio();
+			//		})
+			//	);
+			//}
+			this.WriteResponseResult(e);
+		}
+		private void OnConversationErrorHandler(object sender, SpeechErrorEventArgs e) {
+			FuncWriteLogFile("["+e.SpeechErrorCode+"]"+e.SpeechErrorText);
+			this.FuncChangeImgStatus(2);
+		}
 
 		private void FuncWriteTextLog(string msg) {
 			try {
@@ -1302,6 +1463,40 @@ namespace Kikisen_VC_WPF
 				FuncWriteLogFile(w_e.ToString());
 				return false;
 			}
+		}
+		private async Task<bool> FuncBingSpeechAPIisEnable(string pw) {
+			bool result = false;
+			try {
+				if (pw.Length == 0) return false;
+				int counter = 0;
+				result = true;
+				var micClient = SpeechRecognitionServiceFactory.CreateDataClient(SpeechRecognitionMode.LongDictation, _recog_lang_set, pw);
+				micClient.OnConversationError += (sender2, e2) => {
+					if ("LoginFailed" == e2.SpeechErrorCode.ToString()) {
+						result = false;
+					}
+					counter++;
+				};
+				var recorder = new RecordModel();
+				recorder.RecordDataAvailabled += (sender2, e2) => {
+					if (0 < e2.Length) {
+						try {
+							lock (recorder) {
+								micClient.SendAudio(e2.Buffer, e2.Length);
+							}
+						} catch (Exception w_e4) {
+						}
+					}
+				};
+				recorder.Start();
+				do {
+					Thread.Sleep(Convert.ToInt32(Math.Round(_threadwaitsec)));
+				} while (3 <= counter);
+				recorder.Stop();
+			} catch (Exception w_e) {
+				result = false;
+			}
+			return result;
 		}
 		private async Task<bool> FuncVoiceTextWebAPIisEnable(string apikey) {
 			if (apikey.Length <= 0) return false;

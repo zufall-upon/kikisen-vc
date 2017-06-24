@@ -262,5 +262,17 @@ namespace Kikisen_VC_WPF.Properties {
                 this["keyGTAPI"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string keyBingSpAPI1 {
+            get {
+                return ((string)(this["keyBingSpAPI1"]));
+            }
+            set {
+                this["keyBingSpAPI1"] = value;
+            }
+        }
     }
 }

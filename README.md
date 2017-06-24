@@ -75,6 +75,14 @@ Overview
     - [HOYA VoiceTextWebAPIのAPIキー](https://cloud.voicetext.jp/webapi)
     - 仮想サウンドデバイス作成ソフト
       - [Virtual Audio Cables](http://vb-audio.pagesperso-orange.fr/Cable/index.htm)
+      - [Bing Speech API](https://azure.microsoft.com/ja-jp/services/cognitive-services/speech/)
+        - 「試用版」をクリックして登録する メアドだけでいい模様
+          - ![イメージ](http://i.imgur.com/RLM7dii.png)
+        - キー１を使用してください。
+          - ![イメージ](http://i.imgur.com/K2vdXyD.png)
+
+
+
 
 ## Usage
   - **発声代替機能**の使い方の設定例等
@@ -106,6 +114,7 @@ Overview
 
 ## New Features!
   - 2017/06/17 初回公開。
+  - 2017/06/24 BingSpeechAPIの暫定追加。GoogleCloudSpeechAPIと比べて大声で話す必要がある。辞書機能はまだ対応していません。
 
 ## Problems
 
@@ -116,7 +125,9 @@ Overview
   - GoogleCloudSpeechAPIや、GoogleTranslatorAPIなどの利用は有料。API呼び出し回数はできるだけ抑える必要があるが、レスポンスを高めるためストリーミング音声認識APIを利用すると、1分あたり1回のAPI呼び出しが必須。時間課金と変わらない。
   - GoogleTranslatorAPIも課題は山積み。API呼び出し回数を抑えるためには出来るだけ高い精度で文脈の区切りを見つけて翻訳APIに投げる処理が必要。現在はその処理が甘く、二重三重呼び出し・区切りが甘い等でとんでもない回数APIを呼び出してしまう。1分で100回くらい。。
   - 音声認識APIはAPIによって違う処理の実装が必要。さらに言語によっての最適化が必要。その最適化処理がまだまだ甘い。
-  - 音声認識APIにIntel Real Senseを選べるようにしたい。ローカルエンジンなので、Ping影響なしに使える利点がある。
+  - ~~音声認識APIにIntel Real Senseを選べるようにしたい。ローカルエンジンなので、Ping影響なしに使える利点がある。~~
+    - Intel Realsense SDKは2016R3から有料配布になった模様。普通の方法ではDLできないので中止。
+    - **代わりにBing Speech APIを使いたい。月5000トランザクションまで無料なので、1トランザクション14秒制限はあるが、単純計算で14sec * 5000tra = 70000sec, 月19.4時間までは無料で使えそうな勘定。1回2時間のゲームセッションを月10回は聞き専としては妥当だと思う。**
   - 翻訳APIに無料のものがあれば使いたい。有料しかなさげ。
   - GoogleCloudSpeechAPIは、2017/7/31までにGA版にアップデートが必要。まだ対応できていない。
 

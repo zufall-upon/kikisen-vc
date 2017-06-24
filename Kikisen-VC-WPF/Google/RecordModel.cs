@@ -12,7 +12,7 @@ namespace Kikisen_VC_WPF.Google
 
 		private WaveInEvent waveIn;
 		private WasapiLoopbackCapture Waloop = null;
-		private bool isStoped = false;
+		public bool isStoped = false;
 		private bool isDisposed = false;
 		
 		private SpeechStreamer _ms_wloop_ss;
