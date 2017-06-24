@@ -21,7 +21,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Phrases" Type="System.String" Scope="User">
-      <Value Profile="(Default)">リセット|テスト|設定</Value>
+      <Value Profile="(Default)">リセット|テスト|メートル</Value>
     </Setting>
     <Setting Name="sayVolume" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

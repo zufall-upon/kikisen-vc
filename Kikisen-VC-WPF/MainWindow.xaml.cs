@@ -807,6 +807,7 @@ namespace Kikisen_VC_WPF
 				var streamingConfig = new StreamingRecognitionConfig {
 					Config = new RecognitionConfig {
 						SampleRateHertz = 16000,
+						//SampleRateHertz = 8000,
 						Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
 						LanguageCode = _recog_lang_set,
 					},
@@ -845,13 +846,16 @@ namespace Kikisen_VC_WPF
 									Action<bool> act2 = delegate (bool bContainAlpha) {
 										if (!bSpeaked) {
 											var speechtxt = outtext;
+											speechtxt = Regex.Replace(speechtxt, @"\s", "");
 											if (0 < lastspeaktext.Length) {
 												// 前回の発言内容とスペースを除去
 												try {
-													speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
+													foreach (var tmpStr in lstLastspeaktext) {
+														speechtxt = speechtxt.Replace(tmpStr, "");
+													}
+													//speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
 												} catch (Exception w_e4) {
-													speechtxt = speechtxt.Replace(lastspeaktext, "");
-													FuncWriteLogFile(w_e4.ToString());
+													if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Replace(lastspeaktext, "");
 												}
 												speechtxt = Regex.Replace(speechtxt, @"\s", "");
 											}
@@ -867,27 +871,50 @@ namespace Kikisen_VC_WPF
 															speechtxt += subtext;
 														}
 													}
+													// 前回の発言内容とスペースを除去
+													try {
+														foreach (var tmpStr in lstLastspeaktext) {
+															speechtxt = speechtxt.Replace(tmpStr, "");
+														}
+														//speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
+													} catch (Exception w_e4) {
+														if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Replace(lastspeaktext, "");
+													}
+													speechtxt = Regex.Replace(speechtxt, @"\s", "");
+													if (speechtxt.Length == 0) return;
 													Dispatcher.BeginInvoke((Action)(() => {
 														FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), speechtxt, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
 													}));
-													lastspeaktext = outtext + subtext;
-													txtbRecogStatus.Text = lastspeaktext;
+													lastspeaktext = speechtxt;
+													if (5 <= lstLastspeaktext.Count) {
+														lstLastspeaktext.RemoveAt(0);
+													}
+													lstLastspeaktext.Add(lastspeaktext);
 													bSpeaked = true;
-													bReset = true;
+													//txtbRecogStatus.Text = lastspeaktext;
+													//bReset = true;
 												}
 											} else {
+												if (Regex.IsMatch(speechtxt, @"[a-zA-Z]")) {
+													return;
+												}
+												if (speechtxt.Length == 0) return;
 												Dispatcher.BeginInvoke((Action)(() => {
 													FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), speechtxt, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
 												}));
-												lastspeaktext = outtext;
+												lastspeaktext = speechtxt;
+												if (5 <= lstLastspeaktext.Count) {
+													lstLastspeaktext.RemoveAt(0);
+												}
+												lstLastspeaktext.Add(lastspeaktext);
 												bSpeaked = true;
 												// 暫定処置 バッファが長くなりすぎたらリセットする
-												if (40 < lastspeaktext.Length) {
-													if (WaveIn.DeviceCount == MainWindow.InputDevice) {
-													} else {
-														bReset = true;
-													}
-												}
+												//if (40 < lastspeaktext.Length) {
+												//	if (WaveIn.DeviceCount == MainWindow.InputDevice) {
+												//	} else {
+												//		bReset = true;
+												//	}
+												//}
 											}
 										}
 									};
@@ -916,9 +943,9 @@ namespace Kikisen_VC_WPF
 													}
 												} else {
 													act2(bContainAlpha);
-													if (bContainAlpha) {
-														bReset = true;
-													}
+													//if (bContainAlpha) {
+													//	bReset = true;
+													//}
 												}
 											}
 										}

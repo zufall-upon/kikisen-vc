@@ -97,7 +97,7 @@ namespace Kikisen_VC_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("リセット|テスト|設定")]
+        [global::System.Configuration.DefaultSettingValueAttribute("リセット|テスト|メートル")]
         public string Phrases {
             get {
                 return ((string)(this["Phrases"]));

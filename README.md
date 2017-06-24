@@ -69,7 +69,7 @@ Overview
       - 「en-US」を言語に追加してください。[Microsoft Forum](https://social.msdn.microsoft.com/Forums/lync/en-US/032c4abc-5614-49ca-b696-17ab64525538/speechrecognitionengine?forum=csharpgeneralja)
   - オプションを使うのに必要なもの
     - Google Cloud Speech API json key
-      - [Google Cloud Speech API - サービスアカウントキーは(JSON)発行方法例](https://blog.spot-corp.com/ai/2016/07/28/cloud_speech_api.html)
+      - [Google Cloud Speech API - サービスアカウントキー(JSONファイル)発行方法例](https://blog.spot-corp.com/ai/2016/07/28/cloud_speech_api.html)
     - Google Translator API web key
       - [Google翻訳APIキー取得方法](https://cloudapplications.desk.com/customer/ja/portal/articles/2230196-google%E7%BF%BB%E8%A8%B3api%E3%82%AD%E3%83%BC%E5%8F%96%E5%BE%97%E6%96%B9%E6%B3%95)
     - [HOYA VoiceTextWebAPIのAPIキー](https://cloud.voicetext.jp/webapi)
@@ -78,7 +78,7 @@ Overview
 
 ## Usage
   - **発声代替機能**の使い方の設定例等
-    1. 仮想サウンドデバイス作成ソフトをインストールして、「既定のデバイス」に設定します。
+    1. 仮想サウンドデバイス作成ソフトをインストールして、**録音側**を「既定のデバイス」に設定します。
       - ![イメージ](http://i.imgur.com/yjhCim5.png)
       - 仮想サウンドデバイスを「既定のデバイス」に設定しておけば、無設定で機械音声だけをマイク出力させることができます。自分の声は相手に伝わりません。
     1. 「Inputデバイス」に使用中のマイクを指定します。
