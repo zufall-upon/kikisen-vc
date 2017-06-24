@@ -63,6 +63,8 @@ Overview
       - Google.Apis.Translate.v2
       - System.Net.Http
       - NAudio
+      - Microsoft Cognitive Services Speech Recognition API Client Library for x64 build
+      - Microsoft Cognitive Services Speech Recognition API Client Library for x86 build
   - 使用環境
     - .Net Framework 4以上
     - 「Windows音声認識API」で英語認識をさせる場合は、Windowsの英語音声認識エンジンの追加導入が必要。
