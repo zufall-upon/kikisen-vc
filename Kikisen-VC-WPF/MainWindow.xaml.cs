@@ -931,7 +931,9 @@ namespace Kikisen_VC_WPF
 													if (5 <= lstLastspeaktext.Count) {
 														lstLastspeaktext.RemoveAt(0);
 													}
-													lstLastspeaktext.Add(lastspeaktext);
+													if (3 < lastspeaktext.Length) {
+														lstLastspeaktext.Add(lastspeaktext);
+													}
 													bSpeaked = true;
 													//txtbRecogStatus.Text = lastspeaktext;
 													//bReset = true;
@@ -948,7 +950,9 @@ namespace Kikisen_VC_WPF
 												if (5 <= lstLastspeaktext.Count) {
 													lstLastspeaktext.RemoveAt(0);
 												}
-												lstLastspeaktext.Add(lastspeaktext);
+												if (3 < lastspeaktext.Length) {
+													lstLastspeaktext.Add(lastspeaktext);
+												}
 												bSpeaked = true;
 												// 暫定処置 バッファが長くなりすぎたらリセットする
 												//if (40 < lastspeaktext.Length) {
@@ -1160,6 +1164,7 @@ namespace Kikisen_VC_WPF
 				CancellationToken cToken = _tokenGCSAPIcancelTokenS.Token;
 
 				System.Timers.Timer timer;
+				var recorder = new RecordModel();
 				while (!this.Worker.CancellationPending && !cToken.IsCancellationRequested) {
 					if (this.Worker.CancellationPending || cToken.IsCancellationRequested) {
 						e.Cancel = true;
@@ -1167,13 +1172,11 @@ namespace Kikisen_VC_WPF
 						break;
 					}
 					_micClient = SpeechRecognitionServiceFactory.CreateDataClient(SpeechRecognitionMode.LongDictation, _recog_lang_set, _keyBingSAPI1);
-					
 					_micClient.OnPartialResponseReceived += this.OnPartialResponseReceivedHandler;
 					_micClient.OnResponseReceived += this.OnMicDictationResponseReceivedHandler;
 					_micClient.OnConversationError += this.OnConversationErrorHandler;
 					_micClient.SendAudioFormat(SpeechAudioFormat.create16BitPCMFormat(16000));
 
-					var recorder = new RecordModel();
 					recorder.RecordDataAvailabled += (sender2, e2) => {
 						if (0 < e2.Length) {
 							try {
@@ -1197,8 +1200,8 @@ namespace Kikisen_VC_WPF
 						this.FuncChangeImgStatus(0);
 					}));
 
-					// Bing Speech API1回14秒までなので、14秒まできたら打ち切る
-					timer = new System.Timers.Timer(13800);
+					// Bing Speech API1回15秒までなので、14秒まできたら打ち切る
+					timer = new System.Timers.Timer(14500);
 					timer.Start();
 					timer.Elapsed += (sender2, e2) => {
 						try {

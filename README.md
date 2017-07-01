@@ -117,6 +117,7 @@ Overview
 ## New Features!
   - 2017/06/17 初回公開。
   - 2017/06/24 BingSpeechAPIの暫定追加。GoogleCloudSpeechAPIと比べて大声で話す必要がある。辞書機能はまだ対応していません。
+  - 2017/07/01 BingSpeechAPIに単語辞書を追加するにはCustom Speech Serviceというのに申し込む必要がある模様。諦める。
 
 ## Problems
 
