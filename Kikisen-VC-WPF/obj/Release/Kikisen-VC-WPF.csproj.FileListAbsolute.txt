@@ -137,7 +137,6 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\ru\Microsoft.
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\tr\Microsoft.VisualStudio.Validation.resources.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\zh-Hans\Microsoft.VisualStudio.Validation.resources.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\zh-Hant\Microsoft.VisualStudio.Validation.resources.dll
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC-WPF.csprojResolveAssemblyReference.cache
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\MainWindow.g.cs
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\App.g.cs
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC_Content.g.cs

@@ -892,10 +892,13 @@ namespace Kikisen_VC_WPF
 											if (0 < lastspeaktext.Length) {
 												// 前回の発言内容とスペースを除去
 												try {
+													var iLeng = speechtxt.Length;
 													foreach (var tmpStr in lstLastspeaktext) {
 														speechtxt = speechtxt.Replace(tmpStr, "");
 													}
-													//speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
+													if (iLeng == speechtxt.Length) {
+														if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
+													}
 												} catch (Exception w_e4) {
 													if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Replace(lastspeaktext, "");
 												}
@@ -904,7 +907,8 @@ namespace Kikisen_VC_WPF
 											// アルファベット混じりだと発声が遅れるので処置する
 											if (bContainAlpha) {
 												// 信頼度がある程度以上ならば区切りと判断
-												if (0.8 < note.Results[0].Stability) {
+												float stable_stability = 0.9f;
+												if (stable_stability <= note.Results[0].Stability) {
 													var subtext = "";
 													if (1 < note.Results.Count) {
 														subtext = note.Results[1].Alternatives[0].Transcript;
@@ -915,10 +919,13 @@ namespace Kikisen_VC_WPF
 													}
 													// 前回の発言内容とスペースを除去
 													try {
+														var iLeng = speechtxt.Length;
 														foreach (var tmpStr in lstLastspeaktext) {
 															speechtxt = speechtxt.Replace(tmpStr, "");
 														}
-														//speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
+														if (iLeng == speechtxt.Length) {
+															if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
+														}
 													} catch (Exception w_e4) {
 														if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Replace(lastspeaktext, "");
 													}
@@ -928,7 +935,7 @@ namespace Kikisen_VC_WPF
 														FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), speechtxt, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
 													}));
 													lastspeaktext = speechtxt;
-													if (5 <= lstLastspeaktext.Count) {
+													if (10 <= lstLastspeaktext.Count) {
 														lstLastspeaktext.RemoveAt(0);
 													}
 													if (3 < lastspeaktext.Length) {
@@ -947,7 +954,7 @@ namespace Kikisen_VC_WPF
 													FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), speechtxt, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
 												}));
 												lastspeaktext = speechtxt;
-												if (5 <= lstLastspeaktext.Count) {
+												if (10 <= lstLastspeaktext.Count) {
 													lstLastspeaktext.RemoveAt(0);
 												}
 												if (3 < lastspeaktext.Length) {
@@ -966,7 +973,7 @@ namespace Kikisen_VC_WPF
 									};
 									await Dispatcher.BeginInvoke((Action)(() => {
 										if (_recog_lang_set == "ja-JP") {
-											txtbRecogStatus.Text = outtext;
+											txtbRecogStatus.Text = outtext + "[" + note.Results[0].Stability + "]";
 											if (outtext.EndsWith(@"リセット")) {
 												// リセット用の音声コマンドが文末にあればリセット
 												if (WaveIn.DeviceCount == MainWindow.InputDevice) {
@@ -1196,7 +1203,7 @@ namespace Kikisen_VC_WPF
 					};
 					recorder.Start();
 					Dispatcher.BeginInvoke((Action)(() => {
-						txtbRecogStatus.Text = "Waiting...";
+						txtbRecogStatus.Text = "Waiting...(単語辞書は使用できません)";
 						this.FuncChangeImgStatus(0);
 					}));
 
