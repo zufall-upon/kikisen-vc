@@ -82,6 +82,8 @@ Overview
           - ![イメージ](http://i.imgur.com/RLM7dii.png)
         - キー１を使用してください。
           - ![イメージ](http://i.imgur.com/K2vdXyD.png)
+    - マイクブースト適用ソフト（マイクブーストのないヘッドセットにも使えます。+20dbするとかなり効果的です）
+      - [Equalizer APO](https://sourceforge.net/projects/equalizerapo/)
 
 
 

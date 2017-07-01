@@ -1164,7 +1164,6 @@ namespace Kikisen_VC_WPF
 				CancellationToken cToken = _tokenGCSAPIcancelTokenS.Token;
 
 				System.Timers.Timer timer;
-				var recorder = new RecordModel();
 				while (!this.Worker.CancellationPending && !cToken.IsCancellationRequested) {
 					if (this.Worker.CancellationPending || cToken.IsCancellationRequested) {
 						e.Cancel = true;
@@ -1177,6 +1176,7 @@ namespace Kikisen_VC_WPF
 					_micClient.OnConversationError += this.OnConversationErrorHandler;
 					_micClient.SendAudioFormat(SpeechAudioFormat.create16BitPCMFormat(16000));
 
+					var recorder = new RecordModel();
 					recorder.RecordDataAvailabled += (sender2, e2) => {
 						if (0 < e2.Length) {
 							try {
