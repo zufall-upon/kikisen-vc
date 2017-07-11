@@ -52,6 +52,9 @@ namespace Kikisen_VC_WPF
 		private bool _OutputText_opt1 = Properties.Settings.Default.OutputText_opt1;
 		private string _keyGTAPI = Properties.Settings.Default.keyGTAPI;
 		private string _keyBingSAPI1 = Properties.Settings.Default.keyBingSpAPI1;
+		private bool _readLogFile = Properties.Settings.Default.readLogFile;
+		private string _readLogFilePath = Properties.Settings.Default.readLogFilePath;
+		private string _ReadLogFileExcept = Properties.Settings.Default.ReadLogFileExcept;
 
 		private static System.Windows.Controls.ComboBox _cmbInputDevice;
 		private static System.Windows.Controls.ComboBox _cmbOutputDevice;
@@ -82,6 +85,9 @@ namespace Kikisen_VC_WPF
 		System.Speech.AudioFormat.SpeechAudioFormatInfo _in_safi;
 		System.Speech.AudioFormat.SpeechAudioFormatInfo _out_safi;
 		DataRecognitionClient _micClient;
+		int _iReadLogFileCount = 0;
+		FileSystemWatcher _readLogFileWatcher;
+		DateTime _readLogFileLastWriteFileTime = DateTime.Now;
 
 
 		public static int InputDevice { get => _cmbInputDevice.Items.IndexOf(_InputDevice); }
@@ -96,6 +102,9 @@ namespace Kikisen_VC_WPF
 
 			chkOutputText.IsChecked = _OutputText;
 			chkOutputText_opt1.IsChecked = _OutputText_opt1;
+			chkReadLogFile.IsChecked = _readLogFile;
+			txtReadLogFile.Text = _readLogFilePath;
+			txtReadLogFileExcept.Text = _ReadLogFileExcept;
 
 			_in_safi = new System.Speech.AudioFormat.SpeechAudioFormatInfo(16000, System.Speech.AudioFormat.AudioBitsPerSample.Sixteen, System.Speech.AudioFormat.AudioChannel.Mono);
 			_out_safi = new System.Speech.AudioFormat.SpeechAudioFormatInfo(44100, System.Speech.AudioFormat.AudioBitsPerSample.Sixteen, System.Speech.AudioFormat.AudioChannel.Mono);
@@ -369,6 +378,16 @@ namespace Kikisen_VC_WPF
 				this.FuncChangeImgStatus(1);
 				this.Worker.CancelAsync();
 			}
+			if (_readLogFileWatcher != null) {
+				try {
+					_readLogFileWatcher.EnableRaisingEvents = false;
+				} finally {
+					if (_readLogFileWatcher != null) {
+						_readLogFileWatcher.Dispose();
+						_readLogFileWatcher = null;
+					}
+				}
+			}
 			Properties.Settings.Default.InputDevice = _InputDevice;
 			Properties.Settings.Default.OutputDevice = _OutputDevice;
 			Properties.Settings.Default.RecogAPI = _RecogAPI;
@@ -390,6 +409,9 @@ namespace Kikisen_VC_WPF
 			Properties.Settings.Default.OutputText_opt1 = _OutputText_opt1;
 			Properties.Settings.Default.keyGTAPI = _keyGTAPI;
 			Properties.Settings.Default.keyBingSpAPI1 = _keyBingSAPI1;
+			Properties.Settings.Default.readLogFile = _readLogFile;
+			Properties.Settings.Default.readLogFilePath = _readLogFilePath;
+			Properties.Settings.Default.ReadLogFileExcept = _ReadLogFileExcept;
 			Properties.Settings.Default.Save();
 		}
 
@@ -653,6 +675,99 @@ namespace Kikisen_VC_WPF
 		private void chkOutputText_opt1_Unchecked(object sender, RoutedEventArgs e) {
 			_OutputText_opt1 = false;
 			Properties.Settings.Default.OutputText_opt1 = _OutputText_opt1;
+			Properties.Settings.Default.Save();
+		}
+		private void chkReadLogFile_Checked(object sender, RoutedEventArgs e) {
+			_readLogFile = true;
+			Properties.Settings.Default.readLogFile = _readLogFile;
+			Properties.Settings.Default.Save();
+			if (0 < _readLogFilePath.Length && File.Exists(_readLogFilePath)) {
+				try {
+					_ReadLogFileExcept = txtReadLogFileExcept.Text;
+					_readLogFileWatcher = new FileSystemWatcher();
+					_readLogFileWatcher.Path = Path.GetDirectoryName(_readLogFilePath);
+					_readLogFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
+					_readLogFileWatcher.Filter = Path.GetFileName(_readLogFilePath);
+					_readLogFileWatcher.Changed += FuncReadLogFile;
+					_iReadLogFileCount = 0;
+					foreach (var strline in File.ReadLines(_readLogFilePath)) {
+						_iReadLogFileCount++;
+					}
+					//監視を開始する
+					_readLogFileWatcher.EnableRaisingEvents = true;
+				} catch (Exception) {
+				}
+			}
+		}
+		private void chkReadLogFile_Unchecked(object sender, RoutedEventArgs e) {
+			_readLogFile = false;
+			Properties.Settings.Default.readLogFile = _readLogFile;
+			Properties.Settings.Default.Save();
+			if (_readLogFileWatcher != null) {
+				try {
+					//監視を終了
+					_readLogFileWatcher.EnableRaisingEvents = false;
+					_readLogFileWatcher.Changed -= FuncReadLogFile;
+				} finally {
+					if (_readLogFileWatcher != null) {
+						_readLogFileWatcher.Dispose();
+						_readLogFileWatcher = null;
+					}
+				}
+			}
+		}
+		private void btnReadLogFile_Click(object sender, RoutedEventArgs e) {
+			// ログ読み上げファイルの場所を確定する
+			try {
+				OpenFileDialog openFileDialog = new OpenFileDialog();
+				openFileDialog.Filter = "Text Files (.txt, .log)|*.txt;*.log|All Files (*.*)|*.*";
+				bool? result = openFileDialog.ShowDialog();
+				if (result == true) {
+					var readlogfilepath = openFileDialog.FileName;
+					MessageBox.Show("読み上げ用ログファイルを確定しました。");
+					_readLogFilePath = readlogfilepath;
+					txtReadLogFile.Text = _readLogFilePath;
+					Properties.Settings.Default.readLogFilePath = _readLogFilePath;
+					Properties.Settings.Default.Save();
+				} else {
+					MessageBox.Show("読み上げ用ログファイルの読み取りに失敗しました。");
+				}
+			} catch (Exception e5) {
+				MessageBox.Show(e5.ToString());
+			}
+		}
+		private void FuncReadLogFile(object sender, FileSystemEventArgs e) {
+			DateTime tmpLastWriteTime = File.GetLastWriteTime(e.FullPath);
+			if (tmpLastWriteTime != _readLogFileLastWriteFileTime) {
+				_readLogFileLastWriteFileTime = tmpLastWriteTime;
+			} else {
+				return;
+			}
+			switch (e.ChangeType) {
+				case WatcherChangeTypes.Changed:
+					var strLogFilePath = e.FullPath;
+					if (!File.Exists(strLogFilePath)) return;
+					int iTemp = 0 - _iReadLogFileCount;
+					foreach (var strline in File.ReadLines(_readLogFilePath)) {
+						iTemp++;
+						if (0 < iTemp) {
+							var msg = strline;
+							try {
+								msg = strline.Substring(strline.IndexOf(_ReadLogFileExcept));
+							} catch (Exception) {
+							}
+							FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, _SpeechAPI, _say_msVolume, "1", "Reduced", "Fast", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+							_iReadLogFileCount++;
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		private void txtReadLogFileExcept_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) {
+			_ReadLogFileExcept = txtReadLogFileExcept.Text;
+			Properties.Settings.Default.ReadLogFileExcept = _ReadLogFileExcept;
 			Properties.Settings.Default.Save();
 		}
 
@@ -1282,6 +1397,7 @@ namespace Kikisen_VC_WPF
 			this.FuncChangeImgStatus(2);
 		}
 
+		
 		private void FuncWriteTextLog(string msg) {
 			try {
 				if (_OutputText) {
@@ -1524,8 +1640,6 @@ namespace Kikisen_VC_WPF
 			} else {
 				return false;
 			}
-
-			//string source = "I'm down in that little room is just left of the five sons";
 		}
 		private async Task<string> TranslateTextAsync(TranslateService service, string text, string sourceLanguage, string targetLanguage) {
 			var request = service.Translations.List(new[] { text }, targetLanguage);

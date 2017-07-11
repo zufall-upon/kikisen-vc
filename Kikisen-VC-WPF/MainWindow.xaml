@@ -99,6 +99,12 @@
                             <CheckBox x:Name="chkOutputText_opt1" Content="発言ログに日時を付加する" HorizontalAlignment="Left" VerticalAlignment="Top" Unchecked="chkOutputText_opt1_Unchecked" Checked="chkOutputText_opt1_Checked"/>
                         </StackPanel>
                     </GroupBox>
+                    <Label Content="ログ読み上げ設定" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="chkReadLogFile" Content="以下のファイルのログ読み上げをする" HorizontalAlignment="Left" Margin="10,129,0,0" VerticalAlignment="Top" Width="236" Checked="chkReadLogFile_Checked" Unchecked="chkReadLogFile_Unchecked"/>
+                    <TextBox x:Name="txtReadLogFile" HorizontalAlignment="Left" Height="18" Margin="37,149,0,0" TextWrapping="Wrap" Text="./text.log" VerticalAlignment="Top" Width="209" IsReadOnly="True"/>
+                    <Button x:Name="btnReadLogFile" Content="..." HorizontalAlignment="Left" Margin="10,149,0,0" VerticalAlignment="Top" Width="22" Height="18" Click="btnReadLogFile_Click"/>
+                    <TextBox x:Name="txtReadLogFileExcept" HorizontalAlignment="Left" Height="26" Margin="142,172,0,0" TextWrapping="Wrap" Text=": " VerticalAlignment="Top" Width="104" TextChanged="txtReadLogFileExcept_TextChanged"/>
+                    <Label Content="次の文字列まで無視する" HorizontalAlignment="Left" Margin="10,172,0,0" VerticalAlignment="Top" Width="132"/>
                 </Grid>
             </TabItem>
         </TabControl>

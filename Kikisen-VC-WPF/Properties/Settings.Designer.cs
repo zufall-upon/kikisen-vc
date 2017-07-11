@@ -274,5 +274,41 @@ namespace Kikisen_VC_WPF.Properties {
                 this["keyBingSpAPI1"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool readLogFile {
+            get {
+                return ((bool)(this["readLogFile"]));
+            }
+            set {
+                this["readLogFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string readLogFilePath {
+            get {
+                return ((string)(this["readLogFilePath"]));
+            }
+            set {
+                this["readLogFilePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(": ")]
+        public string ReadLogFileExcept {
+            get {
+                return ((string)(this["ReadLogFileExcept"]));
+            }
+            set {
+                this["ReadLogFileExcept"] = value;
+            }
+        }
     }
 }

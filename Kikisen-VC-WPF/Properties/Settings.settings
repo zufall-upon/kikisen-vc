@@ -65,5 +65,14 @@
     <Setting Name="keyBingSpAPI1" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="readLogFile" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="readLogFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ReadLogFileExcept" Type="System.String" Scope="User">
+      <Value Profile="(Default)">: </Value>
+    </Setting>
   </Settings>
 </SettingsFile>
