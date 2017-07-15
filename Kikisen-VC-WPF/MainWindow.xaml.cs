@@ -54,7 +54,10 @@ namespace Kikisen_VC_WPF
 		private string _keyBingSAPI1 = Properties.Settings.Default.keyBingSpAPI1;
 		private bool _readLogFile = Properties.Settings.Default.readLogFile;
 		private string _readLogFilePath = Properties.Settings.Default.readLogFilePath;
-		private string _ReadLogFileExcept = Properties.Settings.Default.ReadLogFileExcept;
+		private string _readLogFileExcept = Properties.Settings.Default.readLogFileExcept;
+		private bool _readLogFileNicknameChk = Properties.Settings.Default.readLogFileNicknameChk;
+		private string _readLogFileNicknameString = Properties.Settings.Default.readLogFileNicknameString;
+		private bool _readLogFileNicknameChkUseVTWAPI = Properties.Settings.Default.readLogFileNicknameChkUseVTWAPI;
 
 		private static System.Windows.Controls.ComboBox _cmbInputDevice;
 		private static System.Windows.Controls.ComboBox _cmbOutputDevice;
@@ -88,6 +91,8 @@ namespace Kikisen_VC_WPF
 		int _iReadLogFileCount = 0;
 		FileSystemWatcher _readLogFileWatcher;
 		DateTime _readLogFileLastWriteFileTime = DateTime.Now;
+		List<string> _lstNicknames = new List<string>();
+		Dictionary<string, Dictionary<string, string>> _lstNicknameOptions = new Dictionary<string, Dictionary<string, string>>();
 
 
 		public static int InputDevice { get => _cmbInputDevice.Items.IndexOf(_InputDevice); }
@@ -102,9 +107,12 @@ namespace Kikisen_VC_WPF
 
 			chkOutputText.IsChecked = _OutputText;
 			chkOutputText_opt1.IsChecked = _OutputText_opt1;
+			txtReadLogFileExcept.Text = _readLogFileExcept;
 			chkReadLogFile.IsChecked = _readLogFile;
 			txtReadLogFile.Text = _readLogFilePath;
-			txtReadLogFileExcept.Text = _ReadLogFileExcept;
+			txtReadLogFileNicknameString.Text = _readLogFileNicknameString;
+			chkReadLogFileNicknameChk.IsChecked = _readLogFileNicknameChk;
+			chkReadLogFileNicknameChkUseVTWAPI.IsChecked = _readLogFileNicknameChkUseVTWAPI;
 
 			_in_safi = new System.Speech.AudioFormat.SpeechAudioFormatInfo(16000, System.Speech.AudioFormat.AudioBitsPerSample.Sixteen, System.Speech.AudioFormat.AudioChannel.Mono);
 			_out_safi = new System.Speech.AudioFormat.SpeechAudioFormatInfo(44100, System.Speech.AudioFormat.AudioBitsPerSample.Sixteen, System.Speech.AudioFormat.AudioChannel.Mono);
@@ -411,7 +419,10 @@ namespace Kikisen_VC_WPF
 			Properties.Settings.Default.keyBingSpAPI1 = _keyBingSAPI1;
 			Properties.Settings.Default.readLogFile = _readLogFile;
 			Properties.Settings.Default.readLogFilePath = _readLogFilePath;
-			Properties.Settings.Default.ReadLogFileExcept = _ReadLogFileExcept;
+			Properties.Settings.Default.readLogFileExcept = _readLogFileExcept;
+			Properties.Settings.Default.readLogFileNicknameChk = _readLogFileNicknameChk;
+			Properties.Settings.Default.readLogFileNicknameString = _readLogFileNicknameString;
+			Properties.Settings.Default.readLogFileNicknameChkUseVTWAPI = _readLogFileNicknameChkUseVTWAPI;
 			Properties.Settings.Default.Save();
 		}
 
@@ -683,7 +694,7 @@ namespace Kikisen_VC_WPF
 			Properties.Settings.Default.Save();
 			if (0 < _readLogFilePath.Length && File.Exists(_readLogFilePath)) {
 				try {
-					_ReadLogFileExcept = txtReadLogFileExcept.Text;
+					_readLogFileExcept = txtReadLogFileExcept.Text;
 					_readLogFileWatcher = new FileSystemWatcher();
 					_readLogFileWatcher.Path = Path.GetDirectoryName(_readLogFilePath);
 					_readLogFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
@@ -752,11 +763,60 @@ namespace Kikisen_VC_WPF
 						iTemp++;
 						if (0 < iTemp) {
 							var msg = strline;
+							var tmpnickname = "";
 							try {
-								msg = strline.Substring(strline.IndexOf(_ReadLogFileExcept));
+								msg = strline.Substring(strline.IndexOf(_readLogFileExcept));
+								// nicknameを取得して声を変えてみる
+								if (_readLogFileNicknameChk) {
+									var nicknametext = _readLogFileNicknameString;
+									if (0 < nicknametext.Length) {
+										if (Regex.IsMatch(nicknametext, @"\*")) {
+											string[] sepMark = nicknametext.Split('*');
+											tmpnickname = strline.Substring(strline.LastIndexOf(sepMark[0]) + sepMark[0].Length, strline.LastIndexOf(sepMark[1]) - strline.LastIndexOf(sepMark[0]) - sepMark[0].Length);
+											if (!_lstNicknames.Contains(tmpnickname)) {
+												_lstNicknames.Add(tmpnickname);
+												// 音声をランダムで決定する
+												var lstRandomSpeechAPI = new List<string>(_lstMsActors);
+												if (_readLogFileNicknameChkUseVTWAPI && 0 < _keyVTWAPI.Length) {
+													lstRandomSpeechAPI.AddRange(_lstVTActors);
+												}
+												int tmppickno = new Random(DateTime.Now.Millisecond).Next(lstRandomSpeechAPI.Count);
+												var tmppickedSpeechAPI = lstRandomSpeechAPI[tmppickno];
+												Dictionary<string, string> tmpdic = new Dictionary<string, string>();
+												if (_lstMsActors.Contains(tmppickedSpeechAPI)) {
+													tmpdic.Add("_SpeechAPI", _lstMsActors[0]);
+													tmpdic.Add("_say_msPitch", cmbMsPitch.Items[new Random().Next(1,cmbMsPitch.Items.Count)].ToString());
+													//tmpdic.Add("_say_msEmphasis", cmbMsEmphasis.Items[new Random().Next(1,cmbMsEmphasis.Items.Count)].ToString());
+													tmpdic.Add("_say_msRate", cmbMsRate.Items[new Random().Next(1,cmbMsRate.Items.Count)].ToString());
+													tmpdic.Add("_sayPitch", "");
+													tmpdic.Add("_saySpeed", "");
+													tmpdic.Add("_sayEmotion", "");
+												} else {
+													tmpdic.Add("_SpeechAPI", _lstVTActors[new Random().Next(_lstVTActors.Count)]);
+													tmpdic.Add("_say_msPitch", "");
+													tmpdic.Add("_say_msEmphasis", "");
+													tmpdic.Add("_say_msRate", "");
+													tmpdic.Add("_sayPitch", cmbVTPitch.Items[new Random().Next(1,cmbVTPitch.Items.Count)].ToString());
+													//tmpdic.Add("_saySpeed", cmbVTSpeed.Items[new Random().Next(1,cmbVTSpeed.Items.Count)].ToString());
+													tmpdic.Add("_sayEmotion", cmbVTEmotion.Items[new Random().Next(1,cmbVTEmotion.Items.Count)].ToString());
+												}
+												_lstNicknameOptions.Add(tmpnickname, tmpdic);
+											}
+										}
+									}
+								}
 							} catch (Exception) {
 							}
-							FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, _SpeechAPI, _say_msVolume, "1", "Reduced", "Fast", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+							if (_readLogFileNicknameChk) {
+								if (tmpnickname != "") {
+									var dic = _lstNicknameOptions[tmpnickname];
+									FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, dic["_SpeechAPI"], _say_msVolume, dic["_say_msPitch"], _say_msEmphasis, dic["_say_msRate"], dic["_sayPitch"], _saySpeed, _sayVolume, dic["_sayEmotion"]);
+								} else {
+									FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+								}
+							} else {
+								FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+							}
 							_iReadLogFileCount++;
 						}
 					}
@@ -766,10 +826,37 @@ namespace Kikisen_VC_WPF
 			}
 		}
 		private void txtReadLogFileExcept_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) {
-			_ReadLogFileExcept = txtReadLogFileExcept.Text;
-			Properties.Settings.Default.ReadLogFileExcept = _ReadLogFileExcept;
+			_readLogFileExcept = txtReadLogFileExcept.Text;
+			Properties.Settings.Default.readLogFileExcept = _readLogFileExcept;
 			Properties.Settings.Default.Save();
 		}
+		private void chkReadLogFileNicknameChk_Checked(object sender, RoutedEventArgs e) {
+			_readLogFileNicknameChk = true;
+			Properties.Settings.Default.readLogFileNicknameChk = _readLogFileNicknameChk;
+			Properties.Settings.Default.Save();
+		}
+		private void chkReadLogFileNicknameChk_Unchecked(object sender, RoutedEventArgs e) {
+			_readLogFileNicknameChk = false;
+			Properties.Settings.Default.readLogFileNicknameChk = _readLogFileNicknameChk;
+			Properties.Settings.Default.Save();
+		}
+		private void txtReadLogFileNicknameString_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) {
+			_readLogFileNicknameString = txtReadLogFileNicknameString.Text;
+			Properties.Settings.Default.readLogFileNicknameString = _readLogFileNicknameString;
+			Properties.Settings.Default.Save();
+		}
+		private void chkReadLogFileNicknameChkUseVTWAPI_Checked(object sender, RoutedEventArgs e) {
+			_readLogFileNicknameChkUseVTWAPI = true;
+			Properties.Settings.Default.readLogFileNicknameChkUseVTWAPI = _readLogFileNicknameChkUseVTWAPI;
+			Properties.Settings.Default.Save();
+		}
+		private void chkReadLogFileNicknameChkUseVTWAPI_Unchecked(object sender, RoutedEventArgs e) {
+			_readLogFileNicknameChkUseVTWAPI = false;
+			Properties.Settings.Default.readLogFileNicknameChkUseVTWAPI = _readLogFileNicknameChkUseVTWAPI;
+			Properties.Settings.Default.Save();
+		}
+
+
 
 		void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
 			//txtbRecogStatus.Text = e.ProgressPercentage.ToString();
@@ -1022,7 +1109,7 @@ namespace Kikisen_VC_WPF
 											// アルファベット混じりだと発声が遅れるので処置する
 											if (bContainAlpha) {
 												// 信頼度がある程度以上ならば区切りと判断
-												float stable_stability = 0.9f;
+												float stable_stability = 0.7f;
 												if (stable_stability <= note.Results[0].Stability) {
 													var subtext = "";
 													if (1 < note.Results.Count) {

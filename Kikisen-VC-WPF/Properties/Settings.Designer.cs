@@ -302,12 +302,48 @@ namespace Kikisen_VC_WPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(": ")]
-        public string ReadLogFileExcept {
+        public string readLogFileExcept {
             get {
-                return ((string)(this["ReadLogFileExcept"]));
+                return ((string)(this["readLogFileExcept"]));
             }
             set {
-                this["ReadLogFileExcept"] = value;
+                this["readLogFileExcept"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool readLogFileNicknameChk {
+            get {
+                return ((bool)(this["readLogFileNicknameChk"]));
+            }
+            set {
+                this["readLogFileNicknameChk"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("(*)")]
+        public string readLogFileNicknameString {
+            get {
+                return ((string)(this["readLogFileNicknameString"]));
+            }
+            set {
+                this["readLogFileNicknameString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool readLogFileNicknameChkUseVTWAPI {
+            get {
+                return ((bool)(this["readLogFileNicknameChkUseVTWAPI"]));
+            }
+            set {
+                this["readLogFileNicknameChkUseVTWAPI"] = value;
             }
         }
     }

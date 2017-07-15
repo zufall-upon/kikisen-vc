@@ -99,12 +99,19 @@
                             <CheckBox x:Name="chkOutputText_opt1" Content="発言ログに日時を付加する" HorizontalAlignment="Left" VerticalAlignment="Top" Unchecked="chkOutputText_opt1_Unchecked" Checked="chkOutputText_opt1_Checked"/>
                         </StackPanel>
                     </GroupBox>
-                    <Label Content="ログ読み上げ設定" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="chkReadLogFile" Content="以下のファイルのログ読み上げをする" HorizontalAlignment="Left" Margin="10,129,0,0" VerticalAlignment="Top" Width="236" Checked="chkReadLogFile_Checked" Unchecked="chkReadLogFile_Unchecked"/>
-                    <TextBox x:Name="txtReadLogFile" HorizontalAlignment="Left" Height="18" Margin="37,149,0,0" TextWrapping="Wrap" Text="./text.log" VerticalAlignment="Top" Width="209" IsReadOnly="True"/>
-                    <Button x:Name="btnReadLogFile" Content="..." HorizontalAlignment="Left" Margin="10,149,0,0" VerticalAlignment="Top" Width="22" Height="18" Click="btnReadLogFile_Click"/>
-                    <TextBox x:Name="txtReadLogFileExcept" HorizontalAlignment="Left" Height="26" Margin="142,172,0,0" TextWrapping="Wrap" Text=": " VerticalAlignment="Top" Width="104" TextChanged="txtReadLogFileExcept_TextChanged"/>
-                    <Label Content="次の文字列まで無視する" HorizontalAlignment="Left" Margin="10,172,0,0" VerticalAlignment="Top" Width="132"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="読み上げ設定" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="80" Margin="-2,-2,-24,0">
+                <Grid Background="#FFE5E5E5" ToolTip="">
+                    <Label Content="ログ読み上げ設定" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="chkReadLogFile" Content="以下のファイルのログ読み上げをする" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="236" Checked="chkReadLogFile_Checked" Unchecked="chkReadLogFile_Unchecked" ToolTip="1行ごと読み取ります。"/>
+                    <TextBox x:Name="txtReadLogFile" HorizontalAlignment="Left" Height="18" Margin="37,50,0,0" TextWrapping="Wrap" Text="./text.log" VerticalAlignment="Top" Width="209" IsReadOnly="True"/>
+                    <Button x:Name="btnReadLogFile" Content="..." HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="22" Height="18" Click="btnReadLogFile_Click"/>
+                    <TextBox x:Name="txtReadLogFileExcept" HorizontalAlignment="Left" Height="21" Margin="142,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" TextChanged="txtReadLogFileExcept_TextChanged" ToolTip="スキップする文字列（ログ日時など）の終端文字を入力してください。"/>
+                    <Label Content="次の文字列まで無視する" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="132"/>
+                    <CheckBox x:Name="chkReadLogFileNicknameChk" Content="名前によって声を変える" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Width="132" Checked="chkReadLogFileNicknameChk_Checked" Unchecked="chkReadLogFileNicknameChk_Unchecked"/>
+                    <TextBox x:Name="txtReadLogFileNicknameString" HorizontalAlignment="Left" Height="21" Margin="142,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" TextChanged="txtReadLogFileNicknameString_TextChanged" ToolTip="名前をアスタリスク(*)として、囲んで下さい。"/>
+                    <CheckBox x:Name="chkReadLogFileNicknameChkUseVTWAPI" Content="↑にHOYA VoiceTextWebAPIを使用する" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="236" Unchecked="chkReadLogFileNicknameChkUseVTWAPI_Unchecked" Checked="chkReadLogFileNicknameChkUseVTWAPI_Checked" ToolTip="Keyが無効ならばSkipされあます"/>
                 </Grid>
             </TabItem>
         </TabControl>
