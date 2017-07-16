@@ -325,7 +325,7 @@ namespace Kikisen_VC_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("(*)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Global: *:")]
         public string readLogFileNicknameString {
             get {
                 return ((string)(this["readLogFileNicknameString"]));

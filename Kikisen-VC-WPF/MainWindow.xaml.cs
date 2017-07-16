@@ -740,6 +740,8 @@ namespace Kikisen_VC_WPF
 					txtReadLogFile.Text = _readLogFilePath;
 					Properties.Settings.Default.readLogFilePath = _readLogFilePath;
 					Properties.Settings.Default.Save();
+					chkReadLogFile.IsChecked = false;
+					chkReadLogFile.IsChecked = true;
 				} else {
 					MessageBox.Show("読み上げ用ログファイルの読み取りに失敗しました。");
 				}
@@ -761,11 +763,12 @@ namespace Kikisen_VC_WPF
 					int iTemp = 0 - _iReadLogFileCount;
 					foreach (var strline in File.ReadLines(_readLogFilePath)) {
 						iTemp++;
+						if (strline.Length <= 0) continue;
 						if (0 < iTemp) {
 							var msg = strline;
 							var tmpnickname = "";
 							try {
-								msg = strline.Substring(strline.IndexOf(_readLogFileExcept));
+								msg = strline.Substring(strline.LastIndexOf(_readLogFileExcept) + _readLogFileExcept.Length);
 								// nicknameを取得して声を変えてみる
 								if (_readLogFileNicknameChk) {
 									var nicknametext = _readLogFileNicknameString;

@@ -78,7 +78,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="readLogFileNicknameString" Type="System.String" Scope="User">
-      <Value Profile="(Default)">(*)</Value>
+      <Value Profile="(Default)">Global: *:</Value>
     </Setting>
     <Setting Name="readLogFileNicknameChkUseVTWAPI" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
