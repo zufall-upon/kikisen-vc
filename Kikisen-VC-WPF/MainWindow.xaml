@@ -104,19 +104,17 @@
             <TabItem Header="読み上げ設定" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Margin="-2,0,0,0">
                 <Grid Background="#FFE5E5E5" ToolTip="">
                     <Label Content="ログ読み上げ設定" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="chkReadLogFile" Content="以下のファイルのログ読み上げをする" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="236" Checked="chkReadLogFile_Checked" Unchecked="chkReadLogFile_Unchecked" ToolTip="1行ごと読み取ります。"/>
                     <TextBox x:Name="txtReadLogFile" HorizontalAlignment="Left" Height="18" Margin="37,50,0,0" TextWrapping="Wrap" Text="./text.log" VerticalAlignment="Top" Width="209" IsReadOnly="True"/>
                     <Button x:Name="btnReadLogFile" Content="..." HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="22" Height="18" Click="btnReadLogFile_Click"/>
-                    <TextBox x:Name="txtReadLogFileExcept" HorizontalAlignment="Left" Height="21" Margin="142,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" TextChanged="txtReadLogFileExcept_TextChanged" ToolTip="スキップする文字列（ログ日時など）の終端文字を入力してください。"/>
-                    <Label Content="次の文字列まで無視する" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="132"/>
-                    <CheckBox x:Name="chkReadLogFileNicknameChk" Content="名前によって声を変える" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Width="132" Checked="chkReadLogFileNicknameChk_Checked" Unchecked="chkReadLogFileNicknameChk_Unchecked"/>
-                    <TextBox x:Name="txtReadLogFileNicknameString" HorizontalAlignment="Left" Height="21" Margin="142,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" TextChanged="txtReadLogFileNicknameString_TextChanged" ToolTip="名前をアスタリスク(*)として、囲んで下さい。"/>
-                    <CheckBox x:Name="chkReadLogFileNicknameChkUseVTWAPI" Content="↑にHOYA VoiceTextWebAPIを使用する" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="236" Unchecked="chkReadLogFileNicknameChkUseVTWAPI_Unchecked" Checked="chkReadLogFileNicknameChkUseVTWAPI_Checked" ToolTip="Keyが無効ならばSkipされあます"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="OCR" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Margin="-2,0,0,0">
-                <Grid Background="#FFE5E5E5">
-                    <Button x:Name="btnOCRrectSetting" Content="キャプチャ領域設定" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="107" Click="btnOCRrectSetting_Click"/>
+                    <TextBox x:Name="txtReadLogFileExcept" HorizontalAlignment="Left" Height="21" Margin="142,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" TextChanged="txtReadLogFileExcept_TextChanged" ToolTip="スキップする文字列（ログ日時など）の終端文字を入力してください。"/>
+                    <Label Content="次の文字列まで無視する" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top" Width="132"/>
+                    <CheckBox x:Name="chkReadLogFileNicknameChk" Content="名前によって声を変える" HorizontalAlignment="Left" Margin="10,152,0,0" VerticalAlignment="Top" Width="132" Checked="chkReadLogFileNicknameChk_Checked" Unchecked="chkReadLogFileNicknameChk_Unchecked"/>
+                    <TextBox x:Name="txtReadLogFileNicknameString" HorizontalAlignment="Left" Height="21" Margin="142,149,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" TextChanged="txtReadLogFileNicknameString_TextChanged" ToolTip="名前をアスタリスク(*)として、囲んで下さい。"/>
+                    <CheckBox x:Name="chkReadLogFileNicknameChkUseVTWAPI" Content="↑にHOYA VoiceTextWebAPIを使用する" HorizontalAlignment="Left" Margin="10,175,0,0" VerticalAlignment="Top" Width="236" Unchecked="chkReadLogFileNicknameChkUseVTWAPI_Unchecked" Checked="chkReadLogFileNicknameChkUseVTWAPI_Checked" ToolTip="Keyが無効ならばSkipされあます"/>
+                    <Label Content="詳細設定" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top"/>
+                    <RadioButton x:Name="rdReadLogFile" Content="以下のファイルのログ読み上げをする" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Checked="chkReadLogFile_Checked" Unchecked="chkReadLogFile_Unchecked" GroupName="grp_logread"/>
+                    <RadioButton x:Name="rdReadLogFile_ocr" Content="OCRでログ読み上げをする" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" GroupName="grp_logread" Checked="rdReadLogFile_ocr_Checked" Unchecked="rdReadLogFile_ocr_Unchecked"/>
+                    <Button x:Name="btnOCRrectSetting" Content="キャプチャ領域" HorizontalAlignment="Left" Margin="172,70,0,0" VerticalAlignment="Top" Width="74" Click="btnOCRrectSetting_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>

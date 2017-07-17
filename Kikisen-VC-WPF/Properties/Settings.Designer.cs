@@ -346,5 +346,65 @@ namespace Kikisen_VC_WPF.Properties {
                 this["readLogFileNicknameChkUseVTWAPI"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool readLogFileOCR {
+            get {
+                return ((bool)(this["readLogFileOCR"]));
+            }
+            set {
+                this["readLogFileOCR"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double readLogFileOCR_rectdownedX {
+            get {
+                return ((double)(this["readLogFileOCR_rectdownedX"]));
+            }
+            set {
+                this["readLogFileOCR_rectdownedX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double readLogFileOCR_rectdownedY {
+            get {
+                return ((double)(this["readLogFileOCR_rectdownedY"]));
+            }
+            set {
+                this["readLogFileOCR_rectdownedY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double readLogFileOCR_rectwidth {
+            get {
+                return ((double)(this["readLogFileOCR_rectwidth"]));
+            }
+            set {
+                this["readLogFileOCR_rectwidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double readLogFileOCR_rectheight {
+            get {
+                return ((double)(this["readLogFileOCR_rectheight"]));
+            }
+            set {
+                this["readLogFileOCR_rectheight"] = value;
+            }
+        }
     }
 }
