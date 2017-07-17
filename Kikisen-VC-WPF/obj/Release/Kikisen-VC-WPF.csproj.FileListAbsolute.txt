@@ -82,6 +82,7 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\NAudio.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Newtonsoft.Json.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\SpeechClient.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\System.Interactive.Async.dll
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\System.Runtime.WindowsRuntime.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Zlib.Portable.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Bond.pdb
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Bond.xml
@@ -94,7 +95,9 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Bond.JSON.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Bond.Reflection.pdb
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Bond.Reflection.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Google.Api.CommonProtos.xml
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Google.Api.Gax.pdb
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Google.Api.Gax.xml
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Google.Api.Gax.Grpc.pdb
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Google.Api.Gax.Grpc.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Google.Apis.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Google.Apis.Auth.xml
@@ -110,6 +113,7 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Microsoft.Vis
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\NAudio.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Newtonsoft.Json.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\System.Interactive.Async.xml
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\System.Runtime.WindowsRuntime.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\Zlib.Portable.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\cs\Microsoft.VisualStudio.Threading.resources.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\de\Microsoft.VisualStudio.Threading.resources.dll
@@ -137,14 +141,16 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\ru\Microsoft.
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\tr\Microsoft.VisualStudio.Validation.resources.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\zh-Hans\Microsoft.VisualStudio.Validation.resources.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Release\zh-Hant\Microsoft.VisualStudio.Validation.resources.dll
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC-WPF.csprojResolveAssemblyReference.cache
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\MainWindow.g.cs
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\OCR\SelectRect.g.cs
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\App.g.cs
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC_Content.g.cs
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC_MarkupCompile.cache
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC_MarkupCompile.lref
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\MainWindow.baml
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\OCR\SelectRect.baml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC.g.resources
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen_VC_WPF.Properties.Resources.resources
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC-WPF.csproj.GenerateResource.Cache
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC.exe
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC-WPF.csprojResolveAssemblyReference.cache

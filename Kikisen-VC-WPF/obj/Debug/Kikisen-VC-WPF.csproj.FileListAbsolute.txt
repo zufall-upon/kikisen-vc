@@ -53,6 +53,12 @@ C:\Users\rozen\documents\visual studio 2017\Projects\Kikisen-VC-WPF\Kikisen-VC-W
 C:\Users\rozen\documents\visual studio 2017\Projects\Kikisen-VC-WPF\Kikisen-VC-WPF\obj\Debug\Kikisen-VC-WPF.csprojResolveAssemblyReference.cache
 C:\Users\rozen\documents\visual studio 2017\Projects\Kikisen-VC-WPF\Kikisen-VC-WPF\bin\Debug\Google.Apis.Translate.v2.dll
 C:\Users\rozen\documents\visual studio 2017\Projects\Kikisen-VC-WPF\Kikisen-VC-WPF\bin\Debug\Google.Apis.Translate.v2.xml
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\MainWindow.g.cs
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\OCR\SelectRect.g.cs
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\App.g.cs
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC_Content.g.cs
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC_MarkupCompile.cache
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC_MarkupCompile.lref
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\grpc_csharp_ext.x86.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\grpc_csharp_ext.x64.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\libgrpc_csharp_ext.x86.so
@@ -87,6 +93,7 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\NAudio.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Newtonsoft.Json.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\SpeechClient.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\System.Interactive.Async.dll
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\System.Runtime.WindowsRuntime.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Zlib.Portable.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Bond.pdb
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Bond.xml
@@ -99,7 +106,9 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Bond.JSON.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Bond.Reflection.pdb
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Bond.Reflection.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Google.Api.CommonProtos.xml
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Google.Api.Gax.pdb
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Google.Api.Gax.xml
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Google.Api.Gax.Grpc.pdb
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Google.Api.Gax.Grpc.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Google.Apis.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Google.Apis.Auth.xml
@@ -115,6 +124,7 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Microsoft.Visua
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\NAudio.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Newtonsoft.Json.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\System.Interactive.Async.xml
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\System.Runtime.WindowsRuntime.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Zlib.Portable.xml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\cs\Microsoft.VisualStudio.Threading.resources.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\de\Microsoft.VisualStudio.Threading.resources.dll
@@ -142,34 +152,11 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\ru\Microsoft.Vi
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tr\Microsoft.VisualStudio.Validation.resources.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\zh-Hans\Microsoft.VisualStudio.Validation.resources.dll
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\zh-Hant\Microsoft.VisualStudio.Validation.resources.dll
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\MainWindow.g.cs
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\App.g.cs
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC_Content.g.cs
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC_MarkupCompile.cache
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC_MarkupCompile.lref
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\MainWindow.baml
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\OCR\SelectRect.baml
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC.g.resources
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen_VC_WPF.Properties.Resources.resources
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC-WPF.csproj.GenerateResource.Cache
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC.exe
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC.pdb
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\Kikisen-VC-WPF.csprojResolveAssemblyReference.cache
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\x64\tesseract.dll
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\x86\tesseract.dll
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\configs\config.cfg
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\eng.cube.bigrams
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\eng.cube.fold
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\eng.cube.lm
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\eng.cube.nn
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\eng.cube.params
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\eng.cube.size
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\eng.cube.word-freq
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\eng.tesseract_cube.nn
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\eng.traineddata
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\tessdata\pdf.ttx
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Patagames.Ocr.dll
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Google.Api.Gax.pdb
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Google.Api.Gax.Grpc.pdb
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\Patagames.Ocr.xml
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\OCR\SelectRect.g.cs
-C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Debug\OCR\SelectRect.baml

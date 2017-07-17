@@ -93,5 +93,11 @@ namespace Kikisen_VC_WPF.OCR
 				rectangle1.Visibility = Visibility.Visible;
 			}
 		}
+
+		private void ContentPanel_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+			rectangle1.Visibility = Visibility.Hidden;
+			leftbtnclicked = false;
+			this.Close();
+		}
 	}
 }

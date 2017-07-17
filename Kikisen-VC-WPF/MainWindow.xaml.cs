@@ -29,8 +29,6 @@ using Microsoft.CognitiveServices.SpeechRecognition;
 using System.Windows.Shapes;
 using System.Drawing;
 using System.Windows.Interop;
-using Patagames.Ocr.Enums;
-using Patagames.Ocr;
 using Kikisen_VC_WPF.OCR;
 
 namespace Kikisen_VC_WPF
@@ -64,7 +62,16 @@ namespace Kikisen_VC_WPF
 		private bool _readLogFileNicknameChk = Properties.Settings.Default.readLogFileNicknameChk;
 		private string _readLogFileNicknameString = Properties.Settings.Default.readLogFileNicknameString;
 		private bool _readLogFileNicknameChkUseVTWAPI = Properties.Settings.Default.readLogFileNicknameChkUseVTWAPI;
+		private bool _readLogFileOCR = Properties.Settings.Default.readLogFileOCR;
+		private double _readLogFileOCR_rectdownedX = Properties.Settings.Default.readLogFileOCR_rectdownedX;
+		private double _readLogFileOCR_rectdownedY = Properties.Settings.Default.readLogFileOCR_rectdownedY;
+		private double _readLogFileOCR_rectwidth = Properties.Settings.Default.readLogFileOCR_rectwidth;
+		private double _readLogFileOCR_rectheight = Properties.Settings.Default.readLogFileOCR_rectheight;
 
+		private double _rectdownedX = 0;
+		private double _rectdownedY = 0;
+		private double _rectwidth = 0;
+		private double _rectheight = 0;
 		private static System.Windows.Controls.ComboBox _cmbInputDevice;
 		private static System.Windows.Controls.ComboBox _cmbOutputDevice;
 		private static string _outdevice;
@@ -74,10 +81,12 @@ namespace Kikisen_VC_WPF
 		private List<string> _lstVTActors = null;
 		private double _threadwaitsec = 1000;
 		private CancellationTokenSource _tokenGCSAPIcancelTokenS;
+		private CancellationTokenSource _tokenMSOCRcancelTokenS;
 		private bool isNowTestingGCS = false;
 		private string _recog_lang_set = "";
 
 		BackgroundWorker Worker;
+		BackgroundWorker Worker_OCR;
 		Action<string> _funcGoogleCloudSpeechinit;
 		Action<string> _funcVoicetextinit;
 		Action<string> _funcGoogleTranslatorinit;
@@ -99,6 +108,7 @@ namespace Kikisen_VC_WPF
 		DateTime _readLogFileLastWriteFileTime = DateTime.Now;
 		List<string> _lstNicknames = new List<string>();
 		Dictionary<string, Dictionary<string, string>> _lstNicknameOptions = new Dictionary<string, Dictionary<string, string>>();
+		MSOCR_Ex _msocr = new MSOCR_Ex();
 
 
 		public static int InputDevice { get => _cmbInputDevice.Items.IndexOf(_InputDevice); }
@@ -114,13 +124,18 @@ namespace Kikisen_VC_WPF
 			chkOutputText.IsChecked = _OutputText;
 			chkOutputText_opt1.IsChecked = _OutputText_opt1;
 			txtReadLogFileExcept.Text = _readLogFileExcept;
-			chkReadLogFile.IsChecked = _readLogFile;
+			rdReadLogFile.IsChecked = _readLogFile;
+			rdReadLogFile_ocr.IsChecked = _readLogFileOCR;
 			txtReadLogFile.Text = _readLogFilePath;
 			txtReadLogFileNicknameString.Text = _readLogFileNicknameString;
 			chkReadLogFileNicknameChk.IsChecked = _readLogFileNicknameChk;
 			chkReadLogFileNicknameChkUseVTWAPI.IsChecked = _readLogFileNicknameChkUseVTWAPI;
+			_rectdownedX = _readLogFileOCR_rectdownedX;
+			_rectdownedY = _readLogFileOCR_rectdownedY;
+			_rectwidth = _readLogFileOCR_rectwidth;
+			_rectheight = _readLogFileOCR_rectheight;
 
-			_in_safi = new System.Speech.AudioFormat.SpeechAudioFormatInfo(16000, System.Speech.AudioFormat.AudioBitsPerSample.Sixteen, System.Speech.AudioFormat.AudioChannel.Mono);
+		_in_safi = new System.Speech.AudioFormat.SpeechAudioFormatInfo(16000, System.Speech.AudioFormat.AudioBitsPerSample.Sixteen, System.Speech.AudioFormat.AudioChannel.Mono);
 			_out_safi = new System.Speech.AudioFormat.SpeechAudioFormatInfo(44100, System.Speech.AudioFormat.AudioBitsPerSample.Sixteen, System.Speech.AudioFormat.AudioChannel.Mono);
 
 			//GoogleCloudSpeechAPI　お試し用のJSONファイルを読み込む
@@ -385,20 +400,16 @@ namespace Kikisen_VC_WPF
 
 			// 音声認識APIを走らせる
 			this.FuncWorkerReset(false);
-
-			// test code
-			//using (var api = OcrApi.Create()) {
-			//	api.Init(Languages.English);
-			//	string plainText = api.GetTextFromImage(@"D:\My Documents\result2.png");
-			//	FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), plainText, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
-			//	MessageBox.Show(plainText);
-			//}
+			this.FuncWorkerOcrReset(false);
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if (this.Worker != null) {
 				this.FuncChangeImgStatus(1);
 				this.Worker.CancelAsync();
+			}
+			if (this.Worker_OCR != null) {
+				this.Worker_OCR.CancelAsync();
 			}
 			if (_readLogFileWatcher != null) {
 				try {
@@ -437,6 +448,11 @@ namespace Kikisen_VC_WPF
 			Properties.Settings.Default.readLogFileNicknameChk = _readLogFileNicknameChk;
 			Properties.Settings.Default.readLogFileNicknameString = _readLogFileNicknameString;
 			Properties.Settings.Default.readLogFileNicknameChkUseVTWAPI = _readLogFileNicknameChkUseVTWAPI;
+			Properties.Settings.Default.readLogFileOCR = _readLogFileOCR;
+			Properties.Settings.Default.readLogFileOCR_rectdownedX = _readLogFileOCR_rectdownedX;
+			Properties.Settings.Default.readLogFileOCR_rectdownedY = _readLogFileOCR_rectdownedY;
+			Properties.Settings.Default.readLogFileOCR_rectwidth = _readLogFileOCR_rectwidth;
+			Properties.Settings.Default.readLogFileOCR_rectheight = _readLogFileOCR_rectheight;
 			Properties.Settings.Default.Save();
 		}
 
@@ -495,7 +511,22 @@ namespace Kikisen_VC_WPF
 			this.Worker.WorkerSupportsCancellation = true;
 			this.Worker.RunWorkerAsync();
 		}
-
+		public void FuncWorkerOcrReset(bool isNeedCancel = true) {
+			if (isNeedCancel || rdReadLogFile_ocr.IsChecked == false) {
+				if (this.Worker_OCR != null) {
+					this.Worker_OCR.CancelAsync();
+					do {
+						Thread.Sleep(Convert.ToInt32(Math.Round(_threadwaitsec * 2)));
+					} while (!this.Worker_OCR.CancellationPending);
+				}
+			}
+			if (rdReadLogFile_ocr.IsChecked == true) {
+				this.Worker_OCR = new BackgroundWorker();
+				this.Worker_OCR.DoWork += new DoWorkEventHandler(Worker_DoWork_MS_OCR);
+				this.Worker_OCR.WorkerSupportsCancellation = true;
+				this.Worker_OCR.RunWorkerAsync();
+			}
+		}
 		private void cmbInputDevice_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
 			this.FuncCombChangeSave(cmbInputDevice, ref _InputDevice, "InputDevice");
 			// バックグラウンド処理をキャンセルする
@@ -754,8 +785,8 @@ namespace Kikisen_VC_WPF
 					txtReadLogFile.Text = _readLogFilePath;
 					Properties.Settings.Default.readLogFilePath = _readLogFilePath;
 					Properties.Settings.Default.Save();
-					chkReadLogFile.IsChecked = false;
-					chkReadLogFile.IsChecked = true;
+					rdReadLogFile.IsChecked = false;
+					rdReadLogFile.IsChecked = true;
 				} else {
 					MessageBox.Show("読み上げ用ログファイルの読み取りに失敗しました。");
 				}
@@ -763,6 +794,19 @@ namespace Kikisen_VC_WPF
 				MessageBox.Show(e5.ToString());
 			}
 		}
+		private void rdReadLogFile_ocr_Checked(object sender, RoutedEventArgs e) {
+			_readLogFileOCR = true;
+			Properties.Settings.Default.readLogFileOCR = _readLogFileOCR;
+			Properties.Settings.Default.Save();
+			FuncWorkerOcrReset(false);
+		}
+		private void rdReadLogFile_ocr_Unchecked(object sender, RoutedEventArgs e) {
+			_readLogFileOCR = false;
+			Properties.Settings.Default.readLogFileOCR = _readLogFileOCR;
+			Properties.Settings.Default.Save();
+			FuncWorkerOcrReset(true);
+		}
+
 		private void FuncReadLogFile(object sender, FileSystemEventArgs e) {
 			DateTime tmpLastWriteTime = File.GetLastWriteTime(e.FullPath);
 			if (tmpLastWriteTime != _readLogFileLastWriteFileTime) {
@@ -779,67 +823,70 @@ namespace Kikisen_VC_WPF
 						iTemp++;
 						if (strline.Length <= 0) continue;
 						if (0 < iTemp) {
-							var msg = strline;
-							var tmpnickname = "";
-							try {
-								msg = strline.Substring(strline.LastIndexOf(_readLogFileExcept) + _readLogFileExcept.Length);
-								// nicknameを取得して声を変えてみる
-								if (_readLogFileNicknameChk) {
-									var nicknametext = _readLogFileNicknameString;
-									if (0 < nicknametext.Length) {
-										if (Regex.IsMatch(nicknametext, @"\*")) {
-											string[] sepMark = nicknametext.Split('*');
-											tmpnickname = strline.Substring(strline.LastIndexOf(sepMark[0]) + sepMark[0].Length, strline.LastIndexOf(sepMark[1]) - strline.LastIndexOf(sepMark[0]) - sepMark[0].Length);
-											if (!_lstNicknames.Contains(tmpnickname)) {
-												_lstNicknames.Add(tmpnickname);
-												// 音声をランダムで決定する
-												var lstRandomSpeechAPI = new List<string>(_lstMsActors);
-												if (_readLogFileNicknameChkUseVTWAPI && 0 < _keyVTWAPI.Length) {
-													lstRandomSpeechAPI.AddRange(_lstVTActors);
-												}
-												int tmppickno = new Random(DateTime.Now.Millisecond).Next(lstRandomSpeechAPI.Count);
-												var tmppickedSpeechAPI = lstRandomSpeechAPI[tmppickno];
-												Dictionary<string, string> tmpdic = new Dictionary<string, string>();
-												if (_lstMsActors.Contains(tmppickedSpeechAPI)) {
-													tmpdic.Add("_SpeechAPI", _lstMsActors[0]);
-													tmpdic.Add("_say_msPitch", cmbMsPitch.Items[new Random().Next(1,cmbMsPitch.Items.Count)].ToString());
-													//tmpdic.Add("_say_msEmphasis", cmbMsEmphasis.Items[new Random().Next(1,cmbMsEmphasis.Items.Count)].ToString());
-													tmpdic.Add("_say_msRate", cmbMsRate.Items[new Random().Next(1,cmbMsRate.Items.Count)].ToString());
-													tmpdic.Add("_sayPitch", "");
-													tmpdic.Add("_saySpeed", "");
-													tmpdic.Add("_sayEmotion", "");
-												} else {
-													tmpdic.Add("_SpeechAPI", _lstVTActors[new Random().Next(_lstVTActors.Count)]);
-													tmpdic.Add("_say_msPitch", "");
-													tmpdic.Add("_say_msEmphasis", "");
-													tmpdic.Add("_say_msRate", "");
-													tmpdic.Add("_sayPitch", cmbVTPitch.Items[new Random().Next(1,cmbVTPitch.Items.Count)].ToString());
-													//tmpdic.Add("_saySpeed", cmbVTSpeed.Items[new Random().Next(1,cmbVTSpeed.Items.Count)].ToString());
-													tmpdic.Add("_sayEmotion", cmbVTEmotion.Items[new Random().Next(1,cmbVTEmotion.Items.Count)].ToString());
-												}
-												_lstNicknameOptions.Add(tmpnickname, tmpdic);
-											}
-										}
-									}
-								}
-							} catch (Exception) {
-							}
-							if (_readLogFileNicknameChk) {
-								if (tmpnickname != "") {
-									var dic = _lstNicknameOptions[tmpnickname];
-									FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, dic["_SpeechAPI"], _say_msVolume, dic["_say_msPitch"], _say_msEmphasis, dic["_say_msRate"], dic["_sayPitch"], _saySpeed, _sayVolume, dic["_sayEmotion"]);
-								} else {
-									FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
-								}
-							} else {
-								FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
-							}
+							FuncNicknameRotateSpeak(strline);
 							_iReadLogFileCount++;
 						}
 					}
 					break;
 				default:
 					break;
+			}
+		}
+		private void FuncNicknameRotateSpeak(string strline) {
+			var msg = strline;
+			var tmpnickname = "";
+			try {
+				msg = strline.Substring(strline.LastIndexOf(_readLogFileExcept) + _readLogFileExcept.Length);
+				// nicknameを取得して声を変えてみる
+				if (_readLogFileNicknameChk) {
+					var nicknametext = _readLogFileNicknameString;
+					if (0 < nicknametext.Length) {
+						if (Regex.IsMatch(nicknametext, @"\*")) {
+							string[] sepMark = nicknametext.Split('*');
+							tmpnickname = strline.Substring(strline.LastIndexOf(sepMark[0]) + sepMark[0].Length, strline.LastIndexOf(sepMark[1]) - strline.LastIndexOf(sepMark[0]) - sepMark[0].Length);
+							if (!_lstNicknames.Contains(tmpnickname)) {
+								_lstNicknames.Add(tmpnickname);
+								// 音声をランダムで決定する
+								var lstRandomSpeechAPI = new List<string>(_lstMsActors);
+								if (_readLogFileNicknameChkUseVTWAPI && 0 < _keyVTWAPI.Length) {
+									lstRandomSpeechAPI.AddRange(_lstVTActors);
+								}
+								int tmppickno = new Random(DateTime.Now.Millisecond).Next(lstRandomSpeechAPI.Count);
+								var tmppickedSpeechAPI = lstRandomSpeechAPI[tmppickno];
+								Dictionary<string, string> tmpdic = new Dictionary<string, string>();
+								if (_lstMsActors.Contains(tmppickedSpeechAPI)) {
+									tmpdic.Add("_SpeechAPI", _lstMsActors[0]);
+									tmpdic.Add("_say_msPitch", cmbMsPitch.Items[new Random().Next(1, cmbMsPitch.Items.Count)].ToString());
+									//tmpdic.Add("_say_msEmphasis", cmbMsEmphasis.Items[new Random().Next(1,cmbMsEmphasis.Items.Count)].ToString());
+									tmpdic.Add("_say_msRate", cmbMsRate.Items[new Random().Next(1, cmbMsRate.Items.Count)].ToString());
+									tmpdic.Add("_sayPitch", "");
+									tmpdic.Add("_saySpeed", "");
+									tmpdic.Add("_sayEmotion", "");
+								} else {
+									tmpdic.Add("_SpeechAPI", _lstVTActors[new Random().Next(_lstVTActors.Count)]);
+									tmpdic.Add("_say_msPitch", "");
+									tmpdic.Add("_say_msEmphasis", "");
+									tmpdic.Add("_say_msRate", "");
+									tmpdic.Add("_sayPitch", cmbVTPitch.Items[new Random().Next(1, cmbVTPitch.Items.Count)].ToString());
+									//tmpdic.Add("_saySpeed", cmbVTSpeed.Items[new Random().Next(1,cmbVTSpeed.Items.Count)].ToString());
+									tmpdic.Add("_sayEmotion", cmbVTEmotion.Items[new Random().Next(1, cmbVTEmotion.Items.Count)].ToString());
+								}
+								_lstNicknameOptions.Add(tmpnickname, tmpdic);
+							}
+						}
+					}
+				}
+			} catch (Exception) {
+			}
+			if (_readLogFileNicknameChk) {
+				if (tmpnickname != "") {
+					var dic = _lstNicknameOptions[tmpnickname];
+					FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, dic["_SpeechAPI"], _say_msVolume, dic["_say_msPitch"], _say_msEmphasis, dic["_say_msRate"], dic["_sayPitch"], _saySpeed, _sayVolume, dic["_sayEmotion"]);
+				} else {
+					FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+				}
+			} else {
+				FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), msg, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
 			}
 		}
 		private void txtReadLogFileExcept_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) {
@@ -1550,12 +1597,6 @@ namespace Kikisen_VC_WPF
 								stream.Seek(0, SeekOrigin.Begin);
 								provider = new RawSourceWaveStream(stream, new WaveFormat(44100, 16, 1));
 							}
-
-							//outdevice = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia); // 既定の出力
-							//using (var wavPlayer = new WasapiOut(_outdevice, AudioClientShareMode.Shared, false, 300)) {
-							//	wavPlayer.Init(provider);
-							//	wavPlayer.Play();
-							//}
 							using (WaveOutEvent wavout = new WaveOutEvent()) {
 								wavout.DeviceNumber = deviceNo;
 								wavout.Init(provider);
@@ -1757,11 +1798,7 @@ namespace Kikisen_VC_WPF
 		}
 
 		// OCR関連
-		private double _rectdownedX = 0;
-		private double _rectdownedY = 0;
-		private double _rectwidth = 0;
-		private double _rectheight = 0;
-		private void btnOCRrectSetting_Click(object sender, RoutedEventArgs e) {
+		private async void btnOCRrectSetting_Click(object sender, RoutedEventArgs e) {
 			var ocrSettingWindow = new Window1();
 			ocrSettingWindow.DownedX = _rectdownedX;
 			ocrSettingWindow.DownedY = _rectdownedY;
@@ -1772,45 +1809,34 @@ namespace Kikisen_VC_WPF
 			_rectdownedY = ocrSettingWindow.DownedY;
 			_rectwidth = ocrSettingWindow.RectWidth;
 			_rectheight = ocrSettingWindow.RectHeight;
-			if (500 < _rectwidth) {
-				_rectwidth = 500;
-				_rectheight = 50;
-				MessageBox.Show("ライブラリの制限によりキャプチャWidthは500 x 50pxまでに切り詰められます。");
-			}
-			if (500 < _rectheight) {
-				_rectheight = 500;
-				_rectwidth = 50;
-				MessageBox.Show("ライブラリの制限によりキャプチャHeightは50 * 500pxまでに切り詰められます。");
-			}
-			//MessageBox.Show("開始地点x:y→" + _rectdownedX + ":" + _rectdownedY + Environment.NewLine
-			//	+ "矩形範囲w:h→" + _rectwidth + ":" + _rectheight);
-
-			// test code
 			try {
-				using (var api = OcrApi.Create()) {
-					api.Init(Languages.English);
-					using (Stream bmp = new MemoryStream()) {
-						BitmapEncoder enc = new BmpBitmapEncoder();
-						var bs = CaptureStart();
-						if (bs == null) return;
-						enc.Frames.Add(BitmapFrame.Create(bs));
-						enc.Save(bmp);
-						//using (var bmp2 = Bitmap.FromFile(@"C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\result32.png") as Bitmap) {
-						using (var bmp2 = Bitmap.FromStream(bmp) as Bitmap) {
-							string plainText = api.GetTextFromImage(bmp2);
-							//plainText = api.GetTextFromImage(@"C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\result32.png");
-							MessageBox.Show(plainText);
-							using (Stream stream = new FileStream("result" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".png", FileMode.Create)) {
-								PngBitmapEncoder encoder = new PngBitmapEncoder();
-								encoder.Frames.Add(BitmapFrame.Create(bs));
-								encoder.Save(stream);
-							}
-							//FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), plainText, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
-						}
-					}
+				using (MemoryStream bmp = new MemoryStream()) {
+					BitmapEncoder enc = new BmpBitmapEncoder();
+					var bs = CaptureStart();
+					if (bs == null) return;
+					enc.Frames.Add(BitmapFrame.Create(bs));
+					enc.Save(bmp);
+					var bitmap = await _msocr.LoadImage2(bmp);
+					var result = await _msocr.detect(bitmap);
+					string chaostext = result.Text;
+					MessageBox.Show(chaostext);
+					//using (Stream stream = new FileStream("result" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".png", FileMode.Create)) {
+					//	PngBitmapEncoder encoder = new PngBitmapEncoder();
+					//	encoder.Frames.Add(BitmapFrame.Create(bs));
+					//	encoder.Save(stream);
+					//}
 				}
 			} catch (Exception) {
 			}
+			_readLogFileOCR_rectdownedX = _rectdownedX;
+			_readLogFileOCR_rectdownedY = _rectdownedY;
+			_readLogFileOCR_rectwidth = _rectwidth;
+			_readLogFileOCR_rectheight = _rectheight;
+			Properties.Settings.Default.readLogFileOCR_rectdownedX = _readLogFileOCR_rectdownedX;
+			Properties.Settings.Default.readLogFileOCR_rectdownedY = _readLogFileOCR_rectdownedY;
+			Properties.Settings.Default.readLogFileOCR_rectwidth = _readLogFileOCR_rectwidth;
+			Properties.Settings.Default.readLogFileOCR_rectheight = _readLogFileOCR_rectheight;
+			Properties.Settings.Default.Save();
 		}
 		private BitmapSource CaptureStart() {
 			try {
@@ -1834,6 +1860,47 @@ namespace Kikisen_VC_WPF
 			} catch (Exception) {
 			}
 			return null;
+		}
+		async void Worker_DoWork_MS_OCR(object sender, DoWorkEventArgs e) {
+			try {
+				// キャンセルトークンの取得
+				_tokenMSOCRcancelTokenS = new CancellationTokenSource();
+				CancellationToken cToken = _tokenMSOCRcancelTokenS.Token;
+
+				List<string> lstSpeaked = new List<string>();
+				while (!this.Worker.CancellationPending && !cToken.IsCancellationRequested) {
+					if (this.Worker.CancellationPending || cToken.IsCancellationRequested) {
+						e.Cancel = true;
+						_tokenMSOCRcancelTokenS.Cancel();
+						break;
+					}
+					using (MemoryStream bmp = new MemoryStream()) {
+						BitmapEncoder enc = new BmpBitmapEncoder();
+						var bs = CaptureStart();
+						if (bs == null) return;
+						enc.Frames.Add(BitmapFrame.Create(bs));
+						enc.Save(bmp);
+						var bitmap = await _msocr.LoadImage2(bmp);
+						var result = await _msocr.detect(bitmap);
+						string chaostext = result.Text;
+						string linetext = "";
+						foreach (var line in result.Lines) {
+							linetext = line.Text;
+							if (!lstSpeaked.Contains(linetext)) {
+								FuncNicknameRotateSpeak(linetext);
+								lstSpeaked.Add(linetext);
+							}
+						}
+					}
+					Thread.Sleep(Convert.ToInt32(Math.Round(_threadwaitsec)));
+				}
+			} catch (NullReferenceException w_e) {
+				FuncWriteLogFile(w_e.ToString());
+				this.FuncChangeImgStatus(2);
+			} catch (Exception w_e) {
+				FuncWriteLogFile(w_e.ToString());
+				this.FuncChangeImgStatus(2);
+			}
 		}
 	}
 }
