@@ -147,3 +147,4 @@ C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC.g.
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen_VC_WPF.Properties.Resources.resources
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC-WPF.csproj.GenerateResource.Cache
 C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC.exe
+C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\obj\Release\Kikisen-VC-WPF.csprojResolveAssemblyReference.cache

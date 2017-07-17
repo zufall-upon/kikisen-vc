@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("x64/tesseract.dll")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("x86/tesseract.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("grpc_csharp_ext.x86.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("grpc_csharp_ext.x64.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("libgrpc_csharp_ext.x86.so")]

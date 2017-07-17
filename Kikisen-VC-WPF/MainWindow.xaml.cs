@@ -26,6 +26,12 @@ using System.Net;
 using Google.Apis.Translate.v2;
 using Google.Apis.Services;
 using Microsoft.CognitiveServices.SpeechRecognition;
+using System.Windows.Shapes;
+using System.Drawing;
+using System.Windows.Interop;
+using Patagames.Ocr.Enums;
+using Patagames.Ocr;
+using Kikisen_VC_WPF.OCR;
 
 namespace Kikisen_VC_WPF
 {
@@ -379,6 +385,14 @@ namespace Kikisen_VC_WPF
 
 			// 音声認識APIを走らせる
 			this.FuncWorkerReset(false);
+
+			// test code
+			//using (var api = OcrApi.Create()) {
+			//	api.Init(Languages.English);
+			//	string plainText = api.GetTextFromImage(@"D:\My Documents\result2.png");
+			//	FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), plainText, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+			//	MessageBox.Show(plainText);
+			//}
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
@@ -696,9 +710,9 @@ namespace Kikisen_VC_WPF
 				try {
 					_readLogFileExcept = txtReadLogFileExcept.Text;
 					_readLogFileWatcher = new FileSystemWatcher();
-					_readLogFileWatcher.Path = Path.GetDirectoryName(_readLogFilePath);
+					_readLogFileWatcher.Path = System.IO.Path.GetDirectoryName(_readLogFilePath);
 					_readLogFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
-					_readLogFileWatcher.Filter = Path.GetFileName(_readLogFilePath);
+					_readLogFileWatcher.Filter = System.IO.Path.GetFileName(_readLogFilePath);
 					_readLogFileWatcher.Changed += FuncReadLogFile;
 					_iReadLogFileCount = 0;
 					foreach (var strline in File.ReadLines(_readLogFilePath)) {
@@ -940,6 +954,8 @@ namespace Kikisen_VC_WPF
 					}
 					this.FuncChangeImgStatus(0);
 					Thread.Sleep(Convert.ToInt32(Math.Round(_threadwaitsec)));
+					// test code
+					//CaptureStart();
 				} while (true);
 
 				if (_ms_wloop != null) {
@@ -1738,6 +1754,86 @@ namespace Kikisen_VC_WPF
 
 			var response = await request.ExecuteAsync().ConfigureAwait(false);
 			return response.Translations[0].TranslatedText;
+		}
+
+		// OCR関連
+		private double _rectdownedX = 0;
+		private double _rectdownedY = 0;
+		private double _rectwidth = 0;
+		private double _rectheight = 0;
+		private void btnOCRrectSetting_Click(object sender, RoutedEventArgs e) {
+			var ocrSettingWindow = new Window1();
+			ocrSettingWindow.DownedX = _rectdownedX;
+			ocrSettingWindow.DownedY = _rectdownedY;
+			ocrSettingWindow.RectWidth = _rectwidth;
+			ocrSettingWindow.RectHeight = _rectheight;
+			ocrSettingWindow.ShowDialog();
+			_rectdownedX = ocrSettingWindow.DownedX;
+			_rectdownedY = ocrSettingWindow.DownedY;
+			_rectwidth = ocrSettingWindow.RectWidth;
+			_rectheight = ocrSettingWindow.RectHeight;
+			if (500 < _rectwidth) {
+				_rectwidth = 500;
+				_rectheight = 50;
+				MessageBox.Show("ライブラリの制限によりキャプチャWidthは500 x 50pxまでに切り詰められます。");
+			}
+			if (500 < _rectheight) {
+				_rectheight = 500;
+				_rectwidth = 50;
+				MessageBox.Show("ライブラリの制限によりキャプチャHeightは50 * 500pxまでに切り詰められます。");
+			}
+			//MessageBox.Show("開始地点x:y→" + _rectdownedX + ":" + _rectdownedY + Environment.NewLine
+			//	+ "矩形範囲w:h→" + _rectwidth + ":" + _rectheight);
+
+			// test code
+			try {
+				using (var api = OcrApi.Create()) {
+					api.Init(Languages.English);
+					using (Stream bmp = new MemoryStream()) {
+						BitmapEncoder enc = new BmpBitmapEncoder();
+						var bs = CaptureStart();
+						if (bs == null) return;
+						enc.Frames.Add(BitmapFrame.Create(bs));
+						enc.Save(bmp);
+						//using (var bmp2 = Bitmap.FromFile(@"C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\result32.png") as Bitmap) {
+						using (var bmp2 = Bitmap.FromStream(bmp) as Bitmap) {
+							string plainText = api.GetTextFromImage(bmp2);
+							//plainText = api.GetTextFromImage(@"C:\Users\rozen\Source\Repos\kikisen-vc2\Kikisen-VC-WPF\bin\Debug\result32.png");
+							MessageBox.Show(plainText);
+							using (Stream stream = new FileStream("result" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".png", FileMode.Create)) {
+								PngBitmapEncoder encoder = new PngBitmapEncoder();
+								encoder.Frames.Add(BitmapFrame.Create(bs));
+								encoder.Save(stream);
+							}
+							//FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), plainText, "Microsoft Haruka Desktop", _say_msVolume, "1", "Reduced", "Slow", _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+						}
+					}
+				}
+			} catch (Exception) {
+			}
+		}
+		private BitmapSource CaptureStart() {
+			try {
+				System.Windows.Point targetPoint = new System.Windows.Point(_rectdownedX, _rectdownedY);
+				Rect targetRect = new Rect(targetPoint.X, targetPoint.Y, _rectwidth, _rectheight);
+				if (targetRect.X <= 0 || targetRect.Y <= 0) return null;
+				BitmapSource bitmap = this.CaptureScreen(targetRect);
+				return bitmap;
+			} catch (Exception) {
+			}
+			return null;
+		}
+		private BitmapSource CaptureScreen(Rect rect) {
+			try {
+				using (var screenBmp = new Bitmap((int)rect.Width, (int)rect.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb)) {
+					using (var bmpGraphics = Graphics.FromImage(screenBmp)) {
+						bmpGraphics.CopyFromScreen((int)rect.X, (int)rect.Y, 0, 0, screenBmp.Size);
+						return Imaging.CreateBitmapSourceFromHBitmap(screenBmp.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+					}
+				}
+			} catch (Exception) {
+			}
+			return null;
 		}
 	}
 }

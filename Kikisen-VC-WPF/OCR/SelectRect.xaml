@@ -1,0 +1,23 @@
+﻿<Window x:Class="Kikisen_VC_WPF.OCR.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kikisen_VC_WPF.OCR"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="#40FFFFFF"
+        Title="Select Rect" Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowState="Maximized" Topmost="True" Loaded="Window_Loaded" >
+    <Grid x:Name="ContentPanel"
+          Background="Transparent" 
+          MouseLeftButtonDown="ContentPanel_MouseLeftButtonDown" 
+          MouseLeftButtonUp="ContentPanel_MouseLeftButtonUp" 
+          MouseMove="ContentPanel_MouseMove" Opacity="1.0">
+
+        <Rectangle Name="rectangle1" 
+                   HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   StrokeDashArray="2,2" Stroke="Blue" StrokeThickness="3" 
+                   Visibility="Collapsed" Opacity="1.0" />
+    </Grid>
+</Window>
