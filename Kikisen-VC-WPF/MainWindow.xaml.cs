@@ -1124,7 +1124,7 @@ namespace Kikisen_VC_WPF
 					InterimResults = true, // 逐次報告、しないとしゃべり放題ならず
 					SingleUtterance = false, // 50秒喋り放題
 				};
-				List<string> lstLastspeaktext = new List<string>();
+				List<string> lstLastspeaktext = null;
 				while (!this.Worker.CancellationPending && !cToken.IsCancellationRequested) {
 					if (this.Worker.CancellationPending || cToken.IsCancellationRequested) {
 						e.Cancel = true;
@@ -1155,28 +1155,37 @@ namespace Kikisen_VC_WPF
 									outtext = note.Results[0].Alternatives[0].Transcript;
 									Action<bool> act2 = delegate (bool bContainAlpha) {
 										if (!bSpeaked) {
-											var speechtxt = outtext;
-											speechtxt = Regex.Replace(speechtxt, @"\s", "");
-											if (0 < lastspeaktext.Length) {
-												// 前回の発言内容とスペースを除去
-												try {
-													var iLeng = speechtxt.Length;
-													foreach (var tmpStr in lstLastspeaktext) {
-														speechtxt = speechtxt.Replace(tmpStr, "");
-													}
-													if (iLeng == speechtxt.Length) {
-														if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
-													}
-												} catch (Exception w_e4) {
-													if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Replace(lastspeaktext, "");
-												}
+											float stable_stability = 0.89f;
+											if (Regex.IsMatch(outtext, @"[a-zA-Z]")) {
+												stable_stability = 0f;
+											}
+											var speechtxt = "";
+											if (stable_stability <= note.Results[0].Stability
+												|| (0 == note.Results[0].Stability && note.Results[0].IsFinal)) {
+												speechtxt = outtext;
 												speechtxt = Regex.Replace(speechtxt, @"\s", "");
+												if (0 < lastspeaktext.Length) {
+													// 前回の発言内容とスペースを除去
+													try {
+														var iLeng = speechtxt.Length;
+														foreach (var tmpStr in lstLastspeaktext) {
+															speechtxt = speechtxt.Replace(tmpStr, "");
+														}
+														if (iLeng == speechtxt.Length && note.Results[0].IsFinal) {
+															if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
+														}
+													} catch (Exception w_e4) {
+														if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Replace(lastspeaktext, "");
+													}
+													speechtxt = Regex.Replace(speechtxt, @"\s", "");
+												}
 											}
 											// アルファベット混じりだと発声が遅れるので処置する
-											if (bContainAlpha) {
+											if (Regex.IsMatch(outtext, @"[a-zA-Z]")) {
 												// 信頼度がある程度以上ならば区切りと判断
-												float stable_stability = 0.7f;
-												if (stable_stability <= note.Results[0].Stability) {
+												stable_stability = 0.89f;
+												if ((stable_stability <= note.Results[0].Stability)
+													|| (0 == note.Results[0].Stability && note.Results[0].IsFinal) ) {
 													var subtext = "";
 													if (1 < note.Results.Count) {
 														subtext = note.Results[1].Alternatives[0].Transcript;
@@ -1191,7 +1200,7 @@ namespace Kikisen_VC_WPF
 														foreach (var tmpStr in lstLastspeaktext) {
 															speechtxt = speechtxt.Replace(tmpStr, "");
 														}
-														if (iLeng == speechtxt.Length) {
+														if (iLeng == speechtxt.Length && note.Results[0].IsFinal) {
 															if (1 <= lastspeaktext.Length) speechtxt = speechtxt.Substring(lastspeaktext.Length, speechtxt.Length - lastspeaktext.Length);
 														}
 													} catch (Exception w_e4) {
@@ -1203,7 +1212,7 @@ namespace Kikisen_VC_WPF
 														FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), speechtxt, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
 													}));
 													lastspeaktext = speechtxt;
-													if (10 <= lstLastspeaktext.Count) {
+													if (4 <= lstLastspeaktext.Count) {
 														lstLastspeaktext.RemoveAt(0);
 													}
 													if (3 < lastspeaktext.Length) {
@@ -1214,7 +1223,7 @@ namespace Kikisen_VC_WPF
 													//bReset = true;
 												}
 											} else {
-												if (Regex.IsMatch(speechtxt, @"[a-zA-Z]")) {
+												if (Regex.IsMatch(speechtxt, @"[a-zA-Z]") && (0 == note.Results[0].Stability && note.Results[0].IsFinal)) {
 													return;
 												}
 												if (speechtxt.Length == 0) return;
@@ -1222,7 +1231,7 @@ namespace Kikisen_VC_WPF
 													FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), speechtxt, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
 												}));
 												lastspeaktext = speechtxt;
-												if (10 <= lstLastspeaktext.Count) {
+												if (4 <= lstLastspeaktext.Count) {
 													lstLastspeaktext.RemoveAt(0);
 												}
 												if (3 < lastspeaktext.Length) {
@@ -1241,8 +1250,8 @@ namespace Kikisen_VC_WPF
 									};
 									await Dispatcher.BeginInvoke((Action)(() => {
 										if (_recog_lang_set == "ja-JP") {
-											txtbRecogStatus.Text = outtext + "[" + note.Results[0].Stability + "]";
-											if (outtext.EndsWith(@"リセット")) {
+											txtbRecogStatus.Text = outtext + "[" + note.Results[0].Stability + "," + ((note.Results[0].IsFinal)? "final": "no") + "," + ((Regex.IsMatch(outtext, @"[a-zA-Z]"))? "alpha": "no") + "]";
+											if (outtext.EndsWith(@"リセット") && note.Results[0].IsFinal) {
 												// リセット用の音声コマンドが文末にあればリセット
 												if (WaveIn.DeviceCount == MainWindow.InputDevice) {
 												} else {
@@ -1259,7 +1268,7 @@ namespace Kikisen_VC_WPF
 													if (Regex.IsMatch(outtext, @"[a-zA-Z]")) {
 														bContainAlpha = true;
 													}
-													if (note.Results[0].IsFinal || Regex.IsMatch(outtext, @"[a-zA-Z]")) {
+													if (note.Results[0].IsFinal || bContainAlpha) {
 														act2(bContainAlpha);
 													}
 												} else {
@@ -1327,6 +1336,7 @@ namespace Kikisen_VC_WPF
 						initialRequest.StreamingConfig = streamingConfig;
 						call.RequestStream.WriteAsync(initialRequest).Wait();
 						Dispatcher.BeginInvoke((Action)(() => {
+							lstLastspeaktext = new List<string>();
 							txtbRecogStatus.Text = "Waiting...";
 							this.FuncChangeImgStatus(0);
 						}));
