@@ -85,7 +85,7 @@ Overview
       - [Google翻訳APIキー取得方法](https://cloudapplications.desk.com/customer/ja/portal/articles/2230196-google%E7%BF%BB%E8%A8%B3api%E3%82%AD%E3%83%BC%E5%8F%96%E5%BE%97%E6%96%B9%E6%B3%95)
     - [HOYA VoiceTextWebAPIのAPIキー](https://cloud.voicetext.jp/webapi)
     - 仮想サウンドデバイス作成ソフト
-      - [Virtual Audio Cables](http://vb-audio.pagesperso-orange.fr/Cable/index.htm)
+      - [VB-CABLE Virtual Audio Device](http://www.vb-audio.com/Cable/)
       - [Bing Speech API](https://azure.microsoft.com/ja-jp/services/cognitive-services/speech/)
         - 「試用版」をクリックして登録する メアドだけでいい模様
           - ![イメージ](http://i.imgur.com/RLM7dii.png)
