@@ -22,6 +22,7 @@ Overview
    - 2017/07/11 簡易的なログ読み上げ機能を実装。テキストチャットログファイルを監視して読み上げます。テキストチャット見逃し防止にどうぞ。
    - 2017/07/16 簡易ログ読み上げ機能が面白かったので強化。各人ニックネームを認識して、音声を固定する機能を実装。
    - 2017/07/17 OCRでのテキストチャット読み上げ機能を実装。作ってみてテストして、使い物にならない精度であることが分かった程度。ネタ機能にもならないが実装を捨てるのがもったいないのでコミット。
+   - 2017/07/29 音声認識発声機能がバグってメタメタだったので再調整。APIの更新に合わせて動作も変わっていた模様。だいぶ良くなったと思うのでテスト待ち。
 
 ## Description （各機能の概要、開発経緯、特徴）
 
@@ -84,7 +85,7 @@ Overview
       - [Google翻訳APIキー取得方法](https://cloudapplications.desk.com/customer/ja/portal/articles/2230196-google%E7%BF%BB%E8%A8%B3api%E3%82%AD%E3%83%BC%E5%8F%96%E5%BE%97%E6%96%B9%E6%B3%95)
     - [HOYA VoiceTextWebAPIのAPIキー](https://cloud.voicetext.jp/webapi)
     - 仮想サウンドデバイス作成ソフト
-      - [Virtual Audio Cables](http://vb-audio.pagesperso-orange.fr/Cable/index.htm)
+      - [VB-CABLE Virtual Audio Device](http://www.vb-audio.com/Cable/)
       - [Bing Speech API](https://azure.microsoft.com/ja-jp/services/cognitive-services/speech/)
         - 「試用版」をクリックして登録する メアドだけでいい模様
           - ![イメージ](http://i.imgur.com/RLM7dii.png)
