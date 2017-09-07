@@ -19,21 +19,22 @@ using System.Text;
 using System.Net.Http;
 using Microsoft.Win32;
 using NAudio.CoreAudioApi;
-using NAudio.Wave.Compression;
-using NAudio.Utils;
 using Kikisen_VC_WPF.MS;
-using System.Net;
 using Google.Apis.Translate.v2;
 using Google.Apis.Services;
 using Microsoft.CognitiveServices.SpeechRecognition;
-using System.Windows.Shapes;
 using System.Drawing;
 using System.Windows.Interop;
 using Kikisen_VC_WPF.OCR;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Data;
+using System.Collections;
+using System.Linq;
 
 namespace Kikisen_VC_WPF
 {
-	public partial class MainWindow : Window
+    public partial class MainWindow : Window
 	{
 		private static string _InputDevice = Properties.Settings.Default.InputDevice;
 		private static string _OutputDevice = Properties.Settings.Default.OutputDevice;
@@ -66,9 +67,10 @@ namespace Kikisen_VC_WPF
 		private double _readLogFileOCR_rectdownedX = Properties.Settings.Default.readLogFileOCR_rectdownedX;
 		private double _readLogFileOCR_rectdownedY = Properties.Settings.Default.readLogFileOCR_rectdownedY;
 		private double _readLogFileOCR_rectwidth = Properties.Settings.Default.readLogFileOCR_rectwidth;
-		private double _readLogFileOCR_rectheight = Properties.Settings.Default.readLogFileOCR_rectheight;
+        private double _readLogFileOCR_rectheight = Properties.Settings.Default.readLogFileOCR_rectheight;
+        private string _rcSetCommand = Properties.Settings.Default.rcSetCommand;
 
-		private double _rectdownedX = 0;
+        private double _rectdownedX = 0;
 		private double _rectdownedY = 0;
 		private double _rectwidth = 0;
 		private double _rectheight = 0;
@@ -109,9 +111,11 @@ namespace Kikisen_VC_WPF
 		List<string> _lstNicknames = new List<string>();
 		Dictionary<string, Dictionary<string, string>> _lstNicknameOptions = new Dictionary<string, Dictionary<string, string>>();
 		MSOCR_Ex _msocr = new MSOCR_Ex();
+        Dictionary<string, string[]> _dicRcTango = new Dictionary<string, string[]>();
+        bool _rcspeaked = false;
 
 
-		public static int InputDevice { get => _cmbInputDevice.Items.IndexOf(_InputDevice); }
+        public static int InputDevice { get => _cmbInputDevice.Items.IndexOf(_InputDevice); }
 		public static int OutputDevice { get => _cmbOutputDevice.Items.IndexOf(_OutputDevice); }
 		public static string MMDoutputDevice { get => _outdevice; }
 
@@ -363,8 +367,9 @@ namespace Kikisen_VC_WPF
 			cmbRecogAPI.Items.Clear();
 			cmbRecogAPI.Items.Add("Windows音声認識API");
 			cmbRecogAPI.Items.Add("GoogleCloudSpeechAPI");
-			cmbRecogAPI.Items.Add("BingSpeechAPI");
-			cmbRecogAPI.Items.Refresh();
+            cmbRecogAPI.Items.Add("BingSpeechAPI");
+            cmbRecogAPI.Items.Add("ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)");
+            cmbRecogAPI.Items.Refresh();
 			cmbRecogAPI.SelectedIndex = (0 <= cmbRecogAPI.Items.IndexOf(_RecogAPI)) ? cmbRecogAPI.Items.IndexOf(_RecogAPI) : 0;
 
 			// 翻訳APIの初期化
@@ -395,8 +400,42 @@ namespace Kikisen_VC_WPF
 				_Phrases = txtbPhrases.Text;
 			}
 
-			// ステータス画像を表示
-			this.FuncChangeImgStatus(1);
+            // RChatタブの初期化
+            dgRc.Columns.Clear();
+            dgRc.Items.Clear();
+            dgRc.HorizontalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Hidden;
+            dgRc.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Visible;
+            dgRc.Columns.Add(new DataGridTextColumn() { Header = "Command", IsReadOnly = false, FontSize = 12, Binding = new Binding("Command") });
+            dgRc.Columns.Add(new DataGridTextColumn() { Header = "OutVoice", IsReadOnly = false, FontSize = 12, Binding = new Binding("OutVoice") });
+            DataTable dt = new DataTable("dtRChat");
+            dt.Columns.Add(new DataColumn("Command", typeof(string)));
+            dt.Columns.Add(new DataColumn("OutVoice", typeof(string)));
+            string[] delim1 = { "[/BR]" };
+            string[] delim2 = { "[/COM]" };
+            try {
+                var lstCom = _rcSetCommand.Split(delim1, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var strCom in lstCom) {
+                    try {
+                        var lstIndCom = strCom.Split(delim2, StringSplitOptions.RemoveEmptyEntries);
+                        DataRow newRowItem = dt.NewRow();
+                        newRowItem["Command"] = lstIndCom[0];
+                        newRowItem["OutVoice"] = lstIndCom[1];
+                        dt.Rows.Add(newRowItem);
+                        // メモリ上辞書を更新
+                        var tmpListKey = lstIndCom[0].Split(',');
+                        foreach (var tmpKey in tmpListKey) {
+                            _dicRcTango.Add(tmpKey, lstIndCom[1].Split(','));
+                        }
+                    } catch (Exception) {
+                    }
+                }
+            } catch (Exception) {
+            }
+            dgRc.DataContext = dt;
+            dgRc.ColumnWidth = new DataGridLength(1, DataGridLengthUnitType.Star);
+
+            // ステータス画像を表示
+            this.FuncChangeImgStatus(1);
 
 			// 音声認識APIを走らせる
 			this.FuncWorkerReset(false);
@@ -452,8 +491,9 @@ namespace Kikisen_VC_WPF
 			Properties.Settings.Default.readLogFileOCR_rectdownedX = _readLogFileOCR_rectdownedX;
 			Properties.Settings.Default.readLogFileOCR_rectdownedY = _readLogFileOCR_rectdownedY;
 			Properties.Settings.Default.readLogFileOCR_rectwidth = _readLogFileOCR_rectwidth;
-			Properties.Settings.Default.readLogFileOCR_rectheight = _readLogFileOCR_rectheight;
-			Properties.Settings.Default.Save();
+            Properties.Settings.Default.readLogFileOCR_rectheight = _readLogFileOCR_rectheight;
+            Properties.Settings.Default.rcSetCommand = _rcSetCommand;
+            Properties.Settings.Default.Save();
 		}
 
 		private void FuncCombChangeSave(System.Windows.Controls.ComboBox cmb, ref string _grostring, string propname, bool withTitle = false) {
@@ -502,7 +542,9 @@ namespace Kikisen_VC_WPF
 				this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_GCS_Recog);
 			} else if (_RecogAPI == "BingSpeechAPI") {
 				this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_BingSpeech_Recog);
-			} else {
+            } else if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)") {
+                this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_MS_Recog);
+            } else {
 				this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_MS_Recog);
 			}
 			this.Worker.ProgressChanged += new ProgressChangedEventHandler(Worker_ProgressChanged);
@@ -918,11 +960,65 @@ namespace Kikisen_VC_WPF
 			_readLogFileNicknameChkUseVTWAPI = false;
 			Properties.Settings.Default.readLogFileNicknameChkUseVTWAPI = _readLogFileNicknameChkUseVTWAPI;
 			Properties.Settings.Default.Save();
-		}
+        }
+        private bool isManualEditCommit;
+        private void dgRc_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e) {
+            if (!isManualEditCommit) {
+                isManualEditCommit = true;
+                DataGrid grid = (DataGrid)sender;
+                grid.CommitEdit(DataGridEditingUnit.Row, true);
+                isManualEditCommit = false;
+                this.saveDg();
+                if (_ms_recogEngine != null) {
+                    _ms_recogEngine.UnloadAllGrammars();
+                    //語彙登録
+                    foreach (var tmpKey in _dicRcTango) {
+                        Choices words = new Choices(tmpKey.Value);
+                        GrammarBuilder gb = new GrammarBuilder(tmpKey.Key);
+                        gb.Append(words);
+                        Grammar grammar = new Grammar(gb) { Name = tmpKey.Key };
+                        _ms_recogEngine.LoadGrammar(grammar);
+                    }
+                }
+            }
+        }
+        private void saveDg() {
+            try {
+                StringBuilder sb = new StringBuilder();
+                string delim1 = "[/BR]";
+                string delim2 = "[/COM]";
+                var rows = GetDataGridRows(dgRc);
+                foreach (DataGridRow r in rows) {
+                    try {
+                        TextBlock col1 = dgRc.Columns[0].GetCellContent(r) as TextBlock;
+                        TextBlock col2 = dgRc.Columns[1].GetCellContent(r) as TextBlock;
+                        sb.Append(col1.Text + delim2 + col2.Text + delim1);
+                        // メモリ上辞書を更新
+                        var tmpListKey = col1.Text.Split(',');
+                        foreach (var tmpKey in tmpListKey) {
+                            _dicRcTango.Add(tmpKey, col2.Text.Split(','));
+                        }
+                    } catch (Exception) {
+                    }
+                }
+                _rcSetCommand = sb.ToString();
+                Properties.Settings.Default.rcSetCommand = _rcSetCommand;
+                Properties.Settings.Default.Save();
+            } catch (Exception) {
+            }
+        }
+        public IEnumerable<DataGridRow> GetDataGridRows(DataGrid grid) {
+            var itemsSource = grid.ItemsSource as IEnumerable;
+            if (null == itemsSource) yield return null;
+            foreach (var item in itemsSource) {
+                var row = grid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                if (null != row) yield return row;
+            }
+        }
 
 
 
-		void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+        void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
 			//txtbRecogStatus.Text = e.ProgressPercentage.ToString();
 		}
 		void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -977,15 +1073,26 @@ namespace Kikisen_VC_WPF
 
 				var culture = (_recog_lang_set == "en-US") ? "en-US" : _recog_lang_set;
 				_ms_recogEngine = new SpeechRecognitionEngine(new CultureInfo(culture));
-				DictationGrammar customDictationGrammar = new DictationGrammar("grammar:dictation");
-				customDictationGrammar.Name = "custom";
-				customDictationGrammar.Enabled = true;
-				_ms_recogEngine.LoadGrammar(customDictationGrammar);
-				foreach (var str in _lstPhrases) {
-					customDictationGrammar.SetDictationContext(str, null);
-				}
+                //語彙登録
+                if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)") {
+                    foreach (var tmpKey in _dicRcTango) {
+                        Choices words = new Choices(tmpKey.Value);
+                        GrammarBuilder gb = new GrammarBuilder(tmpKey.Key);
+                        gb.Append(words);
+                        Grammar grammar = new Grammar(gb){ Name = tmpKey.Key };
+                        _ms_recogEngine.LoadGrammar(grammar);
+                    }
+                } else {
+                    DictationGrammar customDictationGrammar = new DictationGrammar("grammar:dictation");
+                    customDictationGrammar.Name = "custom";
+                    customDictationGrammar.Enabled = true;
+                    _ms_recogEngine.LoadGrammar(customDictationGrammar);
+                    foreach (var str in _lstPhrases) {
+                        customDictationGrammar.SetDictationContext(str, null);
+                    }
+                }
 
-				if (_ms_wloop != null) {
+                if (_ms_wloop != null) {
 					_ms_recogEngine.SetInputToAudioStream(_ms_wloop_ss, _in_safi);
 				} else {
 					_ms_recogEngine.SetInputToAudioStream(_ms_ss, _in_safi);
@@ -1036,8 +1143,8 @@ namespace Kikisen_VC_WPF
 				FuncWriteLogFile(w_e.ToString());
 				this.FuncChangeImgStatus(2);
 			}
-		}
-		public byte[] Convert16(byte[] input, int length, WaveFormat format) {
+        }
+        public byte[] Convert16(byte[] input, int length, WaveFormat format) {
 			if (length == 0)
 				return new byte[0];
 			using (var memStream = new MemoryStream(input, 0, length)) {
@@ -1077,13 +1184,30 @@ namespace Kikisen_VC_WPF
 				this.FuncChangeImgStatus(2);
 			}
 		}
-		// 推定時の処理
-		void _ms_recogEngine_SpeechHypothesized(object sender, SpeechHypothesizedEventArgs e2) {
-		}
+        // 推定時の処理
+        void _ms_recogEngine_SpeechHypothesized(object sender, SpeechHypothesizedEventArgs e2) {
+            if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)") {
+                if (0.07f <= e2.Result.Confidence && !_rcspeaked) {
+                    _rcspeaked = true;
+                    Dispatcher.BeginInvoke((Action)(() => {
+                        var key = e2.Result.Text;
+                        var strlst = _dicRcTango[key];
+                        Random r = new System.Random();
+                        int i2 = r.Next(0, strlst.Length);
+                        var value = strlst[i2];
+                        txtbRecogStatus.Text = key + " (" + value + ")" + " [" + e2.Result.Confidence + "]";
+                        FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), value, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+                    }));
+                }
+            }
+        }
 		// 認識時の処理
 		void _ms_recogEngine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e2) {
-			if (0.3 < e2.Result.Confidence) {
-				Dispatcher.BeginInvoke((Action)(() => {
+            if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)") {
+                return;
+            } else if (0.07f <= e2.Result.Confidence) {
+                _rcspeaked = true;
+                Dispatcher.BeginInvoke((Action)(() => {
 					var msg = e2.Result.Text;
 					if (msg.Contains("FFF")) return;
 					if (_TranslateAPI == "GoogleTranslatorAPI") {
@@ -1678,7 +1802,8 @@ namespace Kikisen_VC_WPF
 					}
 					this.FuncWriteTextLog(msg);
 				});
-			} catch (Exception w_e) {
+                _rcspeaked = false;
+            } catch (Exception w_e) {
 				FuncWriteLogFile(w_e.ToString());
 			}
 		}
@@ -1912,5 +2037,5 @@ namespace Kikisen_VC_WPF
 				this.FuncChangeImgStatus(2);
 			}
 		}
-	}
+    }
 }

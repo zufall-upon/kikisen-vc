@@ -98,5 +98,8 @@
     <Setting Name="readLogFileOCR_rectheight" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="rcSetCommand" Type="System.String" Scope="User">
+      <Value Profile="(Default)">テスト,test,テス[/COM]テスト,テストです[/BR]</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
