@@ -33,7 +33,7 @@
                     <TextBlock x:Name="lblGCSAPI" HorizontalAlignment="Left" Margin="97,2,0,0" TextWrapping="Wrap" Text="未認証" VerticalAlignment="Top" Width="117"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabReconAPI_BS_set" Header="Bing設定" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
+            <TabItem x:Name="tabReconAPI_BS_set" Header="Bing設定" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="59" Margin="-2,-2,0,0">
                 <Grid Background="#FFE5E5E5">
                     <Button x:Name="btnBingSpAPIkey" Content="BingSpeechAPI(未認証)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="157" Click="btnBingSpAPIkey_Click"/>
                     <PasswordBox x:Name="txtbBingSpAPIkey" HorizontalAlignment="Right" VerticalAlignment="Top" Width="62" Margin="0,1,0,0"/>

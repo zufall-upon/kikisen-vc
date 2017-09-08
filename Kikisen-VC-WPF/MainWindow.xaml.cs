@@ -413,6 +413,7 @@ namespace Kikisen_VC_WPF
             string[] delim1 = { "[/BR]" };
             string[] delim2 = { "[/COM]" };
             try {
+                _dicRcTango.Clear();
                 var lstCom = _rcSetCommand.Split(delim1, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var strCom in lstCom) {
                     try {
@@ -987,18 +988,25 @@ namespace Kikisen_VC_WPF
                 StringBuilder sb = new StringBuilder();
                 string delim1 = "[/BR]";
                 string delim2 = "[/COM]";
-                var rows = GetDataGridRows(dgRc);
-                foreach (DataGridRow r in rows) {
+                _dicRcTango.Clear();
+                string strTmpLog = "";
+                for (int i = 0; i < dgRc.Items.Count; i++) {
                     try {
-                        TextBlock col1 = dgRc.Columns[0].GetCellContent(r) as TextBlock;
-                        TextBlock col2 = dgRc.Columns[1].GetCellContent(r) as TextBlock;
-                        sb.Append(col1.Text + delim2 + col2.Text + delim1);
+                        var row = ((System.Data.DataRowView)(dgRc.Items[i])).Row.ItemArray;
+                        if (row == null) continue;
+                        string col1 = row[0] as string;
+                        string col2 = row[1] as string;
+                        if (col1 == null || col2 == null) continue;
+                        sb.Append(col1 + delim2 + col2 + delim1);
                         // メモリ上辞書を更新
-                        var tmpListKey = col1.Text.Split(',');
+                        var tmpListKey = col1.Split(',');
                         foreach (var tmpKey in tmpListKey) {
-                            _dicRcTango.Add(tmpKey, col2.Text.Split(','));
+                            strTmpLog = tmpKey;
+                            _dicRcTango.Add(tmpKey, col2.Split(','));
                         }
-                    } catch (Exception) {
+                        strTmpLog = "";
+                    } catch (Exception w_e) {
+                        if (strTmpLog != "") FuncWriteLogFile("key[" + strTmpLog + "]" + w_e.ToString());
                     }
                 }
                 _rcSetCommand = sb.ToString();
@@ -1007,15 +1015,6 @@ namespace Kikisen_VC_WPF
             } catch (Exception) {
             }
         }
-        public IEnumerable<DataGridRow> GetDataGridRows(DataGrid grid) {
-            var itemsSource = grid.ItemsSource as IEnumerable;
-            if (null == itemsSource) yield return null;
-            foreach (var item in itemsSource) {
-                var row = grid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                if (null != row) yield return row;
-            }
-        }
-
 
 
         void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
@@ -1187,7 +1186,10 @@ namespace Kikisen_VC_WPF
         // 推定時の処理
         void _ms_recogEngine_SpeechHypothesized(object sender, SpeechHypothesizedEventArgs e2) {
             if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)") {
-                if (0.07f <= e2.Result.Confidence && !_rcspeaked) {
+                Dispatcher.BeginInvoke((Action)(() => {
+                    txtbRecogStatus.Text = e2.Result.Text + "[" + e2.Result.Confidence + "]";
+                }));
+                if (0.7f <= e2.Result.Confidence && !_rcspeaked) {
                     _rcspeaked = true;
                     Dispatcher.BeginInvoke((Action)(() => {
                         var key = e2.Result.Text;
@@ -1204,8 +1206,12 @@ namespace Kikisen_VC_WPF
 		// 認識時の処理
 		void _ms_recogEngine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e2) {
             if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)") {
+                Dispatcher.BeginInvoke((Action)(() => {
+                    txtbRecogStatus.Text = e2.Result.Text + "[確定:" + e2.Result.Confidence + "]";
+                }));
                 return;
-            } else if (0.07f <= e2.Result.Confidence) {
+            }
+            if (0.07f <= e2.Result.Confidence) {
                 _rcspeaked = true;
                 Dispatcher.BeginInvoke((Action)(() => {
 					var msg = e2.Result.Text;
