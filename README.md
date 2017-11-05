@@ -26,6 +26,7 @@ Overview
    - 2017/09/09 MS音声認識を利用したラジオチャットモードを一応実装。それに伴い初期語彙を増やした。ラジオチャットモードは語彙を増やしたら使い物にならなくなった・・。それこそ「v52！」とか記号的な発言で動かしたほうが認識するかもしれない。Windows付属のトレーニングを1時間かけてやったが認識率は向上しなかった。。語彙は、ボイスチャットモードの認識辞書にフィードバックしたので、Appdata/Local/Kikisen-VC/うんぬんにある設定ファイルを初期化すると初期語彙が大量に登録されます。一応ArmaとかPUBGで使える語彙は洗い出したはず。
    - 2017/11/05 Intel Realsenseに対応しました。[こちら](https://www-ssl.intel.com/content/www/us/en/support/articles/000023648/emerging-technologies/intel-realsense-technology.html)からDLしてインストールしてください。詳しいインストールオプションは[NAMAROIDさまのほうを参考にしてください](http://ch.nicovideo.jp/StackGamesEmpire/blomaga/ar953729)。暫定対応なので、単語辞書等は使えません。
    - 2017/11/05 OpenJTalkを組み込みました。ネット上に公開されている.htsvoiceファイルを探してopen_jtalkフォルダに設置すると多彩なボイスを楽しめます。
+   - 2017/11/05 ラジオチャットモードにIntelReakSence用を追加しました。
 
 
 ## Description （各機能の概要、開発経緯、特徴）

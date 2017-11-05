@@ -388,6 +388,7 @@ namespace Kikisen_VC_WPF
 			cmbRecogAPI.Items.Add("GoogleCloudSpeechAPI");
             cmbRecogAPI.Items.Add("BingSpeechAPI");
             cmbRecogAPI.Items.Add("ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)");
+            cmbRecogAPI.Items.Add("ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(IntelRS)");
             cmbRecogAPI.Items.Add("IntelRealsense");
             cmbRecogAPI.Items.Refresh();
 			cmbRecogAPI.SelectedIndex = (0 <= cmbRecogAPI.Items.IndexOf(_RecogAPI)) ? cmbRecogAPI.Items.IndexOf(_RecogAPI) : 0;
@@ -565,6 +566,8 @@ namespace Kikisen_VC_WPF
 				this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_BingSpeech_Recog);
             } else if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)") {
                 this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_MS_Recog);
+            } else if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(IntelRS)") {
+                this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_Intel_Recog);
             } else if (_RecogAPI == "IntelRealsense") {
                 this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_Intel_Recog);
             } else {
@@ -1009,6 +1012,18 @@ namespace Kikisen_VC_WPF
                         gb.Append(words);
                         Grammar grammar = new Grammar(gb) { Name = tmpKey.Key };
                         _ms_recogEngine.LoadGrammar(grammar);
+                    }
+                }
+                if (_sr != null) {
+                    if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(IntelRS)") {
+                        //語彙登録
+                        List<string> strlst = new List<string>();
+                        foreach (var tmpKey in _dicRcTango) {
+                            strlst.Add(tmpKey.Key);
+                        }
+                        string[] cmds = strlst.ToArray();
+                        _sr.BuildGrammarFromStringList(1, cmds, null);
+                        _sr.SetGrammar(1);
                     }
                 }
             }
@@ -1734,9 +1749,7 @@ namespace Kikisen_VC_WPF
                 source.SetVolume(1f);
                 session.CreateImpl<PXCMSpeechRecognition>(out _sr);
 
-                //string[] cmds = _lstPhrases.ToArray();
-                //_sr.BuildGrammarFromStringList(1, cmds, null);
-                //_sr.SetGrammar(1);
+                pxcmStatus status = 0;
 
                 PXCMSpeechRecognition.ProfileInfo pinfo;
                 _sr.QueryProfile(out pinfo);
@@ -1748,14 +1761,44 @@ namespace Kikisen_VC_WPF
                 //} catch (Exception) {
                 //}
                 //status = _sr.AddVocabToDictation(PXCMSpeechRecognition.VocabFileType.VFT_LIST, Environment.CurrentDirectory + "/Intel/vocabulary_file.txt");
-                var status = _sr.SetDictation();
+
+                if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(IntelRS)") {
+                    //語彙登録
+                    List<string> strlst = new List<string>();
+                    foreach (var tmpKey in _dicRcTango) {
+                        strlst.Add(tmpKey.Key);
+                    }
+                    string[] cmds = strlst.ToArray();
+                    _sr.BuildGrammarFromStringList(1, cmds, null);
+                    status = _sr.SetGrammar(1);
+                } else {
+                    status = _sr.SetDictation();
+                }
 
                 var handler = new PXCMSpeechRecognition.Handler();
                 handler.onRecognition = (x) => {
-                    Dispatcher.BeginInvoke((Action)(() => {
-                        txtbRecogStatus.Text = x.scores[0].sentence;
-                        FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), x.scores[0].sentence, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
-                    }));
+                    if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(IntelRS)") {
+                        Dispatcher.BeginInvoke((Action)(() => {
+                            txtbRecogStatus.Text = x.scores[0].sentence;
+                        }));
+                        if (!_rcspeaked) {
+                            _rcspeaked = true;
+                            Dispatcher.BeginInvoke((Action)(() => {
+                                var key = x.scores[0].sentence;
+                                var strlst = _dicRcTango[key];
+                                Random r = new System.Random();
+                                int i2 = r.Next(0, strlst.Length);
+                                var value = strlst[i2];
+                                txtbRecogStatus.Text = key + " (" + value + ")";
+                                FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), value, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+                            }));
+                        }
+                    } else {
+                        Dispatcher.BeginInvoke((Action)(() => {
+                            txtbRecogStatus.Text = x.scores[0].sentence;
+                            FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), x.scores[0].sentence, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+                        }));
+                    }
                 };
                 status = _sr.StartRec(source, handler);
 
