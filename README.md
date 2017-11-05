@@ -24,6 +24,9 @@ Overview
    - 2017/07/17 OCRでのテキストチャット読み上げ機能を実装。作ってみてテストして、使い物にならない精度であることが分かった程度。ネタ機能にもならないが実装を捨てるのがもったいないのでコミット。
    - 2017/07/29 音声認識発声機能がバグってメタメタだったので再調整。APIの更新に合わせて動作も変わっていた模様。だいぶ良くなったと思うのでテスト待ち。
    - 2017/09/09 MS音声認識を利用したラジオチャットモードを一応実装。それに伴い初期語彙を増やした。ラジオチャットモードは語彙を増やしたら使い物にならなくなった・・。それこそ「v52！」とか記号的な発言で動かしたほうが認識するかもしれない。Windows付属のトレーニングを1時間かけてやったが認識率は向上しなかった。。語彙は、ボイスチャットモードの認識辞書にフィードバックしたので、Appdata/Local/Kikisen-VC/うんぬんにある設定ファイルを初期化すると初期語彙が大量に登録されます。一応ArmaとかPUBGで使える語彙は洗い出したはず。
+   - 2017/11/05 Intel Realsenseに対応しました。[こちら](https://www-ssl.intel.com/content/www/us/en/support/articles/000023648/emerging-technologies/intel-realsense-technology.html)からDLしてインストールしてください。詳しいインストールオプションは[NAMAROIDさまのほうを参考にしてください](http://ch.nicovideo.jp/StackGamesEmpire/blomaga/ar953729)。暫定対応なので、単語辞書等は使えません。
+   - 2017/11/05 OpenJTalkを組み込みました。ネット上に公開されている.htsvoiceファイルを探してopen_jtalkフォルダに設置すると多彩なボイスを楽しめます。
+
 
 ## Description （各機能の概要、開発経緯、特徴）
 
@@ -45,6 +48,8 @@ Overview
   - 発声代替機能は、マイク代替なのでVCが使える全てのゲームで動作可能
   - 雑音や咀嚼音、ため息、キーボード音や環境音など入らない純粋な発声代替機能
   - 聞いた英語の日本語訳がすぐわかるので英語学習能力もUpするかもしれません。将来的に。
+  - new! OpenJTalkを組み込みました。.htsvoiceファイルを探してopen_jtalkフォルダに設置すると多彩なボイスを楽しめます。
+  - new! Intel Realsenseに対応しました。[こちら](https://www-ssl.intel.com/content/www/us/en/support/articles/000023648/emerging-technologies/intel-realsense-technology.html)からDLしてインストールしてください。詳しいインストールオプションは[NAMAROIDさまのほうを参考にしてください](http://ch.nicovideo.jp/StackGamesEmpire/blomaga/ar953729)。暫定対応なので、単語辞書等は使えません。
 
 ##### 欠点
   - クラウドAPIを使う場合、回線状況によっては**pingに影響を及ぼす**
@@ -94,7 +99,7 @@ Overview
           - ![イメージ](http://i.imgur.com/K2vdXyD.png)
     - マイクブースト適用ソフト（マイクブーストのないヘッドセットにも使えます。+20dbするとかなり効果的です）
       - [Equalizer APO](https://sourceforge.net/projects/equalizerapo/)
-
+    - [Intel® RealSense™ SDK ](https://www-ssl.intel.com/content/www/us/en/support/articles/000023648/emerging-technologies/intel-realsense-technology.html)
 
 
 
@@ -106,7 +111,7 @@ Overview
     1. 「Inputデバイス」に使用中のマイクを指定します。
     1. 「Outputデバイス」に仮想サウンドデバイスを指定します。
       - ![イメージ](http://i.imgur.com/UMPgiPAm.png) ![イメージ](http://i.imgur.com/QJW1clEm.png)
-    1. 「音声認識API」「SpeechAPI」を適当に選んで設定します。Microsoft Harukaを使うとPingへの影響が軽減されるかもしれません。
+    1. 「音声認識API」「SpeechAPI」を適当に選んで設定します。Microsoft Harukaを使うとPingへの影響が軽減されるかもしれません。OpenJTalkも同様。
     1. 「翻訳API」を「翻訳なし」に設定します。「翻訳設定」を「Jpn→Eng」に設定します。
       - ![イメージ](http://i.imgur.com/XIrbQyl.png) ![イメージ](http://i.imgur.com/V3qCcMS.png)
     1. 必要に応じて「単語辞書」に発声単語を登録しておきます。

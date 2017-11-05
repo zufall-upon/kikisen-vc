@@ -31,6 +31,8 @@ using System.Windows.Data;
 using System.Data;
 using System.Collections;
 using System.Linq;
+using SharpSenses;
+using SharpSenses.RealSense.Capabilities;
 
 namespace Kikisen_VC_WPF
 {
@@ -86,8 +88,10 @@ namespace Kikisen_VC_WPF
 		private CancellationTokenSource _tokenMSOCRcancelTokenS;
 		private bool isNowTestingGCS = false;
 		private string _recog_lang_set = "";
+        private bool openjtalk_lock_flag = false;
+        private int openjtalk_lock_num = 0;
 
-		BackgroundWorker Worker;
+        BackgroundWorker Worker;
 		BackgroundWorker Worker_OCR;
 		Action<string> _funcGoogleCloudSpeechinit;
 		Action<string> _funcVoicetextinit;
@@ -113,6 +117,7 @@ namespace Kikisen_VC_WPF
 		MSOCR_Ex _msocr = new MSOCR_Ex();
         Dictionary<string, string[]> _dicRcTango = new Dictionary<string, string[]>();
         bool _rcspeaked = false;
+        PXCMSpeechRecognition _sr;
 
 
         public static int InputDevice { get => _cmbInputDevice.Items.IndexOf(_InputDevice); }
@@ -276,14 +281,15 @@ namespace Kikisen_VC_WPF
 				cmbMsRate.Items.Refresh();
 				cmbMsRate.SelectedIndex = (0 <= cmbMsRate.Items.IndexOf(_say_msRate)) ? cmbMsRate.Items.IndexOf(_say_msRate) : 1;
 
-				if (FuncVoiceTextWebAPIisEnable(pw).Result) {
+                _lstVTActors = new List<string>();
+                if (FuncVoiceTextWebAPIisEnable(pw).Result) {
 					// APIキーが正しい場合
 					tabVTWAPI.IsEnabled = true;
 					btnVTWAPIkey.Content = "HOYA VoiceText (認証済)";
 					txtbVTWAPIkey.Password = pw;
 					// 役者の初期化
 					List<string> lstActors = new List<string>() { "show", "haruka", "hikari", "takeru", "santa", "bear" };
-					_lstVTActors = lstActors;
+                    _lstVTActors = lstActors;
 					foreach (string str in lstActors) {
 						cmbSpeechAPI.Items.Add(str);
 					}
@@ -336,8 +342,21 @@ namespace Kikisen_VC_WPF
 					btnVTWAPIkey.Content = "HOYA VoiceText (未認証)";
 					txtbVTWAPIkey.Password = "";
 				}
-				// changeEventが走ってしまうので選び直す
-				cmbSpeechAPI.Items.Refresh();
+
+                // OpenJTalk
+                if (File.Exists(Environment.CurrentDirectory + "\\open_jtalk\\open_jtalk.exe")) {
+                    // .htsvoiceで検索して追加する
+                    System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Environment.CurrentDirectory + "\\open_jtalk");
+                    System.IO.FileInfo[] files = di.GetFiles("*.htsvoice", System.IO.SearchOption.AllDirectories);
+                    foreach (System.IO.FileInfo f in files) {
+                        cmbSpeechAPI.Items.Add("OpenJTalk," + Path.GetFileNameWithoutExtension(f.Name));
+                    }
+                    cmbSpeechAPI.Items.Refresh();
+                    cmbSpeechAPI.SelectedIndex = (0 <= cmbSpeechAPI.Items.IndexOf(_SpeechAPI)) ? cmbSpeechAPI.Items.IndexOf(_SpeechAPI) : 0;
+                }
+
+                // changeEventが走ってしまうので選び直す
+                cmbSpeechAPI.Items.Refresh();
 				cmbSpeechAPI.SelectedIndex = (0 <= cmbSpeechAPI.Items.IndexOf(tmpSpeechAPI)) ? cmbSpeechAPI.Items.IndexOf(tmpSpeechAPI) : 0;
 			};
 			_funcVoicetextinit(_keyVTWAPI);
@@ -369,6 +388,7 @@ namespace Kikisen_VC_WPF
 			cmbRecogAPI.Items.Add("GoogleCloudSpeechAPI");
             cmbRecogAPI.Items.Add("BingSpeechAPI");
             cmbRecogAPI.Items.Add("ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)");
+            cmbRecogAPI.Items.Add("IntelRealsense");
             cmbRecogAPI.Items.Refresh();
 			cmbRecogAPI.SelectedIndex = (0 <= cmbRecogAPI.Items.IndexOf(_RecogAPI)) ? cmbRecogAPI.Items.IndexOf(_RecogAPI) : 0;
 
@@ -545,6 +565,8 @@ namespace Kikisen_VC_WPF
 				this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_BingSpeech_Recog);
             } else if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(仮)") {
                 this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_MS_Recog);
+            } else if (_RecogAPI == "IntelRealsense") {
+                this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_Intel_Recog);
             } else {
 				this.Worker.DoWork += new DoWorkEventHandler(Worker_DoWork_MS_Recog);
 			}
@@ -680,8 +702,16 @@ namespace Kikisen_VC_WPF
 					foreach (var str in _lstPhrases) {
 						customDictationGrammar.SetDictationContext(str, null);
 					}
-				}
-			} catch (Exception w_e4) {
+                }
+                if (_sr != null) {
+                    //try {
+                    //    File.WriteAllLines(Environment.CurrentDirectory + "/Intel/vocabulary_file.txt", _lstPhrases);
+                    //} catch (Exception) {
+                    //}
+                    //_sr.AddVocabToDictation(PXCMSpeechRecognition.VocabFileType.VFT_LIST, Environment.CurrentDirectory + "/Intel/vocabulary_file.txt");
+                    //_sr.SetDictation();
+                }
+            } catch (Exception w_e4) {
 				txtbRecogStatus.Text = "単語辞書編集中...";
 				FuncWriteLogFile(w_e4.ToString());
 			}
@@ -1285,7 +1315,7 @@ namespace Kikisen_VC_WPF
 									outtext = note.Results[0].Alternatives[0].Transcript;
 									Action<bool> act2 = delegate (bool bContainAlpha) {
 										if (!bSpeaked) {
-											float stable_stability = 0.89f;
+											float stable_stability = 0.9f;
 											if (Regex.IsMatch(outtext, @"[a-zA-Z]")) {
 												stable_stability = 0f;
 											}
@@ -1313,7 +1343,7 @@ namespace Kikisen_VC_WPF
 											// アルファベット混じりだと発声が遅れるので処置する
 											if (Regex.IsMatch(outtext, @"[a-zA-Z]")) {
 												// 信頼度がある程度以上ならば区切りと判断
-												stable_stability = 0.89f;
+												stable_stability = 0.9f;
 												if ((stable_stability <= note.Results[0].Stability)
 													|| (0 == note.Results[0].Stability && note.Results[0].IsFinal) ) {
 													var subtext = "";
@@ -1688,10 +1718,77 @@ namespace Kikisen_VC_WPF
 		private void OnConversationErrorHandler(object sender, SpeechErrorEventArgs e) {
 			FuncWriteLogFile("["+e.SpeechErrorCode+"]"+e.SpeechErrorText);
 			this.FuncChangeImgStatus(2);
-		}
+        }
+        // IntelRealsense音声認識API
+        void Worker_DoWork_Intel_Recog(object sender, DoWorkEventArgs e) {
+            Dispatcher.BeginInvoke((Action)(() => {
+                txtbRecogStatus.Text = "Waiting...(単語辞書は使用できません)";
+                this.FuncChangeImgStatus(0);
+            }));
+            try {
+                var session = PXCMSession.CreateInstance();
+                var source = session.CreateAudioSource();
+                PXCMAudioSource.DeviceInfo dinfo = null;
+                source.QueryDeviceInfo(cmbInputDevice.Items.IndexOf(_InputDevice), out dinfo);
+                source.SetDevice(dinfo);
+                source.SetVolume(1f);
+                session.CreateImpl<PXCMSpeechRecognition>(out _sr);
 
-		
-		private void FuncWriteTextLog(string msg) {
+                //string[] cmds = _lstPhrases.ToArray();
+                //_sr.BuildGrammarFromStringList(1, cmds, null);
+                //_sr.SetGrammar(1);
+
+                PXCMSpeechRecognition.ProfileInfo pinfo;
+                _sr.QueryProfile(out pinfo);
+                pinfo.language = PXCMSpeechRecognition.LanguageType.LANGUAGE_JP_JAPANESE;
+                _sr.SetProfile(pinfo);
+
+                //try {
+                //    File.WriteAllLines(Environment.CurrentDirectory + "/Intel/vocabulary_file.txt", _lstPhrases/*, Encoding.GetEncoding("shift_jis")*/);
+                //} catch (Exception) {
+                //}
+                //status = _sr.AddVocabToDictation(PXCMSpeechRecognition.VocabFileType.VFT_LIST, Environment.CurrentDirectory + "/Intel/vocabulary_file.txt");
+                var status = _sr.SetDictation();
+
+                var handler = new PXCMSpeechRecognition.Handler();
+                handler.onRecognition = (x) => {
+                    Dispatcher.BeginInvoke((Action)(() => {
+                        txtbRecogStatus.Text = x.scores[0].sentence;
+                        FuncVoicePlay(cmbOutputDevice.Items.IndexOf(_OutputDevice), x.scores[0].sentence, _SpeechAPI, _say_msVolume, _say_msPitch, _say_msEmphasis, _say_msRate, _sayPitch, _saySpeed, _sayVolume, _sayEmotion);
+                    }));
+                };
+                status = _sr.StartRec(source, handler);
+
+                do {
+                    if (this.Worker.CancellationPending) {
+                        e.Cancel = true;
+                        break;
+                    }
+                    this.FuncChangeImgStatus(0);
+                    Thread.Sleep(Convert.ToInt32(Math.Round(_threadwaitsec)));
+                } while (true);
+
+
+                if (_sr != null) {
+                    _sr.StopRec();
+                    _sr.Dispose();
+                    _sr = null;
+                }
+                if (session != null) {
+                    session.Dispose();
+                }
+
+            } catch (NullReferenceException w_e) {
+                FuncWriteLogFile(w_e.ToString());
+                this.FuncChangeImgStatus(2);
+            } catch (Exception w_e) {
+                FuncWriteLogFile(w_e.ToString());
+                this.FuncChangeImgStatus(2);
+            }
+        }
+
+
+        private void FuncWriteTextLog(string msg) {
 			try {
 				if (_OutputText) {
 					string appendText = "";
@@ -1709,104 +1806,163 @@ namespace Kikisen_VC_WPF
 								   string vt_pitch = "100", string vt_speed = "100", string vt_volume = "100", string vt_emotion = null) {
 			try {
 				await Task.Run(() => {
-					if (_lstMsActors.Contains(actor)) {
-						IWaveProvider provider = null;
-						using (var stream = new MemoryStream()) {
-							using (var synth = new System.Speech.Synthesis.SpeechSynthesizer()) {
-								synth.SelectVoice(actor);
-								var iVolume = int.Parse(volume);
-								iVolume = (100 < iVolume) ? 100 : iVolume;
-								iVolume = (iVolume < 50) ? 50 : iVolume;
-								synth.Volume = iVolume;
-								var iRate = int.Parse(rate);
-								iRate = (10 < iRate) ? 10 : iRate;
-								iRate = (iRate < -10) ? -10 : iRate;
-								synth.Rate = iRate;
-								synth.SetOutputToWaveStream(stream);
-								synth.SetOutputToAudioStream(stream, _out_safi);
-								System.Speech.Synthesis.PromptBuilder builder = new System.Speech.Synthesis.PromptBuilder();
-								builder.Culture = CultureInfo.CreateSpecificCulture("ja-JP");
-								builder.StartVoice(builder.Culture);
-								builder.StartSentence();
-								builder.StartStyle(new System.Speech.Synthesis.PromptStyle() { Emphasis = (System.Speech.Synthesis.PromptEmphasis)Enum.Parse(typeof(System.Speech.Synthesis.PromptEmphasis), emphasis, true), Rate = (System.Speech.Synthesis.PromptRate)Enum.Parse(typeof(System.Speech.Synthesis.PromptRate), prate, true) });
-								builder.AppendText(msg);
-								builder.EndStyle();
-								builder.EndSentence();
-								builder.EndVoice();
-								synth.Speak(builder);
-								stream.Seek(0, SeekOrigin.Begin);
-								provider = new RawSourceWaveStream(stream, new WaveFormat(44100, 16, 1));
-							}
-							using (WaveOutEvent wavout = new WaveOutEvent()) {
-								wavout.DeviceNumber = deviceNo;
-								wavout.Init(provider);
-								wavout.Play();
-								while (wavout.PlaybackState == PlaybackState.Playing) {
-									Thread.Sleep(200);
-								}
-							}
-						}
-					} else if (_lstVTActors.Contains(actor)) {
-						HttpClient http = new HttpClient();
-						http.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(_keyVTWAPI)));
-						FormUrlEncodedContent encContent = null;
-						string[] capableActor = new string[] { "haruka", "hikari", "takeru", "santa", "bear" };
-						if (0 <= Array.IndexOf(capableActor, actor)) {
-							var tmp_emotion = (vt_emotion == "なし") ? null : vt_emotion;
-							if (tmp_emotion != null) {
-								encContent = new FormUrlEncodedContent(
-									new[]{
-									new KeyValuePair<string , string>( "text" , msg),
-									new KeyValuePair<string , string>( "speaker" , actor),
-									new KeyValuePair<string , string>( "pitch" , vt_pitch),
-									new KeyValuePair<string , string>( "speed" , vt_speed),
-									new KeyValuePair<string , string>( "volume" , vt_volume),
-									new KeyValuePair<string , string>( "emotion" , tmp_emotion),
-									new KeyValuePair<string , string>( "emotion_level" , "4"),
-									}
-								);
-							} else {
-								encContent = new FormUrlEncodedContent(
-									new[]{
-									new KeyValuePair<string , string>( "text" , msg),
-									new KeyValuePair<string , string>( "speaker" , actor),
-									new KeyValuePair<string , string>( "pitch" , vt_pitch),
-									new KeyValuePair<string , string>( "speed" , vt_speed),
-									new KeyValuePair<string , string>( "volume" , vt_volume),
-									}
-								);
-							}
-						} else {
-							encContent = new FormUrlEncodedContent(
-								new[]{
-								new KeyValuePair<string , string>( "text" , msg),
-								new KeyValuePair<string , string>( "speaker" , actor),
-								new KeyValuePair<string , string>( "pitch" , vt_pitch),
-								new KeyValuePair<string , string>( "speed" , vt_speed),
-								new KeyValuePair<string , string>( "volume" , vt_volume),
-								}
-							);
-						}
-						http.PostAsync("https://api.voicetext.jp/v1/tts", encContent).ContinueWith(async task => {
-							var Stream = await task.Result.Content.ReadAsStreamAsync();
-							WaveStream mainOutputStream = new WaveFileReader(Stream);
-							WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
-							using (WaveOutEvent wavout = new WaveOutEvent()) {
-								wavout.DeviceNumber = deviceNo;
-								wavout.Init(volumeStream);
-								wavout.Play();
-								while (wavout.PlaybackState == PlaybackState.Playing) {
-									Thread.Sleep(200);
-								}
-							}
-							//outdevice = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia); // 既定の出力
-							//using (var wavPlayer = new WasapiOut(_outdevice, AudioClientShareMode.Shared, false, 300)) {
-							//	wavPlayer.Init(volumeStream);
-							//	wavPlayer.Play();
-							//}
-						});
-					}
-					this.FuncWriteTextLog(msg);
+                    if (_lstMsActors.Contains(actor)) {
+                        IWaveProvider provider = null;
+                        using (var stream = new MemoryStream()) {
+                            using (var synth = new System.Speech.Synthesis.SpeechSynthesizer()) {
+                                synth.SelectVoice(actor);
+                                var iVolume = int.Parse(volume);
+                                iVolume = (100 < iVolume) ? 100 : iVolume;
+                                iVolume = (iVolume < 50) ? 50 : iVolume;
+                                synth.Volume = iVolume;
+                                var iRate = int.Parse(rate);
+                                iRate = (10 < iRate) ? 10 : iRate;
+                                iRate = (iRate < -10) ? -10 : iRate;
+                                synth.Rate = iRate;
+                                synth.SetOutputToWaveStream(stream);
+                                synth.SetOutputToAudioStream(stream, _out_safi);
+                                System.Speech.Synthesis.PromptBuilder builder = new System.Speech.Synthesis.PromptBuilder();
+                                builder.Culture = CultureInfo.CreateSpecificCulture("ja-JP");
+                                builder.StartVoice(builder.Culture);
+                                builder.StartSentence();
+                                builder.StartStyle(new System.Speech.Synthesis.PromptStyle() { Emphasis = (System.Speech.Synthesis.PromptEmphasis)Enum.Parse(typeof(System.Speech.Synthesis.PromptEmphasis), emphasis, true), Rate = (System.Speech.Synthesis.PromptRate)Enum.Parse(typeof(System.Speech.Synthesis.PromptRate), prate, true) });
+                                builder.AppendText(msg);
+                                builder.EndStyle();
+                                builder.EndSentence();
+                                builder.EndVoice();
+                                synth.Speak(builder);
+                                stream.Seek(0, SeekOrigin.Begin);
+                                provider = new RawSourceWaveStream(stream, new WaveFormat(44100, 16, 1));
+                            }
+                            using (WaveOutEvent wavout = new WaveOutEvent()) {
+                                wavout.DeviceNumber = deviceNo;
+                                wavout.Init(provider);
+                                wavout.Play();
+                                while (wavout.PlaybackState == PlaybackState.Playing) {
+                                    Thread.Sleep(200);
+                                }
+                            }
+                        }
+                    } else if (_lstVTActors.Contains(actor)) {
+                        HttpClient http = new HttpClient();
+                        http.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(_keyVTWAPI)));
+                        FormUrlEncodedContent encContent = null;
+                        string[] capableActor = new string[] { "haruka", "hikari", "takeru", "santa", "bear" };
+                        if (0 <= Array.IndexOf(capableActor, actor)) {
+                            var tmp_emotion = (vt_emotion == "なし") ? null : vt_emotion;
+                            if (tmp_emotion != null) {
+                                encContent = new FormUrlEncodedContent(
+                                    new[]{
+                                    new KeyValuePair<string , string>( "text" , msg),
+                                    new KeyValuePair<string , string>( "speaker" , actor),
+                                    new KeyValuePair<string , string>( "pitch" , vt_pitch),
+                                    new KeyValuePair<string , string>( "speed" , vt_speed),
+                                    new KeyValuePair<string , string>( "volume" , vt_volume),
+                                    new KeyValuePair<string , string>( "emotion" , tmp_emotion),
+                                    new KeyValuePair<string , string>( "emotion_level" , "4"),
+                                    }
+                                );
+                            } else {
+                                encContent = new FormUrlEncodedContent(
+                                    new[]{
+                                    new KeyValuePair<string , string>( "text" , msg),
+                                    new KeyValuePair<string , string>( "speaker" , actor),
+                                    new KeyValuePair<string , string>( "pitch" , vt_pitch),
+                                    new KeyValuePair<string , string>( "speed" , vt_speed),
+                                    new KeyValuePair<string , string>( "volume" , vt_volume),
+                                    }
+                                );
+                            }
+                        } else {
+                            encContent = new FormUrlEncodedContent(
+                                new[]{
+                                new KeyValuePair<string , string>( "text" , msg),
+                                new KeyValuePair<string , string>( "speaker" , actor),
+                                new KeyValuePair<string , string>( "pitch" , vt_pitch),
+                                new KeyValuePair<string , string>( "speed" , vt_speed),
+                                new KeyValuePair<string , string>( "volume" , vt_volume),
+                                }
+                            );
+                        }
+                        http.PostAsync("https://api.voicetext.jp/v1/tts", encContent).ContinueWith(async task => {
+                            var Stream = await task.Result.Content.ReadAsStreamAsync();
+                            WaveStream mainOutputStream = new WaveFileReader(Stream);
+                            WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
+                            using (WaveOutEvent wavout = new WaveOutEvent()) {
+                                wavout.DeviceNumber = deviceNo;
+                                wavout.Init(volumeStream);
+                                wavout.Play();
+                                while (wavout.PlaybackState == PlaybackState.Playing) {
+                                    Thread.Sleep(200);
+                                }
+                            }
+                            //outdevice = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia); // 既定の出力
+                            //using (var wavPlayer = new WasapiOut(_outdevice, AudioClientShareMode.Shared, false, 300)) {
+                            //	wavPlayer.Init(volumeStream);
+                            //	wavPlayer.Play();
+                            //}
+                        });
+                    } else if (actor.Contains("OpenJTalk")) {
+                        while (openjtalk_lock_flag) {
+                            Thread.Sleep(500);
+                        }
+                        openjtalk_lock_flag = true;
+                        string outfilename = "";
+                        string infilename = "";
+                        if (10 <= openjtalk_lock_num) {
+                            openjtalk_lock_num = 0;
+                            for (int i = 0; i < 10; i++) {
+                                outfilename = Environment.CurrentDirectory + "/open_jtalk/" + "ojt_output" + i + ".wav";
+                                infilename = Environment.CurrentDirectory + "/open_jtalk/" + "ojt_input" + i+ ".txt";
+                                FileInfo cFileInfo1 = new FileInfo(outfilename);
+                                FileInfo cFileInfo2 = new FileInfo(infilename);
+                                if (cFileInfo1.Exists) cFileInfo1.Delete();
+                                if (cFileInfo2.Exists) cFileInfo2.Delete();
+                            }
+                        }
+                        outfilename = "ojt_output" + openjtalk_lock_num + ".wav";
+                        infilename = "ojt_input" + openjtalk_lock_num + ".txt";
+
+                        string htsvoice = actor.Split(',')[1];
+
+                        // テキストファイルにShift-JISで書き込む
+                        System.Text.Encoding enc = System.Text.Encoding.GetEncoding("shift_jis");
+                        File.WriteAllText(Environment.CurrentDirectory + "/open_jtalk/" + infilename, msg, enc);
+
+                        System.Diagnostics.Process p = new System.Diagnostics.Process();
+                        p.StartInfo.FileName = System.Environment.GetEnvironmentVariable("ComSpec");
+                        p.StartInfo.UseShellExecute = false;
+                        p.StartInfo.RedirectStandardOutput = false;
+                        p.StartInfo.RedirectStandardInput = false;
+                        p.StartInfo.CreateNoWindow = true;
+                        //コマンドラインを指定（"/c"は実行後閉じるために必要）
+                        p.StartInfo.Arguments = "/c \"\"" + Environment.CurrentDirectory
+                        + "/open_jtalk/open_jtalk.exe\" -m \"" + Environment.CurrentDirectory
+                        + "/open_jtalk/" + htsvoice + ".htsvoice\" -x \"" + Environment.CurrentDirectory
+                        + "/open_jtalk/dic\" -ow \"" + Environment.CurrentDirectory
+                        + "/open_jtalk/" + outfilename + "\" \"" + Environment.CurrentDirectory
+                        + "/open_jtalk/" + infilename + "\"\"";
+                        p.Start();
+                        p.WaitForExit();
+                        p.Close();
+
+                        try {
+                            using (WaveStream mainOutputStream = new WaveFileReader(Environment.CurrentDirectory + "/open_jtalk/" + outfilename)) {
+                                using (WaveOutEvent wavout = new WaveOutEvent()) {
+                                    wavout.DeviceNumber = deviceNo;
+                                    wavout.Init(mainOutputStream);
+                                    wavout.Play();
+                                    while (wavout.PlaybackState == PlaybackState.Playing) {
+                                        Thread.Sleep(200);
+                                    }
+                                }
+                            }
+                        } catch (Exception) {
+                        }
+                        openjtalk_lock_num++;
+                        openjtalk_lock_flag = false;
+                    }
+                    this.FuncWriteTextLog(msg);
 				});
                 _rcspeaked = false;
             } catch (Exception w_e) {
