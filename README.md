@@ -27,6 +27,7 @@ Overview
    - 2017/11/05 Intel Realsenseに対応しました。[こちら](https://www-ssl.intel.com/content/www/us/en/support/articles/000023648/emerging-technologies/intel-realsense-technology.html)からDLしてインストールしてください。詳しいインストールオプションは[NAMAROIDさまのほうを参考にしてください](http://ch.nicovideo.jp/StackGamesEmpire/blomaga/ar953729)。暫定対応なので、単語辞書等は使えません。
    - 2017/11/05 OpenJTalkを組み込みました。ネット上に公開されている.htsvoiceファイルを探してopen_jtalkフォルダに設置すると多彩なボイスを楽しめます。
    - 2017/11/05 ラジオチャットモードにIntelReakSence用を追加しました。
+   - 2017/11/12 いったん区切りとしてコミット。今の時点で機械に通訳はできそうにないので、別の方向性を考える必要がありそう。という結論。今後はラジオチャットに特化した方向等、なにがしかの工夫で今の時点の技術と付き合う方法を探る予定。
 
 
 ## Description （各機能の概要、開発経緯、特徴）

@@ -1736,10 +1736,6 @@ namespace Kikisen_VC_WPF
         }
         // IntelRealsense音声認識API
         void Worker_DoWork_Intel_Recog(object sender, DoWorkEventArgs e) {
-            Dispatcher.BeginInvoke((Action)(() => {
-                txtbRecogStatus.Text = "Waiting...(単語辞書は使用できません)";
-                this.FuncChangeImgStatus(0);
-            }));
             try {
                 var session = PXCMSession.CreateInstance();
                 var source = session.CreateAudioSource();
@@ -1756,12 +1752,6 @@ namespace Kikisen_VC_WPF
                 pinfo.language = PXCMSpeechRecognition.LanguageType.LANGUAGE_JP_JAPANESE;
                 _sr.SetProfile(pinfo);
 
-                //try {
-                //    File.WriteAllLines(Environment.CurrentDirectory + "/Intel/vocabulary_file.txt", _lstPhrases/*, Encoding.GetEncoding("shift_jis")*/);
-                //} catch (Exception) {
-                //}
-                //status = _sr.AddVocabToDictation(PXCMSpeechRecognition.VocabFileType.VFT_LIST, Environment.CurrentDirectory + "/Intel/vocabulary_file.txt");
-
                 if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(IntelRS)") {
                     //語彙登録
                     List<string> strlst = new List<string>();
@@ -1772,10 +1762,15 @@ namespace Kikisen_VC_WPF
                     _sr.BuildGrammarFromStringList(1, cmds, null);
                     status = _sr.SetGrammar(1);
                 } else {
-                    status = _sr.SetDictation();
-                }
+					//try {
+					//	File.WriteAllLines(Environment.CurrentDirectory + "/Intel/vocabulary_file.txt", _lstPhrases/*, Encoding.GetEncoding("shift_jis")*/);
+					//} catch (Exception) {
+					//}
+					//status = _sr.AddVocabToDictation(PXCMSpeechRecognition.VocabFileType.VFT_LIST, Environment.CurrentDirectory + "/Intel/vocabulary_file.txt");
+					status = _sr.SetDictation();
+				}
 
-                var handler = new PXCMSpeechRecognition.Handler();
+				var handler = new PXCMSpeechRecognition.Handler();
                 handler.onRecognition = (x) => {
                     if (_RecogAPI == "ﾗｼﾞｵﾁｬｯﾄﾓｰﾄﾞ(IntelRS)") {
                         Dispatcher.BeginInvoke((Action)(() => {
@@ -1800,10 +1795,15 @@ namespace Kikisen_VC_WPF
                         }));
                     }
                 };
-                status = _sr.StartRec(source, handler);
+                _sr.StartRec(source, handler);
 
-                do {
-                    if (this.Worker.CancellationPending) {
+				Dispatcher.BeginInvoke((Action)(() => {
+					txtbRecogStatus.Text = "Waiting...(単語辞書は使用できません)";
+					this.FuncChangeImgStatus(0);
+				}));
+
+				do {
+                    if (this.Worker.CancellationPending || status == pxcmStatus.PXCM_STATUS_DEVICE_FAILED) {
                         e.Cancel = true;
                         break;
                     }

@@ -13,11 +13,5 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("open_jtalk/dic/rewrite.def")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("open_jtalk/dic/right-id.def")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("open_jtalk/open_jtalk.exe")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("grpc_csharp_ext.x86.dll")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("grpc_csharp_ext.x64.dll")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("libgrpc_csharp_ext.x86.so")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("libgrpc_csharp_ext.x64.so")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("libgrpc_csharp_ext.x86.dylib")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("libgrpc_csharp_ext.x64.dylib")]
 
 
