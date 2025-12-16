@@ -1,3 +1,21 @@
+25/12/16→継承プロジェクトです。
+<div class="banner">
+  <!-- GitHub Repo Banner -->
+  <div style="text-align:center; margin: 24px 0;">
+    <a href="https://github.com/zufall-upon/MobMate" target="_blank">
+      <img
+        src="https://raw.githubusercontent.com/zufall-upon/MobMate/refs/heads/main/logo01.png"
+        alt="MobMate GitHub Repository"
+        style="max-width: 480px; width: 80%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);"
+      />
+    </a>
+    <div style="margin-top:8px; opacity:0.8;">
+      ▶ View on GitHub
+    </div>
+  </div>
+</div>
+
+
 Kikisen-VC (音声認識・音声合成・翻訳・擬似VCツール)
 ====
 Overview
